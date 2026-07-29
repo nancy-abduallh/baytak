@@ -1,9 +1,9 @@
 "use client";
 import { useMemo, useState } from "react";
 import { Order } from "@/lib/types";
-import { StatusTabs } from "./StatusTabs";
-import { OrderRow } from "./OrderRow";
-import { OrderDetails } from "./OrderDetails";
+import { StatusTabs } from "@/components/dashboard/StatusTabs";
+import { OrderRow } from "@/components/dashboard/OrderRow";
+import { OrderDetails } from "@/components/dashboard/OrderDetails";
 
 type TabKey = "all" | "in_progress" | "completed";
 
