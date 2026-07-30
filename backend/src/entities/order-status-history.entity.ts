@@ -22,7 +22,7 @@ export class OrderStatusHistory {
     @Column({ type: 'enum', enum: ['pending', 'confirmed', 'in_progress', 'completed', 'cancelled'] })
     status: OrderStatus;
 
-    @Column({ length: 255, nullable: true })
+    @Column({ type: 'varchar', length: 255, nullable: true })
     note: string | null;
 
     @CreateDateColumn({ name: 'changed_at' })

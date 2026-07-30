@@ -13,26 +13,26 @@ export class User {
     })
     id: number;
 
-    @Column({ name: 'full_name', length: 120 })
+    @Column({ name: 'full_name', type: 'varchar', length: 120 })
     fullName: string;
 
-    @Column({ length: 20, unique: true })
+    @Column({ type: 'varchar', length: 20, unique: true })
     phone: string;
 
-    @Column({ length: 160, unique: true, nullable: true })
+    @Column({ type: 'varchar', length: 160, unique: true, nullable: true })
     email: string | null;
 
     @Exclude()
-    @Column({ name: 'password_hash', length: 255, select: false })
+    @Column({ name: 'password_hash', type: 'varchar', length: 255, select: false })
     passwordHash: string;
 
-    @Column({ name: 'avatar_url', length: 255, nullable: true })
+    @Column({ name: 'avatar_url', type: 'varchar', length: 255, nullable: true })
     avatarUrl: string | null;
 
-    @Column({ length: 80, nullable: true })
+    @Column({ type: 'varchar', length: 80, nullable: true })
     city: string | null;
 
-    @Column({ length: 80, nullable: true })
+    @Column({ type: 'varchar', length: 80, nullable: true })
     district: string | null;
 
     @Column({ name: 'is_active', default: true })

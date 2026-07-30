@@ -1,0 +1,30 @@
+import { User } from './user.entity';
+import { Technician } from './technician.entity';
+import { ServiceCategory } from './service-category.entity';
+import { Address } from './address.entity';
+import { OrderStatusHistory } from './order-status-history.entity';
+import { OrderImage } from './order-image.entity';
+export type OrderStatus = 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
+export type PaymentStatus = 'unpaid' | 'paid' | 'refunded';
+export declare class Order {
+    id: number;
+    userId: number;
+    user: User;
+    technicianId: number | null;
+    technician: Technician | null;
+    categoryId: number;
+    category: ServiceCategory;
+    addressId: number;
+    address: Address;
+    description: string | null;
+    status: OrderStatus;
+    scheduledDate: string;
+    scheduledSlot: string | null;
+    amount: number;
+    paymentStatus: PaymentStatus;
+    paymentMethodId: number | null;
+    createdAt: Date;
+    updatedAt: Date;
+    statusHistory: OrderStatusHistory[];
+    images: OrderImage[];
+}

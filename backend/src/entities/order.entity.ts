@@ -56,7 +56,7 @@ export class Order {
     @Column({ name: 'scheduled_date', type: 'date' })
     scheduledDate: string;
 
-    @Column({ name: 'scheduled_slot', length: 30, nullable: true })
+    @Column({ name: 'scheduled_slot', type: 'varchar', length: 30, nullable: true })
     scheduledSlot: string | null;
 
     @Column({ type: 'decimal', precision: 10, scale: 2, transformer: decimalTransformer })

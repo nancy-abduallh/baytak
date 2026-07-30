@@ -23,10 +23,10 @@ export class PaymentMethod {
     @Column({ type: 'enum', enum: ['card', 'apple_pay', 'stc_pay', 'cash'] })
     type: PaymentMethodType;
 
-    @Column({ name: 'card_brand', length: 30, nullable: true })
+    @Column({ name: 'card_brand', type: 'varchar', length: 30, nullable: true })
     cardBrand: string | null;
 
-    @Column({ name: 'card_last4', length: 4, nullable: true })
+    @Column({ name: 'card_last4', type: 'varchar', length: 4, nullable: true })
     cardLast4: string | null;
 
     @Column({ name: 'is_default', default: false })

@@ -12,23 +12,23 @@ export class Technician {
     })
     id: number;
 
-    @Column({ name: 'full_name', length: 120 })
+    @Column({ name: 'full_name', type: 'varchar', length: 120 })
     fullName: string;
 
-    @Column({ length: 6 })
+    @Column({ type: 'varchar', length: 6 })
     initials: string;
 
-    @Column({ length: 20, unique: true })
+    @Column({ type: 'varchar', length: 20, unique: true })
     phone: string;
 
-    @Column({ length: 160, unique: true, nullable: true })
+    @Column({ type: 'varchar', length: 160, unique: true, nullable: true })
     email: string | null;
 
     @Exclude()
-    @Column({ name: 'password_hash', length: 255, select: false })
+    @Column({ name: 'password_hash', type: 'varchar', length: 255, select: false })
     passwordHash: string;
 
-    @Column({ name: 'avatar_url', length: 255, nullable: true })
+    @Column({ name: 'avatar_url', type: 'varchar', length: 255, nullable: true })
     avatarUrl: string | null;
 
     @Column({ name: 'primary_category_id', type: 'int' })
@@ -49,10 +49,10 @@ export class Technician {
     @Column({ name: 'years_experience', type: 'smallint', default: 0 })
     yearsExperience: number;
 
-    @Column({ length: 80 })
+    @Column({ type: 'varchar', length: 80 })
     city: string;
 
-    @Column({ length: 80 })
+    @Column({ type: 'varchar', length: 80 })
     district: string;
 
     @Column({ type: 'decimal', precision: 10, scale: 7, nullable: true, transformer: decimalTransformer })

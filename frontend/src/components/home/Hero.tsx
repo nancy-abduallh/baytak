@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/Button";
 
 const HUB_NODES = [
     { icon: Droplet, label: "سباكة", className: "top-1.5 start-1/2 -translate-x-1/2" },
-    { icon: Zap, label: "كهرباء", className: "top-24 end-3" },
-    { icon: Snowflake, label: "تكييف", className: "bottom-24 end-3" },
+    { icon: Zap, label: "كهرباء", className: "top-24 start-3" },
+    { icon: Snowflake, label: "تكييف", className: "bottom-24 start-3" },
     { icon: Hammer, label: "نجارة", className: "bottom-1.5 start-1/2 -translate-x-1/2" },
-    { icon: PaintRoller, label: "دهانات", className: "bottom-24 start-3" },
-    { icon: Sparkles, label: "تنظيف", className: "top-24 start-3" },
+    { icon: PaintRoller, label: "دهانات", className: "bottom-24 end-3" },
+    { icon: Sparkles, label: "تنظيف", className: "top-24 end-3" },
 ];
 
 export function Hero() {
@@ -75,10 +75,10 @@ function ServiceHub() {
                 </div>
             ))}
 
-            <div className="absolute start-1.5 top-6 z-10 flex items-center gap-2.5 rounded-2xl bg-white px-4 py-3 text-[12.5px] font-bold shadow-lift">
+            <div className="absolute end-1.5 top-6 z-10 flex items-center gap-2.5 rounded-2xl bg-white px-4 py-3 text-[12.5px] font-bold shadow-lift">
                 <span className="h-2 w-2 rounded-full bg-green-500" /> فني في الطريق إليك
             </div>
-            <div className="absolute bottom-9 start-0 z-10 rounded-2xl bg-white px-4 py-3 text-[12.5px] font-bold shadow-lift">
+            <div className="absolute bottom-9 end-0 z-10 rounded-2xl bg-white px-4 py-3 text-[12.5px] font-bold shadow-lift">
                 ✓ تم تأكيد الحجز · #1010
             </div>
         </div>

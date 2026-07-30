@@ -24,8 +24,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar" dir="rtl">
-      <body className={`${tajawal.variable} ${plexArabic.variable} font-body antialiased`}>
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
+      <body className={`${tajawal.variable} ${plexArabic.variable} font-body antialiased`} suppressHydrationWarning>
         <Navbar />
         {children}
       </body>

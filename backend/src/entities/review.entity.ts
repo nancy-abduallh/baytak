@@ -37,7 +37,7 @@ export class Review {
     @Column({ type: 'tinyint' })
     rating: number;
 
-    @Column({ length: 500, nullable: true })
+    @Column({ type: 'varchar', length: 500, nullable: true })
     comment: string | null;
 
     @CreateDateColumn({ name: 'created_at' })

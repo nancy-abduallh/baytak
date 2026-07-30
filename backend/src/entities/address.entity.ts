@@ -18,19 +18,19 @@ export class Address {
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @Column({ length: 60, default: 'المنزل' })
+    @Column({ type: 'varchar', length: 60, default: 'المنزل' })
     label: string;
 
-    @Column({ length: 80 })
+    @Column({ type: 'varchar', length: 80 })
     city: string;
 
-    @Column({ length: 80 })
+    @Column({ type: 'varchar', length: 80 })
     district: string;
 
-    @Column({ length: 160, nullable: true })
+    @Column({ type: 'varchar', length: 160, nullable: true })
     street: string | null;
 
-    @Column({ name: 'building_no', length: 30, nullable: true })
+    @Column({ name: 'building_no', type: 'varchar', length: 30, nullable: true })
     buildingNo: string | null;
 
     @Column({ type: 'decimal', precision: 10, scale: 7, nullable: true, transformer: decimalTransformer })
