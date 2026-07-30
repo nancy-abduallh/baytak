@@ -2,15 +2,15 @@ import clsx from "clsx";
 import { ArrowLeft, Droplet, Zap, Snowflake, Hammer, PaintRoller, Sparkles, Home as HomeIcon } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
-const HUB_RADIUS = 190; // px — distance of each node's center from the hub center
+const HUB_RADIUS = 190;
 
 const HUB_NODES = [
-    { icon: Droplet, label: "سباكة", angle: -90 },   // top
-    { icon: Zap, label: "كهرباء", angle: -30 },       // upper-right
-    { icon: Snowflake, label: "تكييف", angle: 30 },    // lower-right
-    { icon: Hammer, label: "نجارة", angle: 90 },       // bottom
-    { icon: PaintRoller, label: "دهانات", angle: 150 }, // lower-left
-    { icon: Sparkles, label: "تنظيف", angle: 210 },     // upper-left
+    { icon: Droplet, label: "سباكة", angle: -90 },
+    { icon: Zap, label: "كهرباء", angle: -30 },
+    { icon: Snowflake, label: "تكييف", angle: 30 },
+    { icon: Hammer, label: "نجارة", angle: 90 },
+    { icon: PaintRoller, label: "دهانات", angle: 150 },
+    { icon: Sparkles, label: "تنظيف", angle: 210 },
 ];
 
 export function Hero() {
