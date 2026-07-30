@@ -2,18 +2,26 @@ import clsx from "clsx";
 import { ArrowLeft, Droplet, Zap, Snowflake, Hammer, PaintRoller, Sparkles, Home as HomeIcon } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
+const HUB_RADIUS = 190; // px — distance of each node's center from the hub center
+
 const HUB_NODES = [
-    { icon: Droplet, label: "سباكة", className: "top-1.5 start-1/2 -translate-x-1/2" },
-    { icon: Zap, label: "كهرباء", className: "top-24 start-3" },
-    { icon: Snowflake, label: "تكييف", className: "bottom-24 start-3" },
-    { icon: Hammer, label: "نجارة", className: "bottom-1.5 start-1/2 -translate-x-1/2" },
-    { icon: PaintRoller, label: "دهانات", className: "bottom-24 end-3" },
-    { icon: Sparkles, label: "تنظيف", className: "top-24 end-3" },
+    { icon: Droplet, label: "سباكة", angle: -90 },   // top
+    { icon: Zap, label: "كهرباء", angle: -30 },       // upper-right
+    { icon: Snowflake, label: "تكييف", angle: 30 },    // lower-right
+    { icon: Hammer, label: "نجارة", angle: 90 },       // bottom
+    { icon: PaintRoller, label: "دهانات", angle: 150 }, // lower-left
+    { icon: Sparkles, label: "تنظيف", angle: 210 },     // upper-left
 ];
 
 export function Hero() {
     return (
-        <section className="relative overflow-hidden bg-gradient-to-b from-teal-900 via-teal-900 to-sand-50 px-10 pt-20">
+        <section
+            className="relative overflow-hidden px-10 pt-[76px]"
+            style={{
+                background:
+                    "linear-gradient(180deg, var(--color-teal-900) 0%, var(--color-teal-800) 62%, var(--color-sand-50) 62%)",
+            }}
+        >
             <div className="mx-auto grid max-w-[1360px] grid-cols-[1.05fr_.95fr] items-center gap-10">
                 <div>
                     <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[.08] px-4 py-1.5 text-[13px] font-semibold text-gold-100">
@@ -33,12 +41,12 @@ export function Hero() {
                         <Button href="/services/electrical" variant="primary">
                             اطلب خدمة الآن <ArrowLeft className="h-4 w-4" />
                         </Button>
-                        <Button href="#how-it-works" variant="ghost">شاهد كيف يعمل التطبيق</Button>
+                        <Button href="#how-it-works" variant="outline">شاهد كيف يعمل التطبيق</Button>
                     </div>
 
                     <div className="flex">
-                        <Stat value="+2,400" label="فني معتمد بالمملكة" />
-                        <Stat value="4.9★" label="تقييم متوسط للخدمة" />
+                        <Stat value="2,400" symbol="+" symbolPosition="before" label="فني معتمد بالمملكة" />
+                        <Stat value="4.9" symbol="★" symbolPosition="after" label="تقييم متوسط للخدمة" />
                         <Stat value="24/7" label="دعم فني وطلبات طارئة" last />
                     </div>
                 </div>
@@ -49,11 +57,27 @@ export function Hero() {
     );
 }
 
-function Stat({ value, label, last }: { value: string; label: string; last?: boolean }) {
+function Stat({
+    value,
+    symbol,
+    symbolPosition = "after",
+    label,
+    last,
+}: {
+    value: string;
+    symbol?: string;
+    symbolPosition?: "before" | "after";
+    label: string;
+    last?: boolean;
+}) {
     return (
-        <div className={clsx("ms-8 ps-8 border-s border-white/20", last && "ms-0 border-none ps-0")}>
-            <div className="font-heading text-2xl font-extrabold text-white">{value}</div>
-            <div className="mt-1 text-[12.5px] text-[#AFC9C0]">{label}</div>
+        <div className={clsx("ms-8 ps-8 border-s border-ink/10", last && "ms-0 border-none ps-0")}>
+            <div className="flex items-baseline gap-0.5 font-heading text-2xl font-extrabold text-ink">
+                {symbol && symbolPosition === "before" && <span className="text-gold-500">{symbol}</span>}
+                <span>{value}</span>
+                {symbol && symbolPosition === "after" && <span className="text-gold-500">{symbol}</span>}
+            </div>
+            <div className="mt-1 text-[12.5px] font-medium text-[#63756F]">{label}</div>
         </div>
     );
 }
@@ -68,12 +92,25 @@ function ServiceHub() {
                 <HomeIcon className="h-11 w-11 text-white" />
             </div>
 
-            {HUB_NODES.map(({ icon: Icon, label, className }) => (
-                <div key={label} className={clsx("absolute z-10 flex h-[88px] w-[88px] flex-col items-center justify-center gap-1.5 rounded-lg bg-white shadow-lift", className)}>
-                    <Icon className="h-6 w-6 text-teal-700" />
-                    <span className="text-[11px] font-bold text-ink">{label}</span>
-                </div>
-            ))}
+            {HUB_NODES.map(({ icon: Icon, label, angle }) => {
+                const rad = (angle * Math.PI) / 180;
+                const x = Math.cos(rad) * HUB_RADIUS;
+                const y = Math.sin(rad) * HUB_RADIUS;
+                return (
+                    <div
+                        key={label}
+                        className="absolute z-10 flex h-[88px] w-[88px] flex-col items-center justify-center gap-1.5 rounded-lg bg-white shadow-lift"
+                        style={{
+                            left: `calc(50% + ${x}px)`,
+                            top: `calc(50% + ${y}px)`,
+                            transform: "translate(-50%, -50%)",
+                        }}
+                    >
+                        <Icon className="h-6 w-6 text-teal-700" />
+                        <span className="text-[11px] font-bold text-ink">{label}</span>
+                    </div>
+                );
+            })}
 
             <div className="absolute end-1.5 top-6 z-10 flex items-center gap-2.5 rounded-2xl bg-white px-4 py-3 text-[12.5px] font-bold shadow-lift">
                 <span className="h-2 w-2 rounded-full bg-green-500" /> فني في الطريق إليك
