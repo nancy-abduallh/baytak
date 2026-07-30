@@ -4,14 +4,27 @@ import { StepsSection } from "@/components/home/StepsSection";
 import { TrustBar } from "@/components/home/TrustBar";
 import { Footer } from "@/components/layout/Footer";
 import { api } from "@/lib/api";
+import { ServiceCategory } from "@/lib/types";
 
 export default async function HomePage() {
-  const categories = await api.getCategories();
+  let categories: ServiceCategory[] = [];
+  try {
+    categories = await api.getCategories();
+  } catch {
+    // The marketing homepage should still render even if the API is
+    // down — this section just shows a note instead of throwing.
+  }
 
   return (
     <main>
       <Hero />
-      <ServicesGrid categories={categories} />
+      {categories.length > 0 ? (
+        <ServicesGrid categories={categories} />
+      ) : (
+        <div className="mx-auto max-w-[1360px] px-10 py-24 text-center text-[14px] text-[#8A9691]">
+          تعذر تحميل قائمة الخدمات حاليًا. تأكد من تشغيل الخادم الخلفي على المنفذ 4000، ثم أعد تحميل الصفحة.
+        </div>
+      )}
       <StepsSection />
       <TrustBar />
       <Footer />

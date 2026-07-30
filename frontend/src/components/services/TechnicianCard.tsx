@@ -27,7 +27,7 @@ export function TechnicianCard({ tech }: { tech: Technician }) {
                 <div className="font-heading text-lg font-extrabold">{tech.priceFrom} ر.س</div>
                 <div className="text-[11.5px] text-[#8A9691]">بداية السعر</div>
             </div>
-            <Button variant="dark">احجز الآن</Button>
+            <Button href={`/booking/${tech.id}`} variant="dark">احجز الآن</Button>
         </div>
     );
 }

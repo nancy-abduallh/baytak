@@ -33,13 +33,13 @@ export type OrderStatus = "pending" | "confirmed" | "in_progress" | "completed" 
 
 export interface Order {
     id: number;
-    orderNumber: string;              // "#1010"
+    orderNumber: string;
     categoryId: number;
     categorySlug: ServiceCategorySlug;
     categoryLabel: string;
     categoryIconKey: string;
     technician?: { id: number; fullName: string } | null;
-    description: string;
+    description: string | null;
     status: OrderStatus;
     address: string;
     amount: number;
@@ -49,9 +49,18 @@ export interface Order {
 export interface User {
     id: number;
     fullName: string;
-    initials: string;
     phone: string;
     email?: string | null;
+    city?: string | null;
+    district?: string | null;
+}
+
+export interface Address {
+    id: number;
+    userId: number;
+    label: string;
     city: string;
     district: string;
+    street?: string | null;
+    isDefault: boolean;
 }
