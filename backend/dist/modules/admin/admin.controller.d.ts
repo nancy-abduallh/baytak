@@ -1,18 +1,12 @@
-import { Repository } from 'typeorm';
-import { Order, OrderStatus } from '../../entities/order.entity';
-import { User } from '../../entities/user.entity';
-import { Technician } from '../../entities/technician.entity';
-import { ServiceCategory } from '../../entities/service-category.entity';
-import { OrdersService } from '../orders/orders.service';
+import { AdminService } from './admin.service';
 import { UpdateOrderStatusDto } from '../orders/dto/update-order-status.dto';
+import { UpdateTechnicianVerifiedDto, UpdateTechnicianActiveDto } from './dto/technician-flags.dto';
+import { UpdateUserBlockedDto } from './dto/update-user-blocked.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-export declare class AdminService {
-    private readonly orders;
-    private readonly users;
-    private readonly technicians;
-    private readonly categories;
-    private readonly ordersService;
-    constructor(orders: Repository<Order>, users: Repository<User>, technicians: Repository<Technician>, categories: Repository<ServiceCategory>, ordersService: OrdersService);
+import type { OrderStatus } from '../../entities/order.entity';
+export declare class AdminController {
+    private readonly admin;
+    constructor(admin: AdminService);
     getStats(): Promise<{
         ordersToday: number;
         ordersInProgress: number;
@@ -43,7 +37,6 @@ export declare class AdminService {
         scheduledDate: string;
         createdAt: string;
     }>;
-    private toOrderRow;
     getTechnicians(): Promise<{
         id: number;
         fullName: string;
@@ -57,7 +50,7 @@ export declare class AdminService {
         reviewCount: number;
         completedOrders: number;
     }[]>;
-    setTechnicianVerified(id: number, isVerified: boolean): Promise<{
+    setTechnicianVerified(id: number, dto: UpdateTechnicianVerifiedDto): Promise<{
         id: number;
         fullName: string;
         phone: string;
@@ -70,7 +63,7 @@ export declare class AdminService {
         reviewCount: number;
         completedOrders: number;
     }>;
-    setTechnicianActive(id: number, isActive: boolean): Promise<{
+    setTechnicianActive(id: number, dto: UpdateTechnicianActiveDto): Promise<{
         id: number;
         fullName: string;
         phone: string;
@@ -83,8 +76,6 @@ export declare class AdminService {
         reviewCount: number;
         completedOrders: number;
     }>;
-    private completedCountFor;
-    private toTechnicianRow;
     getUsers(): Promise<{
         id: number;
         fullName: string;
@@ -95,7 +86,7 @@ export declare class AdminService {
         orderCount: number;
         createdAt: string;
     }[]>;
-    setUserBlocked(id: number, isBlocked: boolean): Promise<{
+    setUserBlocked(id: number, dto: UpdateUserBlockedDto): Promise<{
         id: number;
         fullName: string;
         phone: string;
@@ -105,7 +96,6 @@ export declare class AdminService {
         orderCount: number;
         createdAt: string;
     }>;
-    private toUserRow;
-    getCategories(): Promise<ServiceCategory[]>;
-    updateCategory(id: number, dto: UpdateCategoryDto): Promise<ServiceCategory>;
+    getCategories(): Promise<import("../../entities/service-category.entity").ServiceCategory[]>;
+    updateCategory(id: number, dto: UpdateCategoryDto): Promise<import("../../entities/service-category.entity").ServiceCategory>;
 }

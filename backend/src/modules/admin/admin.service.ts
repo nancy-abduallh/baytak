@@ -170,4 +170,32 @@ export class AdminService {
         user.isActive = !isBlocked;
         await this.users.save(user);
         const count = await this.orders.count({ where: { userId: id } });
-        return this.
+        return this.toUserRow(user, count);
+    }
+
+    private toUserRow(u: User, orderCount: number) {
+        return {
+            id: u.id,
+            fullName: u.fullName,
+            phone: u.phone,
+            email: u.email,
+            city: u.city,
+            isBlocked: !u.isActive,
+            orderCount,
+            createdAt: u.createdAt?.toISOString().slice(0, 10),
+        };
+    }
+
+    // ---------- Categories ----------
+    getCategories() {
+        return this.categories.find({ order: { sortOrder: 'ASC' } });
+    }
+
+    async updateCategory(id: number, dto: UpdateCategoryDto) {
+        const category = await this.categories.findOne({ where: { id } });
+        if (!category) throw new NotFoundException('الفئة غير موجودة');
+        if (dto.priceFrom !== undefined) category.priceFrom = dto.priceFrom as any;
+        if (dto.isActive !== undefined) category.isActive = dto.isActive;
+        return this.categories.save(category);
+    }
+}

@@ -162,7 +162,32 @@ let AdminService = class AdminService {
         user.isActive = !isBlocked;
         await this.users.save(user);
         const count = await this.orders.count({ where: { userId: id } });
-        return this.;
+        return this.toUserRow(user, count);
+    }
+    toUserRow(u, orderCount) {
+        return {
+            id: u.id,
+            fullName: u.fullName,
+            phone: u.phone,
+            email: u.email,
+            city: u.city,
+            isBlocked: !u.isActive,
+            orderCount,
+            createdAt: u.createdAt?.toISOString().slice(0, 10),
+        };
+    }
+    getCategories() {
+        return this.categories.find({ order: { sortOrder: 'ASC' } });
+    }
+    async updateCategory(id, dto) {
+        const category = await this.categories.findOne({ where: { id } });
+        if (!category)
+            throw new common_1.NotFoundException('الفئة غير موجودة');
+        if (dto.priceFrom !== undefined)
+            category.priceFrom = dto.priceFrom;
+        if (dto.isActive !== undefined)
+            category.isActive = dto.isActive;
+        return this.categories.save(category);
     }
 };
 exports.AdminService = AdminService;

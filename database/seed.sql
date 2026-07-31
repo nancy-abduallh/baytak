@@ -46,3 +46,9 @@ INSERT INTO order_status_history (order_id, status, note) VALUES
 INSERT INTO reviews (order_id, user_id, technician_id, rating, comment) VALUES
 (1000, 1, 2, 5, 'سرعة في الاستجابة والتنفيذ، ممتاز.'),
 (1009, 1, 3, 5, 'فني محترف ونظيف في العمل.');
+
+-- ---------- Admin (super_admin) ----------
+-- Login email: admin@baytak.sa
+-- Login password: Admin@12345   <-- CHANGE THIS after first login in production
+INSERT INTO admins (full_name, email, password_hash, role, is_active) VALUES
+('مدير النظام', 'admin@baytak.sa', '$2b$12$oqvx914qmpmQ2rcK08JQGuUE3O4a.ZGhZBKXzpSy2uuDRq0agEPM2', 'super_admin', 1);
