@@ -22,6 +22,7 @@ exports.OrdersModule = OrdersModule = __decorate([
         imports: [typeorm_1.TypeOrmModule.forFeature([order_entity_1.Order, order_status_history_entity_1.OrderStatusHistory])],
         controllers: [orders_controller_1.OrdersController],
         providers: [orders_service_1.OrdersService, orders_gateway_1.OrdersGateway],
+        exports: [orders_service_1.OrdersService],
     })
 ], OrdersModule);
 //# sourceMappingURL=orders.module.js.map

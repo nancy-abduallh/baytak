@@ -49,6 +49,6 @@ INSERT INTO reviews (order_id, user_id, technician_id, rating, comment) VALUES
 
 -- ---------- Admin (super_admin) ----------
 -- Login email: admin@baytak.sa
--- Login password: Admin@12345   <-- CHANGE THIS after first login in production
+-- Login password: Admin@12345   
 INSERT INTO admins (full_name, email, password_hash, role, is_active) VALUES
 ('مدير النظام', 'admin@baytak.sa', '$2b$12$oqvx914qmpmQ2rcK08JQGuUE3O4a.ZGhZBKXzpSy2uuDRq0agEPM2', 'super_admin', 1);
