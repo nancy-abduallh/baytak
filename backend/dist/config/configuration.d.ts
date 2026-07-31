@@ -1,6 +1,6 @@
 declare const _default: () => {
     port: number;
-    corsOrigin: string;
+    corsOrigin: string[];
     jwt: {
         accessSecret: string | undefined;
         refreshSecret: string | undefined;
