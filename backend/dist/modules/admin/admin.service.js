@@ -186,6 +186,9 @@ let AdminService = class AdminService {
             throw new common_1.NotFoundException('الطلب غير موجود');
         return this.toOrderRow(order);
     }
+    async deleteOrder(id) {
+        return this.ordersService.remove(id);
+    }
     toOrderRow(o) {
         return {
             id: o.id,

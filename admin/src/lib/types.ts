@@ -1,8 +1,47 @@
+export type PermissionKey =
+    | "dashboard.view"
+    | "orders.view"
+    | "orders.update_status"
+    | "orders.delete"
+    | "technicians.manage"
+    | "users.manage"
+    | "categories.manage"
+    | "admins.manage";
+
 export interface AdminUser {
     id: number;
     fullName: string;
     email: string;
-    role: "super_admin" | "operations" | "support";
+    role: "super_admin" | "operations" | "support" | "finance";
+    permissions: PermissionKey[];
+    isActive?: boolean;
+}
+
+export interface AdminRow {
+    id: number;
+    fullName: string;
+    email: string;
+    role: AdminUser["role"];
+    permissions: PermissionKey[];
+    isActive: boolean;
+    createdAt: string;
+}
+
+export interface CreateAdminPayload {
+    fullName: string;
+    email: string;
+    password: string;
+    role: AdminUser["role"];
+    permissions: PermissionKey[];
+    isActive?: boolean;
+}
+
+export type UpdateAdminPayload = Partial<Omit<CreateAdminPayload, "password">> & { password?: string };
+
+export interface UpdateOwnProfilePayload {
+    fullName?: string;
+    currentPassword?: string;
+    newPassword?: string;
 }
 
 export type OrderStatus = "pending" | "confirmed" | "in_progress" | "completed" | "cancelled";

@@ -87,6 +87,14 @@ let OrdersService = class OrdersService {
         });
         return this.findOne(id);
     }
+    async remove(id) {
+        const order = await this.orders.findOneBy({ id });
+        if (!order)
+            throw new common_1.NotFoundException('الطلب غير موجود');
+        await this.orders.remove(order);
+        this.events.emit('order.deleted', { orderId: id, deletedAt: new Date().toISOString() });
+        return { id, deleted: true };
+    }
     toResponse(order) {
         return {
             id: order.id,

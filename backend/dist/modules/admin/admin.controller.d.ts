@@ -59,6 +59,10 @@ export declare class AdminController {
         scheduledDate: string;
         createdAt: string;
     }>;
+    deleteOrder(id: number): Promise<{
+        id: number;
+        deleted: boolean;
+    }>;
     getTechnicians(): Promise<{
         id: number;
         fullName: string;

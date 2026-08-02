@@ -66,6 +66,10 @@ export declare class AdminService {
         scheduledDate: string;
         createdAt: string;
     }>;
+    deleteOrder(id: number): Promise<{
+        id: number;
+        deleted: boolean;
+    }>;
     private toOrderRow;
     getTechnicians(): Promise<{
         id: number;

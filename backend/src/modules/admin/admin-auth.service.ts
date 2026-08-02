@@ -26,14 +26,23 @@ export class AdminAuthService {
             throw new UnauthorizedException('البريد الإلكتروني أو كلمة المرور غير صحيحة');
         }
 
+        const permissions = admin.role === 'super_admin' ? [] : admin.permissions ?? [];
+
         const accessToken = this.jwt.sign(
-            { sub: admin.id, email: admin.email, role: admin.role, actorType: 'admin' },
+            { sub: admin.id, email: admin.email, role: admin.role, actorType: 'admin', permissions },
             { secret: this.config.get('jwt.accessSecret'), expiresIn: '8h' },
         );
 
         return {
             accessToken,
-            admin: { id: admin.id, fullName: admin.fullName, email: admin.email, role: admin.role },
+            admin: {
+                id: admin.id,
+                fullName: admin.fullName,
+                email: admin.email,
+                role: admin.role,
+                permissions,
+                isActive: admin.isActive,
+            },
         };
     }
 }

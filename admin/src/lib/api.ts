@@ -4,6 +4,7 @@ import {
     CreateTechnicianPayload, UpdateTechnicianPayload,
     CreateCategoryPayload, UpdateCategoryPayload,
     DashboardStats, DashboardAnalytics, AdminUser, OrderStatus,
+    AdminRow, CreateAdminPayload, UpdateAdminPayload, UpdateOwnProfilePayload, PermissionKey,
 } from "./types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
@@ -57,8 +58,10 @@ export const adminApi = {
         const qs = new URLSearchParams(params as Record<string, string>).toString();
         return request<AdminOrderRow[]>(`/admin/orders${qs ? `?${qs}` : ""}`);
     },
-    updateOrderStatus: (id: number, status: OrderStatus) =>
-        request<AdminOrderRow>(`/admin/orders/${id}/status`, { method: "PATCH", body: JSON.stringify({ status }) }),
+    updateOrderStatus: (id: number, status: OrderStatus, note?: string) =>
+        request<AdminOrderRow>(`/admin/orders/${id}/status`, { method: "PATCH", body: JSON.stringify({ status, note }) }),
+    deleteOrder: (id: number) =>
+        request<{ id: number; deleted: boolean }>(`/admin/orders/${id}`, { method: "DELETE" }),
 
     // ---------- Technicians ----------
     getTechnicians: (params?: { search?: string; verified?: boolean }) => {
@@ -92,4 +95,19 @@ export const adminApi = {
         request<AdminCategoryRow>(`/admin/categories/${id}`, { method: "PATCH", body: JSON.stringify(payload) }),
     deleteCategory: (id: number) =>
         request<{ id: number; deleted: boolean }>(`/admin/categories/${id}`, { method: "DELETE" }),
+
+    // ---------- My own account ----------
+    getMe: () => request<AdminRow>("/admin/me"),
+    updateMe: (payload: UpdateOwnProfilePayload) =>
+        request<AdminRow>("/admin/me", { method: "PATCH", body: JSON.stringify(payload) }),
+
+    // ---------- Admin & permissions management (super admin / admins.manage only) ----------
+    getPermissionsCatalogue: () => request<{ key: PermissionKey; label: string }[]>("/admin/permissions"),
+    getAdmins: () => request<AdminRow[]>("/admin/admins"),
+    createAdmin: (payload: CreateAdminPayload) =>
+        request<AdminRow>("/admin/admins", { method: "POST", body: JSON.stringify(payload) }),
+    updateAdmin: (id: number, payload: UpdateAdminPayload) =>
+        request<AdminRow>(`/admin/admins/${id}`, { method: "PATCH", body: JSON.stringify(payload) }),
+    deleteAdmin: (id: number) =>
+        request<{ id: number; deleted: boolean }>(`/admin/admins/${id}`, { method: "DELETE" }),
 };

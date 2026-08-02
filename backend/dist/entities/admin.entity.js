@@ -19,8 +19,10 @@ let Admin = class Admin {
     email;
     passwordHash;
     role;
+    permissions;
     isActive;
     createdAt;
+    updatedAt;
 };
 exports.Admin = Admin;
 __decorate([
@@ -45,9 +47,13 @@ __decorate([
     __metadata("design:type", String)
 ], Admin.prototype, "passwordHash", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: ['super_admin', 'support', 'finance'], default: 'support' }),
+    (0, typeorm_1.Column)({ type: 'enum', enum: ['super_admin', 'operations', 'support', 'finance'], default: 'support' }),
     __metadata("design:type", String)
 ], Admin.prototype, "role", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'json', nullable: false, default: () => "('[]')" }),
+    __metadata("design:type", Array)
+], Admin.prototype, "permissions", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'is_active', default: true }),
     __metadata("design:type", Boolean)
@@ -56,6 +62,10 @@ __decorate([
     (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)
 ], Admin.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)({ name: 'updated_at' }),
+    __metadata("design:type", Date)
+], Admin.prototype, "updatedAt", void 0);
 exports.Admin = Admin = __decorate([
     (0, typeorm_1.Entity)('admins')
 ], Admin);

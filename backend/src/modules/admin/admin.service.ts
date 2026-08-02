@@ -167,6 +167,10 @@ export class AdminService {
         return this.toOrderRow(order);
     }
 
+    async deleteOrder(id: number) {
+        return this.ordersService.remove(id);
+    }
+
     private toOrderRow(o: Order) {
         return {
             id: o.id,

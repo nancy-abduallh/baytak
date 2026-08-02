@@ -83,6 +83,20 @@ export class OrdersService {
         return this.findOne(id);
     }
 
+    async remove(id: number) {
+        const order = await this.orders.findOneBy({ id });
+        if (!order) throw new NotFoundException('الطلب غير موجود');
+
+        await this.orders.remove(order);
+        // order_status_history, order_images and reviews all cascade on
+        // delete at the DB level (see schema.sql), so no manual cleanup
+        // is required here.
+
+        this.events.emit('order.deleted', { orderId: id, deletedAt: new Date().toISOString() });
+
+        return { id, deleted: true };
+    }
+
     private toResponse(order: Order) {
         return {
             id: order.id,

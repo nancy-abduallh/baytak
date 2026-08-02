@@ -282,3 +282,25 @@ CREATE TABLE auth_tokens (
 ) ENGINE=InnoDB;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+ALTER TABLE admins
+  MODIFY COLUMN role ENUM('super_admin','operations','support','finance')
+    NOT NULL DEFAULT 'support';
+
+
+ALTER TABLE admins
+  ADD COLUMN IF NOT EXISTS permissions JSON NOT NULL DEFAULT (JSON_ARRAY())
+    AFTER role;
+
+ALTER TABLE admins
+  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL
+    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER is_active;
+
+
+UPDATE admins
+SET permissions = JSON_ARRAY(
+  'dashboard.view','orders.view','orders.update_status','orders.delete',
+  'technicians.manage','users.manage','categories.manage','admins.manage'
+)
+WHERE role = 'super_admin';

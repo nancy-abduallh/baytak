@@ -2,8 +2,9 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
-import { LayoutDashboard, ClipboardList, Wrench, Users, ListTree, LogOut, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, ClipboardList, Wrench, Users, ListTree, LogOut, ShieldCheck, UserCog, Settings } from "lucide-react";
 import { useAdminAuthStore } from "@/lib/stores/admin-auth-store";
+import { hasPermission, ROLE_LABELS } from "@/lib/permissions";
 
 const NAV = [
     { href: "/", label: "نظرة عامة", icon: LayoutDashboard, exact: true },
@@ -17,6 +18,14 @@ export function AdminSidebar() {
     const pathname = usePathname();
     const router = useRouter();
     const { admin, clearSession } = useAdminAuthStore();
+
+    const nav = [
+        ...NAV,
+        ...(hasPermission(admin, "admins.manage")
+            ? [{ href: "/admins", label: "إدارة المشرفين", icon: UserCog }]
+            : []),
+        { href: "/account", label: "حسابي", icon: Settings },
+    ];
 
     const handleLogout = () => {
         clearSession();
@@ -50,7 +59,7 @@ export function AdminSidebar() {
             </div>
 
             <nav className="relative flex-1 space-y-1.5">
-                {NAV.map(({ href, label, icon: Icon, exact }) => {
+                {nav.map(({ href, label, icon: Icon, exact }) => {
                     const active = exact ? pathname === href : pathname.startsWith(href);
                     return (
                         <Link
@@ -80,7 +89,7 @@ export function AdminSidebar() {
                     </div>
                     <div className="leading-tight">
                         <div className="text-[13px] font-semibold text-white">{admin?.fullName ?? "—"}</div>
-                        <div className="text-[11px] text-[#9FC2B7]">{roleLabel(admin?.role)}</div>
+                        <div className="text-[11px] text-[#9FC2B7]">{admin?.role ? ROLE_LABELS[admin.role] : "—"}</div>
                     </div>
                 </div>
                 <button
@@ -92,13 +101,4 @@ export function AdminSidebar() {
             </div>
         </aside>
     );
-}
-
-function roleLabel(role?: string) {
-    switch (role) {
-        case "super_admin": return "مدير عام";
-        case "operations": return "فريق العمليات";
-        case "support": return "فريق الدعم";
-        default: return "—";
-    }
 }

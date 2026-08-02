@@ -4,9 +4,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
+import { AdminsController } from './admins.controller';
+import { AdminsService } from './admins.service';
 import { AdminAuthController } from './admin-auth.controller';
 import { AdminAuthService } from './admin-auth.service';
 import { JwtAdminStrategy } from './strategies/jwt-admin.strategy';
+import { PermissionsGuard } from './guards/permissions.guard';
 import { Admin } from '../../entities/admin.entity';
 import { Order } from '../../entities/order.entity';
 import { User } from '../../entities/user.entity';
@@ -21,7 +24,7 @@ import { OrdersModule } from '../orders/orders.module';
         JwtModule.register({}),
         OrdersModule,
     ],
-    controllers: [AdminAuthController, AdminController],
-    providers: [AdminAuthService, AdminService, JwtAdminStrategy],
+    controllers: [AdminAuthController, AdminController, AdminsController],
+    providers: [AdminAuthService, AdminService, AdminsService, JwtAdminStrategy, PermissionsGuard],
 })
 export class AdminModule { }

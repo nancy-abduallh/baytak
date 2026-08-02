@@ -77,5 +77,9 @@ export declare class OrdersService {
         amount: number;
         scheduledDate: string;
     }>;
+    remove(id: number): Promise<{
+        id: number;
+        deleted: boolean;
+    }>;
     private toResponse;
 }

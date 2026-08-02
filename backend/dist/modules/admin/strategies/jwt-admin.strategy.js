@@ -8,30 +8,50 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JwtAdminStrategy = void 0;
 const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
 const passport_jwt_1 = require("passport-jwt");
 const config_1 = require("@nestjs/config");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
+const admin_entity_1 = require("../../../entities/admin.entity");
 let JwtAdminStrategy = class JwtAdminStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy, 'jwt-admin') {
-    constructor(config) {
+    admins;
+    constructor(config, admins) {
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
             secretOrKey: config.getOrThrow('jwt.accessSecret'),
         });
+        this.admins = admins;
     }
     async validate(payload) {
         if (payload.actorType !== 'admin') {
             throw new common_1.UnauthorizedException('رمز الدخول غير صالح للوحة التحكم');
         }
-        return { id: payload.sub, email: payload.email, role: payload.role, actorType: payload.actorType };
+        const admin = await this.admins.findOne({ where: { id: payload.sub } });
+        if (!admin || !admin.isActive) {
+            throw new common_1.UnauthorizedException('هذا الحساب غير نشط أو غير موجود');
+        }
+        return {
+            id: admin.id,
+            email: admin.email,
+            role: admin.role,
+            actorType: payload.actorType,
+            permissions: admin.role === 'super_admin' ? [] : admin.permissions ?? [],
+        };
     }
 };
 exports.JwtAdminStrategy = JwtAdminStrategy;
 exports.JwtAdminStrategy = JwtAdminStrategy = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [config_1.ConfigService])
+    __param(1, (0, typeorm_1.InjectRepository)(admin_entity_1.Admin)),
+    __metadata("design:paramtypes", [config_1.ConfigService,
+        typeorm_2.Repository])
 ], JwtAdminStrategy);
 //# sourceMappingURL=jwt-admin.strategy.js.map

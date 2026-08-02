@@ -13,9 +13,12 @@ const jwt_1 = require("@nestjs/jwt");
 const passport_1 = require("@nestjs/passport");
 const admin_controller_1 = require("./admin.controller");
 const admin_service_1 = require("./admin.service");
+const admins_controller_1 = require("./admins.controller");
+const admins_service_1 = require("./admins.service");
 const admin_auth_controller_1 = require("./admin-auth.controller");
 const admin_auth_service_1 = require("./admin-auth.service");
 const jwt_admin_strategy_1 = require("./strategies/jwt-admin.strategy");
+const permissions_guard_1 = require("./guards/permissions.guard");
 const admin_entity_1 = require("../../entities/admin.entity");
 const order_entity_1 = require("../../entities/order.entity");
 const user_entity_1 = require("../../entities/user.entity");
@@ -33,8 +36,8 @@ exports.AdminModule = AdminModule = __decorate([
             jwt_1.JwtModule.register({}),
             orders_module_1.OrdersModule,
         ],
-        controllers: [admin_auth_controller_1.AdminAuthController, admin_controller_1.AdminController],
-        providers: [admin_auth_service_1.AdminAuthService, admin_service_1.AdminService, jwt_admin_strategy_1.JwtAdminStrategy],
+        controllers: [admin_auth_controller_1.AdminAuthController, admin_controller_1.AdminController, admins_controller_1.AdminsController],
+        providers: [admin_auth_service_1.AdminAuthService, admin_service_1.AdminService, admins_service_1.AdminsService, jwt_admin_strategy_1.JwtAdminStrategy, permissions_guard_1.PermissionsGuard],
     })
 ], AdminModule);
 //# sourceMappingURL=admin.module.js.map

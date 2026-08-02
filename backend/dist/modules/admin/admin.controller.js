@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminController = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_admin_guard_1 = require("./guards/jwt-admin.guard");
+const permissions_guard_1 = require("./guards/permissions.guard");
+const require_permission_decorator_1 = require("./decorators/require-permission.decorator");
 const admin_service_1 = require("./admin.service");
 const update_order_status_dto_1 = require("../orders/dto/update-order-status.dto");
 const technician_flags_dto_1 = require("./dto/technician-flags.dto");
@@ -39,6 +41,9 @@ let AdminController = class AdminController {
     }
     updateOrderStatus(id, dto) {
         return this.admin.updateOrderStatus(id, dto);
+    }
+    deleteOrder(id) {
+        return this.admin.deleteOrder(id);
     }
     getTechnicians() {
         return this.admin.getTechnicians();
@@ -80,18 +85,21 @@ let AdminController = class AdminController {
 exports.AdminController = AdminController;
 __decorate([
     (0, common_1.Get)('stats'),
+    (0, require_permission_decorator_1.RequirePermission)('dashboard.view'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "getStats", null);
 __decorate([
     (0, common_1.Get)('analytics'),
+    (0, require_permission_decorator_1.RequirePermission)('dashboard.view'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "getAnalytics", null);
 __decorate([
     (0, common_1.Get)('orders'),
+    (0, require_permission_decorator_1.RequirePermission)('orders.view'),
     __param(0, (0, common_1.Query)('status')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -99,6 +107,7 @@ __decorate([
 ], AdminController.prototype, "getOrders", null);
 __decorate([
     (0, common_1.Patch)('orders/:id/status'),
+    (0, require_permission_decorator_1.RequirePermission)('orders.update_status'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -106,13 +115,23 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "updateOrderStatus", null);
 __decorate([
+    (0, common_1.Delete)('orders/:id'),
+    (0, require_permission_decorator_1.RequirePermission)('orders.delete'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "deleteOrder", null);
+__decorate([
     (0, common_1.Get)('technicians'),
+    (0, require_permission_decorator_1.RequirePermission)('technicians.manage'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "getTechnicians", null);
 __decorate([
     (0, common_1.Post)('technicians'),
+    (0, require_permission_decorator_1.RequirePermission)('technicians.manage'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_technician_dto_1.CreateTechnicianDto]),
@@ -120,6 +139,7 @@ __decorate([
 ], AdminController.prototype, "createTechnician", null);
 __decorate([
     (0, common_1.Patch)('technicians/:id'),
+    (0, require_permission_decorator_1.RequirePermission)('technicians.manage'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -128,6 +148,7 @@ __decorate([
 ], AdminController.prototype, "updateTechnician", null);
 __decorate([
     (0, common_1.Delete)('technicians/:id'),
+    (0, require_permission_decorator_1.RequirePermission)('technicians.manage'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -135,6 +156,7 @@ __decorate([
 ], AdminController.prototype, "deleteTechnician", null);
 __decorate([
     (0, common_1.Patch)('technicians/:id/verify'),
+    (0, require_permission_decorator_1.RequirePermission)('technicians.manage'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -143,6 +165,7 @@ __decorate([
 ], AdminController.prototype, "setTechnicianVerified", null);
 __decorate([
     (0, common_1.Patch)('technicians/:id/active'),
+    (0, require_permission_decorator_1.RequirePermission)('technicians.manage'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -151,12 +174,14 @@ __decorate([
 ], AdminController.prototype, "setTechnicianActive", null);
 __decorate([
     (0, common_1.Get)('users'),
+    (0, require_permission_decorator_1.RequirePermission)('users.manage'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "getUsers", null);
 __decorate([
     (0, common_1.Patch)('users/:id/block'),
+    (0, require_permission_decorator_1.RequirePermission)('users.manage'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -165,12 +190,14 @@ __decorate([
 ], AdminController.prototype, "setUserBlocked", null);
 __decorate([
     (0, common_1.Get)('categories'),
+    (0, require_permission_decorator_1.RequirePermission)('categories.manage'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "getCategories", null);
 __decorate([
     (0, common_1.Post)('categories'),
+    (0, require_permission_decorator_1.RequirePermission)('categories.manage'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_category_dto_1.CreateCategoryDto]),
@@ -178,6 +205,7 @@ __decorate([
 ], AdminController.prototype, "createCategory", null);
 __decorate([
     (0, common_1.Patch)('categories/:id'),
+    (0, require_permission_decorator_1.RequirePermission)('categories.manage'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -186,13 +214,14 @@ __decorate([
 ], AdminController.prototype, "updateCategory", null);
 __decorate([
     (0, common_1.Delete)('categories/:id'),
+    (0, require_permission_decorator_1.RequirePermission)('categories.manage'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "deleteCategory", null);
 exports.AdminController = AdminController = __decorate([
-    (0, common_1.UseGuards)(jwt_admin_guard_1.JwtAdminGuard),
+    (0, common_1.UseGuards)(jwt_admin_guard_1.JwtAdminGuard, permissions_guard_1.PermissionsGuard),
     (0, common_1.Controller)('admin'),
     __metadata("design:paramtypes", [admin_service_1.AdminService])
 ], AdminController);
