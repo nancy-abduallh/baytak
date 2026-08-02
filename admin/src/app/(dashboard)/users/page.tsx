@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { Info } from "lucide-react";
 import { adminApi } from "@/lib/api";
 import { AdminUserRow } from "@/lib/types";
 import { AdminTopbar } from "@/components/layout/AdminTopbar";
@@ -48,8 +49,9 @@ export default function AdminUsersPage() {
                 <button
                     onClick={() => toggleBlocked(u)}
                     disabled={busyId === u.id}
-                    className={`rounded-full px-3.5 py-2 text-xs font-bold disabled:opacity-50 ${u.isBlocked ? "bg-teal-700 text-white" : "bg-danger/10 text-danger"
+                    className={`rounded-full px-3.5 py-2 text-xs font-bold text-white shadow-[0_8px_18px_-8px_rgba(18,48,46,.4)] transition-transform hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 ${u.isBlocked ? "" : "bg-gradient-to-br from-[#D97060] to-[#B24B3C]"
                         }`}
+                    style={u.isBlocked ? { background: "linear-gradient(135deg,#2F8F79,#1E6B5C)" } : undefined}
                 >
                     {u.isBlocked ? "إلغاء الحظر" : "حظر المستخدم"}
                 </button>
@@ -61,7 +63,8 @@ export default function AdminUsersPage() {
         <div>
             <AdminTopbar title="المستخدمون" description="إدارة حسابات العملاء المسجلين على المنصة" />
             {isMock && (
-                <div className="mb-6 rounded-md border border-gold-500/30 bg-gold-100/50 px-5 py-3 text-[13px] font-semibold text-[#8A6417]">
+                <div className="mb-6 flex items-center gap-2 rounded-md border border-gold-500/30 bg-gold-100/50 px-5 py-3 text-[13px] font-semibold text-[#8A6417]">
+                    <Info className="h-4 w-4 flex-none" />
                     يتم عرض بيانات تجريبية — نقطة /admin/users غير مبنية على الخادم الخلفي بعد.
                 </div>
             )}

@@ -2,10 +2,11 @@
 import { useEffect, useMemo, useState } from "react";
 import {
     ClipboardList, Wrench, Wallet, UserCheck, ShieldAlert, UserPlus,
+    TrendingUp, PieChart as PieIcon, ListTree,
 } from "lucide-react";
 import {
     ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-    BarChart, Bar, PieChart, Pie, Cell, Legend,
+    BarChart, Bar, Cell, PieChart, Pie, Legend,
 } from "recharts";
 import { adminApi } from "@/lib/api";
 import { DashboardAnalytics, DashboardStats, OrderStatus } from "@/lib/types";
@@ -59,12 +60,14 @@ const STATUS_LABEL: Record<OrderStatus, string> = {
 };
 
 const STATUS_COLOR: Record<OrderStatus, string> = {
-    pending: "#3B6B7D",
+    pending: "#2F6FED",
     confirmed: "#7C9CB0",
     in_progress: "#BF8A34",
     completed: "#4C9A6A",
     cancelled: "#B24B3C",
 };
+
+const CATEGORY_COLORS = ["#1E6B5C", "#BF8A34", "#4C9A6A", "#2F6FED", "#8B5CF6", "#3B6B7D"];
 
 const MONTH_LABEL = (key: string) => {
     const [, month] = key.split("-");
@@ -105,6 +108,22 @@ export default function AdminOverviewPage() {
         [analytics],
     );
 
+    // Derived trends — real, based on the analytics we already have (not fabricated).
+    const ordersTodayTrend = useMemo(() => {
+        if (!stats || ordersChartData.length === 0) return undefined;
+        const avg = ordersChartData.reduce((s, d) => s + d.orders, 0) / ordersChartData.length;
+        if (!avg) return undefined;
+        return { value: Math.round(((stats.ordersToday - avg) / avg) * 100) };
+    }, [stats, ordersChartData]);
+
+    const revenueTrend = useMemo(() => {
+        if (revenueChartData.length < 2) return undefined;
+        const prev = revenueChartData[revenueChartData.length - 2].revenue;
+        const curr = revenueChartData[revenueChartData.length - 1].revenue;
+        if (!prev) return undefined;
+        return { value: Math.round(((curr - prev) / prev) * 100) };
+    }, [revenueChartData]);
+
     return (
         <div>
             <AdminTopbar title="نظرة عامة" description="ملخص أداء المنصة والإحصاءات التشغيلية" />
@@ -116,16 +135,16 @@ export default function AdminOverviewPage() {
             )}
 
             {!stats || !analytics ? (
-                <div className="rounded-md border border-line bg-white p-10 text-center text-[13.5px] text-[#8A9691]">جارِ التحميل...</div>
+                <div className="card-elevated p-10 text-center text-[13.5px] text-[#8A9691]">جارِ التحميل...</div>
             ) : (
                 <>
                     <div className="mb-6 grid grid-cols-3 gap-5">
-                        <StatCard icon={ClipboardList} label="طلبات اليوم" value={stats.ordersToday} tone="teal" />
+                        <StatCard icon={ClipboardList} label="طلبات اليوم" value={stats.ordersToday} tone="blue" trend={ordersTodayTrend} />
                         <StatCard icon={Wrench} label="طلبات قيد التنفيذ" value={stats.ordersInProgress} tone="gold" />
-                        <StatCard icon={Wallet} label="إيرادات هذا الشهر" value={`${stats.revenueThisMonth.toLocaleString()} ر.س`} tone="green" />
+                        <StatCard icon={Wallet} label="إيرادات هذا الشهر" value={`${stats.revenueThisMonth.toLocaleString()} ر.س`} tone="green" trend={revenueTrend} />
                         <StatCard icon={UserCheck} label="فنيون نشطون" value={stats.activeTechnicians} tone="teal" />
                         <StatCard icon={ShieldAlert} label="بانتظار التحقق" value={stats.pendingVerifications} tone="danger" />
-                        <StatCard icon={UserPlus} label="مستخدمون جدد هذا الأسبوع" value={stats.newUsersThisWeek} tone="green" />
+                        <StatCard icon={UserPlus} label="مستخدمون جدد هذا الأسبوع" value={stats.newUsersThisWeek} tone="purple" />
                     </div>
 
                     <div className="mb-5 grid grid-cols-3 gap-5">
@@ -133,87 +152,116 @@ export default function AdminOverviewPage() {
                             title="الطلبات خلال آخر 14 يومًا"
                             description="عدد الطلبات المُنشأة يوميًا"
                             className="col-span-2"
+                            icon={TrendingUp}
+                            tone="teal"
                         >
-                            <ResponsiveContainer width="100%" height={260}>
-                                <AreaChart data={ordersChartData} margin={{ left: -18, right: 8 }}>
-                                    <defs>
-                                        <linearGradient id="ordersFill" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#1E6B5C" stopOpacity={0.35} />
-                                            <stop offset="95%" stopColor="#1E6B5C" stopOpacity={0.02} />
-                                        </linearGradient>
-                                    </defs>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#E2DDD0" vertical={false} />
-                                    <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#8A9691" }} axisLine={false} tickLine={false} />
-                                    <YAxis tick={{ fontSize: 11, fill: "#8A9691" }} axisLine={false} tickLine={false} allowDecimals={false} />
-                                    <Tooltip
-                                        contentStyle={{ borderRadius: 10, border: "1px solid #E2DDD0", fontSize: 12.5, direction: "rtl" }}
-                                        labelFormatter={(l) => `يوم ${l}`}
-                                        formatter={(value: number) => [`${value} طلب`, "الطلبات"]}
-                                    />
-                                    <Area type="monotone" dataKey="orders" stroke="#1E6B5C" strokeWidth={2.5} fill="url(#ordersFill)" />
-                                </AreaChart>
-                            </ResponsiveContainer>
+                            <div style={{ filter: "drop-shadow(0 8px 14px rgba(18,48,46,.12))" }}>
+                                <ResponsiveContainer width="100%" height={260}>
+                                    <AreaChart data={ordersChartData} margin={{ left: -18, right: 8 }}>
+                                        <defs>
+                                            <linearGradient id="ordersFill" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#1E6B5C" stopOpacity={0.4} />
+                                                <stop offset="95%" stopColor="#1E6B5C" stopOpacity={0.02} />
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#E2DDD0" vertical={false} />
+                                        <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#8A9691" }} axisLine={false} tickLine={false} />
+                                        <YAxis tick={{ fontSize: 11, fill: "#8A9691" }} axisLine={false} tickLine={false} allowDecimals={false} />
+                                        <Tooltip
+                                            contentStyle={{ borderRadius: 12, border: "1px solid #E2DDD0", fontSize: 12.5, direction: "rtl", boxShadow: "0 12px 30px rgba(18,48,46,.18)" }}
+                                            labelFormatter={(l) => `يوم ${l}`}
+                                            formatter={(value: number) => [`${value} طلب`, "الطلبات"]}
+                                        />
+                                        <Area
+                                            type="monotone"
+                                            dataKey="orders"
+                                            stroke="#1E6B5C"
+                                            strokeWidth={3}
+                                            fill="url(#ordersFill)"
+                                            activeDot={{ r: 5, fill: "#1E6B5C", stroke: "#fff", strokeWidth: 2 }}
+                                        />
+                                    </AreaChart>
+                                </ResponsiveContainer>
+                            </div>
                         </ChartCard>
 
-                        <ChartCard title="توزيع حالات الطلبات" description="نسبة الطلبات حسب الحالة">
-                            <ResponsiveContainer width="100%" height={260}>
-                                <PieChart>
-                                    <Pie
-                                        data={statusChartData}
-                                        dataKey="value"
-                                        nameKey="name"
-                                        innerRadius={55}
-                                        outerRadius={85}
-                                        paddingAngle={2}
-                                    >
-                                        {statusChartData.map((entry) => (
-                                            <Cell key={entry.name} fill={entry.color} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip
-                                        contentStyle={{ borderRadius: 10, border: "1px solid #E2DDD0", fontSize: 12.5, direction: "rtl" }}
-                                        formatter={(value: number, name: string) => [`${value} طلب`, name]}
-                                    />
-                                    <Legend
-                                        verticalAlign="bottom"
-                                        iconType="circle"
-                                        iconSize={8}
-                                        formatter={(value) => <span className="text-[12px] text-[#57655F]">{value}</span>}
-                                    />
-                                </PieChart>
-                            </ResponsiveContainer>
+                        <ChartCard title="توزيع حالات الطلبات" description="نسبة الطلبات حسب الحالة" icon={PieIcon} tone="gold">
+                            <div style={{ filter: "drop-shadow(0 8px 14px rgba(18,48,46,.12))" }}>
+                                <ResponsiveContainer width="100%" height={260}>
+                                    <PieChart>
+                                        <Pie
+                                            data={statusChartData}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            innerRadius={55}
+                                            outerRadius={85}
+                                            paddingAngle={3}
+                                            cornerRadius={6}
+                                            stroke="none"
+                                        >
+                                            {statusChartData.map((entry) => (
+                                                <Cell key={entry.name} fill={entry.color} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip
+                                            contentStyle={{ borderRadius: 12, border: "1px solid #E2DDD0", fontSize: 12.5, direction: "rtl", boxShadow: "0 12px 30px rgba(18,48,46,.18)" }}
+                                            formatter={(value: number, name: string) => [`${value} طلب`, name]}
+                                        />
+                                        <Legend
+                                            verticalAlign="bottom"
+                                            iconType="circle"
+                                            iconSize={8}
+                                            formatter={(value) => <span className="text-[12px] text-[#57655F]">{value}</span>}
+                                        />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
                         </ChartCard>
                     </div>
 
                     <div className="grid grid-cols-2 gap-5">
-                        <ChartCard title="الإيرادات الشهرية" description="آخر 6 أشهر — الطلبات المكتملة فقط">
-                            <ResponsiveContainer width="100%" height={240}>
-                                <BarChart data={revenueChartData} margin={{ left: -12, right: 8 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#E2DDD0" vertical={false} />
-                                    <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#8A9691" }} axisLine={false} tickLine={false} />
-                                    <YAxis tick={{ fontSize: 11, fill: "#8A9691" }} axisLine={false} tickLine={false} />
-                                    <Tooltip
-                                        contentStyle={{ borderRadius: 10, border: "1px solid #E2DDD0", fontSize: 12.5, direction: "rtl" }}
-                                        formatter={(value: number) => [`${value.toLocaleString()} ر.س`, "الإيرادات"]}
-                                    />
-                                    <Bar dataKey="revenue" fill="#BF8A34" radius={[6, 6, 0, 0]} maxBarSize={34} />
-                                </BarChart>
-                            </ResponsiveContainer>
+                        <ChartCard title="الإيرادات الشهرية" description="آخر 6 أشهر — الطلبات المكتملة فقط" icon={Wallet} tone="green">
+                            <div style={{ filter: "drop-shadow(0 8px 14px rgba(18,48,46,.12))" }}>
+                                <ResponsiveContainer width="100%" height={240}>
+                                    <BarChart data={revenueChartData} margin={{ left: -12, right: 8 }}>
+                                        <defs>
+                                            <linearGradient id="revenueFill" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stopColor="#E4B15C" />
+                                                <stop offset="100%" stopColor="#BF8A34" />
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#E2DDD0" vertical={false} />
+                                        <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#8A9691" }} axisLine={false} tickLine={false} />
+                                        <YAxis tick={{ fontSize: 11, fill: "#8A9691" }} axisLine={false} tickLine={false} />
+                                        <Tooltip
+                                            contentStyle={{ borderRadius: 12, border: "1px solid #E2DDD0", fontSize: 12.5, direction: "rtl", boxShadow: "0 12px 30px rgba(18,48,46,.18)" }}
+                                            formatter={(value: number) => [`${value.toLocaleString()} ر.س`, "الإيرادات"]}
+                                        />
+                                        <Bar dataKey="revenue" fill="url(#revenueFill)" radius={[8, 8, 0, 0]} maxBarSize={34} />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </ChartCard>
 
-                        <ChartCard title="الفئات الأكثر طلبًا" description="عدد الطلبات لكل فئة خدمة">
-                            <ResponsiveContainer width="100%" height={240}>
-                                <BarChart data={analytics.topCategories} layout="vertical" margin={{ left: 8, right: 16 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#E2DDD0" horizontal={false} />
-                                    <XAxis type="number" tick={{ fontSize: 11, fill: "#8A9691" }} axisLine={false} tickLine={false} allowDecimals={false} />
-                                    <YAxis dataKey="label" type="category" width={70} tick={{ fontSize: 12, fill: "#57655F" }} axisLine={false} tickLine={false} />
-                                    <Tooltip
-                                        contentStyle={{ borderRadius: 10, border: "1px solid #E2DDD0", fontSize: 12.5, direction: "rtl" }}
-                                        formatter={(value: number) => [`${value} طلب`, "الطلبات"]}
-                                    />
-                                    <Bar dataKey="count" fill="#1E6B5C" radius={[0, 6, 6, 0]} maxBarSize={18} />
-                                </BarChart>
-                            </ResponsiveContainer>
+                        <ChartCard title="الفئات الأكثر طلبًا" description="عدد الطلبات لكل فئة خدمة" icon={ListTree} tone="blue">
+                            <div style={{ filter: "drop-shadow(0 8px 14px rgba(18,48,46,.12))" }}>
+                                <ResponsiveContainer width="100%" height={240}>
+                                    <BarChart data={analytics.topCategories} layout="vertical" margin={{ left: 8, right: 16 }}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#E2DDD0" horizontal={false} />
+                                        <XAxis type="number" tick={{ fontSize: 11, fill: "#8A9691" }} axisLine={false} tickLine={false} allowDecimals={false} />
+                                        <YAxis dataKey="label" type="category" width={70} tick={{ fontSize: 12, fill: "#57655F" }} axisLine={false} tickLine={false} />
+                                        <Tooltip
+                                            contentStyle={{ borderRadius: 12, border: "1px solid #E2DDD0", fontSize: 12.5, direction: "rtl", boxShadow: "0 12px 30px rgba(18,48,46,.18)" }}
+                                            formatter={(value: number) => [`${value} طلب`, "الطلبات"]}
+                                        />
+                                        <Bar dataKey="count" radius={[0, 8, 8, 0]} maxBarSize={18}>
+                                            {analytics.topCategories.map((entry, i) => (
+                                                <Cell key={entry.label} fill={CATEGORY_COLORS[i % CATEGORY_COLORS.length]} />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </ChartCard>
                     </div>
                 </>

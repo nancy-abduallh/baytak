@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { Check, X, Pencil, Trash2, Plus, Search, Ban, PlayCircle } from "lucide-react";
+import { Check, X, Pencil, Trash2, Plus, Search, Ban, PlayCircle, Info } from "lucide-react";
 import { adminApi, ApiError } from "@/lib/api";
 import { AdminCategoryRow, AdminTechnicianRow, CreateTechnicianPayload, UpdateTechnicianPayload } from "@/lib/types";
 import { AdminTopbar } from "@/components/layout/AdminTopbar";
@@ -179,7 +179,8 @@ export default function AdminTechniciansPage() {
                         onClick={() => toggleVerified(t)}
                         disabled={busyId === t.id}
                         title={t.isVerified ? "إلغاء التحقق" : "توثيق"}
-                        className={`grid h-8 w-8 place-items-center rounded-full disabled:opacity-50 ${t.isVerified ? "bg-danger/10 text-danger" : "bg-teal-700 text-white"}`}
+                        className={`grid h-8 w-8 place-items-center rounded-full text-white transition-transform hover:scale-110 disabled:opacity-50 disabled:hover:scale-100 ${t.isVerified ? "bg-gradient-to-br from-[#D97060] to-[#B24B3C]" : "bg-gradient-to-br from-[#2F8F79] to-[#1E6B5C]"
+                            }`}
                     >
                         {t.isVerified ? <X className="h-3.5 w-3.5" /> : <Check className="h-3.5 w-3.5" />}
                     </button>
@@ -187,21 +188,22 @@ export default function AdminTechniciansPage() {
                         onClick={() => toggleActive(t)}
                         disabled={busyId === t.id}
                         title={t.isActive ? "إيقاف الحساب" : "تفعيل الحساب"}
-                        className={`grid h-8 w-8 place-items-center rounded-full disabled:opacity-50 ${t.isActive ? "bg-gold-100 text-[#8A6417]" : "bg-green-100 text-green-500"}`}
+                        className={`grid h-8 w-8 place-items-center rounded-full text-white transition-transform hover:scale-110 disabled:opacity-50 disabled:hover:scale-100 ${t.isActive ? "bg-gradient-to-br from-[#E4B15C] to-[#BF8A34]" : "bg-gradient-to-br from-[#6BC28A] to-[#4C9A6A]"
+                            }`}
                     >
                         {t.isActive ? <Ban className="h-3.5 w-3.5" /> : <PlayCircle className="h-3.5 w-3.5" />}
                     </button>
                     <button
                         onClick={() => openEdit(t)}
                         title="تعديل"
-                        className="grid h-8 w-8 place-items-center rounded-full bg-sand-100 text-[#57655F] hover:bg-sand-50"
+                        className="grid h-8 w-8 place-items-center rounded-full bg-sand-100 text-[#57655F] transition-transform hover:scale-110 hover:bg-sand-50"
                     >
                         <Pencil className="h-3.5 w-3.5" />
                     </button>
                     <button
                         onClick={() => { setDeleteTarget(t); setDeleteError(null); }}
                         title="حذف"
-                        className="grid h-8 w-8 place-items-center rounded-full bg-danger/10 text-danger hover:bg-danger/20"
+                        className="grid h-8 w-8 place-items-center rounded-full bg-danger/10 text-danger transition-transform hover:scale-110 hover:bg-danger/20"
                     >
                         <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -215,13 +217,14 @@ export default function AdminTechniciansPage() {
             <AdminTopbar title="الفنيون" description="إدارة الفنيين المسجلين وحالات التحقق من هويّاتهم" />
 
             {isMock && (
-                <div className="mb-6 rounded-md border border-gold-500/30 bg-gold-100/50 px-5 py-3 text-[13px] font-semibold text-[#8A6417]">
+                <div className="mb-6 flex items-center gap-2 rounded-md border border-gold-500/30 bg-gold-100/50 px-5 py-3 text-[13px] font-semibold text-[#8A6417]">
+                    <Info className="h-4 w-4 flex-none" />
                     يتم عرض بيانات تجريبية — تعذر الاتصال بالخادم الخلفي للفنيين والفئات.
                 </div>
             )}
 
             <div className="mb-5 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2.5 w-[300px]">
+                <div className="flex w-[300px] items-center gap-2 rounded-full border border-line bg-white px-4 py-2.5 shadow-sm transition-shadow focus-within:border-teal-700 focus-within:shadow-[0_0_0_4px_rgba(30,107,92,.12)]">
                     <Search className="h-4 w-4 text-[#8A9691]" />
                     <input
                         value={search}
@@ -232,7 +235,8 @@ export default function AdminTechniciansPage() {
                 </div>
                 <button
                     onClick={openCreate}
-                    className="flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-[13px] font-bold text-white hover:bg-teal-900"
+                    className="flex items-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-bold text-white shadow-[0_10px_24px_-8px_rgba(18,48,46,.5)] transition-transform hover:scale-[1.03]"
+                    style={{ background: "linear-gradient(135deg,#12302E,#1E6B5C)" }}
                 >
                     <Plus className="h-4 w-4" /> إضافة فني
                 </button>
@@ -283,13 +287,14 @@ export default function AdminTechniciansPage() {
                 </div>
 
                 <div className="mt-2 flex justify-end gap-3">
-                    <button onClick={closeModal} className="rounded-full border border-line px-5 py-2.5 text-[13px] font-semibold text-[#57655F] hover:bg-sand-50">
+                    <button onClick={closeModal} className="rounded-full border border-line px-5 py-2.5 text-[13px] font-semibold text-[#57655F] transition hover:bg-sand-50">
                         إلغاء
                     </button>
                     <button
                         onClick={submitForm}
                         disabled={saving}
-                        className="rounded-full bg-teal-700 px-6 py-2.5 text-[13px] font-bold text-white hover:bg-teal-800 disabled:opacity-60"
+                        className="rounded-full px-6 py-2.5 text-[13px] font-bold text-white shadow-[0_10px_22px_-8px_rgba(18,48,46,.45)] transition-transform hover:scale-[1.03] disabled:opacity-60 disabled:hover:scale-100"
+                        style={{ background: "linear-gradient(135deg,#2F8F79,#1E6B5C)" }}
                     >
                         {saving ? "جارِ الحفظ..." : editing ? "حفظ التعديلات" : "إضافة الفني"}
                     </button>

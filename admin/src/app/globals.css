@@ -9,6 +9,10 @@
     --color-green-100: #E6F2E9;
     --color-gold-500: #BF8A34;
     --color-gold-100: #F6E9D2;
+    --color-blue-500: #2F6FED;
+    --color-blue-100: #E7EEFE;
+    --color-purple-500: #8B5CF6;
+    --color-purple-100: #F1EAFE;
     --color-sand-50: #F6F3EC;
     --color-sand-100: #EFEAE0;
     --color-line: #E2DDD0;
@@ -52,5 +56,56 @@
     img {
         display: block;
         max-width: 100%;
+    }
+}
+
+@layer components {
+
+    /* Elevated "3D" surface used across the admin dashboard */
+    .card-elevated {
+        position: relative;
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid var(--color-line);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-card);
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .card-elevated:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lift);
+    }
+
+    /* Thin gradient accent line along the top edge of a card */
+    .card-accent-top::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 4px;
+        background: var(--accent-gradient, linear-gradient(90deg, #1E6B5C, #4C9A6A));
+    }
+
+    /* Soft glow shadow behind icon badges — gives a "lit" 3D look */
+    .icon-badge-glow {
+        box-shadow:
+            0 10px 22px -6px var(--glow-color, rgba(30, 107, 92, .4)),
+            inset 0 1px 0 rgba(255, 255, 255, .35);
+    }
+
+    /* Subtle color mesh behind the main dashboard content */
+    .mesh-bg {
+        background-image:
+            radial-gradient(circle at 12% 10%, rgba(30, 107, 92, .09), transparent 40%),
+            radial-gradient(circle at 88% 0%, rgba(191, 138, 52, .09), transparent 45%),
+            radial-gradient(circle at 50% 100%, rgba(47, 111, 237, .06), transparent 45%);
+        background-attachment: fixed;
+    }
+
+    .text-gradient {
+        background: linear-gradient(90deg, #175249, #4C9A6A);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
     }
 }

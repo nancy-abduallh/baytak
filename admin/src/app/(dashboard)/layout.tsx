@@ -19,7 +19,7 @@ export default function DashboardShellLayout({ children }: { children: React.Rea
     return (
         <div className="flex min-h-screen bg-sand-50">
             <AdminSidebar />
-            <main className="flex-1 px-9 py-8">{children}</main>
+            <main className="mesh-bg flex-1 px-9 py-8">{children}</main>
         </div>
     );
 }

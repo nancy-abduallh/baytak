@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { Info } from "lucide-react";
 import { adminApi } from "@/lib/api";
 import { AdminOrderRow, OrderStatus } from "@/lib/types";
 import { AdminTopbar } from "@/components/layout/AdminTopbar";
@@ -49,17 +50,20 @@ export default function AdminOrdersPage() {
             <AdminTopbar title="الطلبات" description="متابعة وإدارة جميع طلبات الخدمة على المنصة" />
 
             {isMock && (
-                <div className="mb-6 rounded-md border border-gold-500/30 bg-gold-100/50 px-5 py-3 text-[13px] font-semibold text-[#8A6417]">
+                <div className="mb-6 flex items-center gap-2 rounded-md border border-gold-500/30 bg-gold-100/50 px-5 py-3 text-[13px] font-semibold text-[#8A6417]">
+                    <Info className="h-4 w-4 flex-none" />
                     يتم عرض بيانات تجريبية — نقطة /admin/orders غير مبنية على الخادم الخلفي بعد.
                 </div>
             )}
 
-            <div className="mb-5 flex gap-1.5 rounded-full border border-line bg-white p-1.5 w-fit">
+            <div className="card-elevated mb-5 flex w-fit gap-1.5 p-1.5">
                 {STATUS_FILTERS.map((s) => (
                     <button
                         key={s.key}
                         onClick={() => setFilter(s.key)}
-                        className={`rounded-full px-4 py-2.5 text-[13px] font-semibold ${filter === s.key ? "bg-ink text-white" : "text-[#57655F]"}`}
+                        className={`rounded-full px-4 py-2.5 text-[13px] font-semibold transition-all ${filter === s.key ? "text-white shadow-[0_8px_18px_-6px_rgba(18,48,46,.45)]" : "text-[#57655F] hover:bg-sand-50"
+                            }`}
+                        style={filter === s.key ? { background: "linear-gradient(135deg,#12302E,#1E6B5C)" } : undefined}
                     >
                         {s.label}
                     </button>

@@ -10,16 +10,15 @@ function FieldShell({ label, error, children }: { label: string; error?: string;
     );
 }
 
+const baseInput =
+    "w-full rounded-xl border px-3.5 py-3 text-sm outline-none transition-shadow focus:border-teal-700 focus:shadow-[0_0_0_4px_rgba(30,107,92,.12)]";
+
 export function TextField({
     label, error, className = "", ...props
 }: { label: string; error?: string } & InputHTMLAttributes<HTMLInputElement>) {
     return (
         <FieldShell label={label} error={error}>
-            <input
-                {...props}
-                className={`w-full rounded-md border px-3.5 py-3 text-sm outline-none transition focus:border-teal-700 ${error ? "border-danger" : "border-line"
-                    } ${className}`}
-            />
+            <input {...props} className={`${baseInput} ${error ? "border-danger" : "border-line"} ${className}`} />
         </FieldShell>
     );
 }
@@ -29,11 +28,7 @@ export function TextareaField({
 }: { label: string; error?: string } & TextareaHTMLAttributes<HTMLTextAreaElement>) {
     return (
         <FieldShell label={label} error={error}>
-            <textarea
-                {...props}
-                className={`w-full rounded-md border px-3.5 py-3 text-sm outline-none transition focus:border-teal-700 ${error ? "border-danger" : "border-line"
-                    } ${className}`}
-            />
+            <textarea {...props} className={`${baseInput} ${error ? "border-danger" : "border-line"} ${className}`} />
         </FieldShell>
     );
 }
@@ -43,11 +38,7 @@ export function SelectField({
 }: { label: string; error?: string; children: ReactNode } & SelectHTMLAttributes<HTMLSelectElement>) {
     return (
         <FieldShell label={label} error={error}>
-            <select
-                {...props}
-                className={`w-full rounded-md border bg-white px-3.5 py-3 text-sm outline-none transition focus:border-teal-700 ${error ? "border-danger" : "border-line"
-                    } ${className}`}
-            >
+            <select {...props} className={`${baseInput} bg-white ${error ? "border-danger" : "border-line"} ${className}`}>
                 {children}
             </select>
         </FieldShell>
