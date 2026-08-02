@@ -1,7 +1,9 @@
 import { useAdminAuthStore } from "./stores/admin-auth-store";
 import {
     AdminOrderRow, AdminTechnicianRow, AdminUserRow, AdminCategoryRow,
-    DashboardStats, AdminUser, OrderStatus,
+    CreateTechnicianPayload, UpdateTechnicianPayload,
+    CreateCategoryPayload, UpdateCategoryPayload,
+    DashboardStats, DashboardAnalytics, AdminUser, OrderStatus,
 } from "./types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
@@ -38,8 +40,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     return res.json() as Promise<T>;
 }
 
-// NOTE: every endpoint below is under /admin and needs a backend AdminGuard
-// that does not exist yet — see the roadmap note at the end of this response.
+// NOTE: every endpoint below is under /admin and requires a valid admin JWT
+// (see backend/src/modules/admin — AdminController + JwtAdminGuard).
 export const adminApi = {
     login: (payload: { email: string; password: string }) =>
         request<{ accessToken: string; admin: AdminUser }>("/admin/auth/login", {
@@ -48,7 +50,9 @@ export const adminApi = {
         }),
 
     getStats: () => request<DashboardStats>("/admin/stats"),
+    getAnalytics: () => request<DashboardAnalytics>("/admin/analytics"),
 
+    // ---------- Orders ----------
     getOrders: (params?: { status?: OrderStatus; search?: string }) => {
         const qs = new URLSearchParams(params as Record<string, string>).toString();
         return request<AdminOrderRow[]>(`/admin/orders${qs ? `?${qs}` : ""}`);
@@ -56,15 +60,23 @@ export const adminApi = {
     updateOrderStatus: (id: number, status: OrderStatus) =>
         request<AdminOrderRow>(`/admin/orders/${id}/status`, { method: "PATCH", body: JSON.stringify({ status }) }),
 
+    // ---------- Technicians ----------
     getTechnicians: (params?: { search?: string; verified?: boolean }) => {
         const qs = new URLSearchParams(params as Record<string, string>).toString();
         return request<AdminTechnicianRow[]>(`/admin/technicians${qs ? `?${qs}` : ""}`);
     },
+    createTechnician: (payload: CreateTechnicianPayload) =>
+        request<AdminTechnicianRow>("/admin/technicians", { method: "POST", body: JSON.stringify(payload) }),
+    updateTechnician: (id: number, payload: UpdateTechnicianPayload) =>
+        request<AdminTechnicianRow>(`/admin/technicians/${id}`, { method: "PATCH", body: JSON.stringify(payload) }),
+    deleteTechnician: (id: number) =>
+        request<{ id: number; deleted: boolean }>(`/admin/technicians/${id}`, { method: "DELETE" }),
     setTechnicianVerified: (id: number, isVerified: boolean) =>
         request<AdminTechnicianRow>(`/admin/technicians/${id}/verify`, { method: "PATCH", body: JSON.stringify({ isVerified }) }),
     setTechnicianActive: (id: number, isActive: boolean) =>
         request<AdminTechnicianRow>(`/admin/technicians/${id}/active`, { method: "PATCH", body: JSON.stringify({ isActive }) }),
 
+    // ---------- Users ----------
     getUsers: (params?: { search?: string }) => {
         const qs = new URLSearchParams(params as Record<string, string>).toString();
         return request<AdminUserRow[]>(`/admin/users${qs ? `?${qs}` : ""}`);
@@ -72,7 +84,12 @@ export const adminApi = {
     setUserBlocked: (id: number, isBlocked: boolean) =>
         request<AdminUserRow>(`/admin/users/${id}/block`, { method: "PATCH", body: JSON.stringify({ isBlocked }) }),
 
+    // ---------- Categories ----------
     getCategories: () => request<AdminCategoryRow[]>("/admin/categories"),
-    updateCategory: (id: number, payload: Partial<Pick<AdminCategoryRow, "priceFrom" | "isActive">>) =>
+    createCategory: (payload: CreateCategoryPayload) =>
+        request<AdminCategoryRow>("/admin/categories", { method: "POST", body: JSON.stringify(payload) }),
+    updateCategory: (id: number, payload: UpdateCategoryPayload) =>
         request<AdminCategoryRow>(`/admin/categories/${id}`, { method: "PATCH", body: JSON.stringify(payload) }),
+    deleteCategory: (id: number) =>
+        request<{ id: number; deleted: boolean }>(`/admin/categories/${id}`, { method: "DELETE" }),
 };

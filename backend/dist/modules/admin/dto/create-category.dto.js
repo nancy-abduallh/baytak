@@ -9,10 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateCategoryDto = void 0;
+exports.CreateCategoryDto = void 0;
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
-class UpdateCategoryDto {
+class CreateCategoryDto {
     nameAr;
     slug;
     description;
@@ -22,49 +22,45 @@ class UpdateCategoryDto {
     sortOrder;
     isActive;
 }
-exports.UpdateCategoryDto = UpdateCategoryDto;
+exports.CreateCategoryDto = CreateCategoryDto;
 __decorate([
-    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(2),
     __metadata("design:type", String)
-], UpdateCategoryDto.prototype, "nameAr", void 0);
+], CreateCategoryDto.prototype, "nameAr", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.Matches)(/^[a-z0-9-]+$/, { message: 'المعرّف (slug) يجب أن يحتوي على أحرف إنجليزية صغيرة وأرقام وشرطات فقط' }),
     __metadata("design:type", String)
-], UpdateCategoryDto.prototype, "slug", void 0);
+], CreateCategoryDto.prototype, "slug", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], UpdateCategoryDto.prototype, "description", void 0);
+], CreateCategoryDto.prototype, "description", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], UpdateCategoryDto.prototype, "iconKey", void 0);
+], CreateCategoryDto.prototype, "iconKey", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
     (0, class_transformer_1.Type)(() => Number),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.Min)(0),
     __metadata("design:type", Number)
-], UpdateCategoryDto.prototype, "priceFrom", void 0);
+], CreateCategoryDto.prototype, "priceFrom", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], UpdateCategoryDto.prototype, "priceUnit", void 0);
+], CreateCategoryDto.prototype, "priceUnit", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_transformer_1.Type)(() => Number),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
-], UpdateCategoryDto.prototype, "sortOrder", void 0);
+], CreateCategoryDto.prototype, "sortOrder", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], UpdateCategoryDto.prototype, "isActive", void 0);
-//# sourceMappingURL=update-category.dto.js.map
+], CreateCategoryDto.prototype, "isActive", void 0);
+//# sourceMappingURL=create-category.dto.js.map

@@ -1,29 +1,25 @@
 import { Type } from 'class-transformer';
 import { IsBoolean, IsInt, IsNumber, IsOptional, IsString, Matches, Min, MinLength } from 'class-validator';
 
-export class UpdateCategoryDto {
-    @IsOptional()
+export class CreateCategoryDto {
     @IsString()
     @MinLength(2)
-    nameAr?: string;
+    nameAr: string;
 
-    @IsOptional()
     @Matches(/^[a-z0-9-]+$/, { message: 'المعرّف (slug) يجب أن يحتوي على أحرف إنجليزية صغيرة وأرقام وشرطات فقط' })
-    slug?: string;
+    slug: string;
 
     @IsOptional()
     @IsString()
     description?: string;
 
-    @IsOptional()
     @IsString()
-    iconKey?: string;
+    iconKey: string;
 
-    @IsOptional()
     @Type(() => Number)
     @IsNumber()
     @Min(0)
-    priceFrom?: number;
+    priceFrom: number;
 
     @IsOptional()
     @IsString()

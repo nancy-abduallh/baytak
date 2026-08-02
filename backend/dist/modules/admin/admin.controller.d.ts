@@ -2,7 +2,10 @@ import { AdminService } from './admin.service';
 import { UpdateOrderStatusDto } from '../orders/dto/update-order-status.dto';
 import { UpdateTechnicianVerifiedDto, UpdateTechnicianActiveDto } from './dto/technician-flags.dto';
 import { UpdateUserBlockedDto } from './dto/update-user-blocked.dto';
+import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CreateTechnicianDto } from './dto/create-technician.dto';
+import { UpdateTechnicianDto } from './dto/update-technician.dto';
 import type { OrderStatus } from '../../entities/order.entity';
 export declare class AdminController {
     private readonly admin;
@@ -14,6 +17,25 @@ export declare class AdminController {
         activeTechnicians: number;
         pendingVerifications: number;
         newUsersThisWeek: number;
+    }>;
+    getAnalytics(): Promise<{
+        ordersLast14Days: {
+            date: string;
+            orders: number;
+        }[];
+        ordersByStatus: {
+            status: OrderStatus;
+            count: number;
+        }[];
+        topCategories: {
+            label: string;
+            count: number;
+        }[];
+        revenueLast6Months: {
+            month: string;
+            revenue: number;
+            orders: number;
+        }[];
     }>;
     getOrders(status?: OrderStatus): Promise<{
         id: number;
@@ -41,22 +63,68 @@ export declare class AdminController {
         id: number;
         fullName: string;
         phone: string;
+        email: string | null;
         categoryLabel: string;
+        primaryCategoryId: number;
         city: string;
         district: string;
+        yearsExperience: number;
+        priceFrom: number;
         isVerified: boolean;
         isActive: boolean;
         averageRating: number;
         reviewCount: number;
         completedOrders: number;
     }[]>;
+    createTechnician(dto: CreateTechnicianDto): Promise<{
+        id: number;
+        fullName: string;
+        phone: string;
+        email: string | null;
+        categoryLabel: string;
+        primaryCategoryId: number;
+        city: string;
+        district: string;
+        yearsExperience: number;
+        priceFrom: number;
+        isVerified: boolean;
+        isActive: boolean;
+        averageRating: number;
+        reviewCount: number;
+        completedOrders: number;
+    }>;
+    updateTechnician(id: number, dto: UpdateTechnicianDto): Promise<{
+        id: number;
+        fullName: string;
+        phone: string;
+        email: string | null;
+        categoryLabel: string;
+        primaryCategoryId: number;
+        city: string;
+        district: string;
+        yearsExperience: number;
+        priceFrom: number;
+        isVerified: boolean;
+        isActive: boolean;
+        averageRating: number;
+        reviewCount: number;
+        completedOrders: number;
+    }>;
+    deleteTechnician(id: number): Promise<{
+        id: number;
+        deleted: boolean;
+    }>;
     setTechnicianVerified(id: number, dto: UpdateTechnicianVerifiedDto): Promise<{
         id: number;
         fullName: string;
         phone: string;
+        email: string | null;
         categoryLabel: string;
+        primaryCategoryId: number;
         city: string;
         district: string;
+        yearsExperience: number;
+        priceFrom: number;
         isVerified: boolean;
         isActive: boolean;
         averageRating: number;
@@ -67,9 +135,13 @@ export declare class AdminController {
         id: number;
         fullName: string;
         phone: string;
+        email: string | null;
         categoryLabel: string;
+        primaryCategoryId: number;
         city: string;
         district: string;
+        yearsExperience: number;
+        priceFrom: number;
         isVerified: boolean;
         isActive: boolean;
         averageRating: number;
@@ -96,6 +168,44 @@ export declare class AdminController {
         orderCount: number;
         createdAt: string;
     }>;
-    getCategories(): Promise<import("../../entities/service-category.entity").ServiceCategory[]>;
-    updateCategory(id: number, dto: UpdateCategoryDto): Promise<import("../../entities/service-category.entity").ServiceCategory>;
+    getCategories(): Promise<{
+        technicianCount: number;
+        id: number;
+        slug: string;
+        nameAr: string;
+        description: string | null;
+        iconKey: string;
+        priceFrom: number;
+        priceUnit: string;
+        sortOrder: number;
+        isActive: boolean;
+    }[]>;
+    createCategory(dto: CreateCategoryDto): Promise<{
+        technicianCount: number;
+        id: number;
+        slug: string;
+        nameAr: string;
+        description: string | null;
+        iconKey: string;
+        priceFrom: number;
+        priceUnit: string;
+        sortOrder: number;
+        isActive: boolean;
+    }>;
+    updateCategory(id: number, dto: UpdateCategoryDto): Promise<{
+        technicianCount: number;
+        id: number;
+        slug: string;
+        nameAr: string;
+        description: string | null;
+        iconKey: string;
+        priceFrom: number;
+        priceUnit: string;
+        sortOrder: number;
+        isActive: boolean;
+    }>;
+    deleteCategory(id: number): Promise<{
+        id: number;
+        deleted: boolean;
+    }>;
 }

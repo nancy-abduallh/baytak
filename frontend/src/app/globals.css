@@ -39,7 +39,11 @@
     background-color: var(--color-green-100);
   }
 
-  h1, h2, h3, h4, .display {
+  h1,
+  h2,
+  h3,
+  h4,
+  .display {
     font-family: var(--font-heading);
   }
 

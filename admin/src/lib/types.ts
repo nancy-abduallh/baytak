@@ -23,15 +23,35 @@ export interface AdminTechnicianRow {
     id: number;
     fullName: string;
     phone: string;
+    email: string | null;
     categoryLabel: string;
+    primaryCategoryId: number;
     city: string;
     district: string;
+    yearsExperience: number;
+    priceFrom: number;
     isVerified: boolean;
     isActive: boolean;
     averageRating: number;
     reviewCount: number;
     completedOrders: number;
 }
+
+export interface CreateTechnicianPayload {
+    fullName: string;
+    phone: string;
+    email?: string;
+    password: string;
+    primaryCategoryId: number;
+    yearsExperience?: number;
+    city: string;
+    district: string;
+    priceFrom: number;
+    isVerified?: boolean;
+    isActive?: boolean;
+}
+
+export type UpdateTechnicianPayload = Partial<Omit<CreateTechnicianPayload, "password">> & { password?: string };
 
 export interface AdminUserRow {
     id: number;
@@ -48,11 +68,27 @@ export interface AdminCategoryRow {
     id: number;
     nameAr: string;
     slug: string;
+    description: string | null;
+    iconKey: string;
     priceFrom: number;
     priceUnit: string;
+    sortOrder: number;
     technicianCount: number;
     isActive: boolean;
 }
+
+export interface CreateCategoryPayload {
+    nameAr: string;
+    slug: string;
+    description?: string;
+    iconKey: string;
+    priceFrom: number;
+    priceUnit?: string;
+    sortOrder?: number;
+    isActive?: boolean;
+}
+
+export type UpdateCategoryPayload = Partial<CreateCategoryPayload>;
 
 export interface DashboardStats {
     ordersToday: number;
@@ -61,4 +97,11 @@ export interface DashboardStats {
     activeTechnicians: number;
     pendingVerifications: number;
     newUsersThisWeek: number;
+}
+
+export interface DashboardAnalytics {
+    ordersLast14Days: { date: string; orders: number }[];
+    ordersByStatus: { status: OrderStatus; count: number }[];
+    topCategories: { label: string; count: number }[];
+    revenueLast6Months: { month: string; revenue: number; orders: number }[];
 }
