@@ -225,7 +225,7 @@ export default function AdminTechniciansPage() {
 
             <div className="mb-5 flex items-center justify-between gap-3">
                 <div className="flex w-[300px] items-center gap-2 rounded-full border border-line bg-white px-4 py-2.5 shadow-sm transition-shadow focus-within:border-teal-700 focus-within:shadow-[0_0_0_4px_rgba(30,107,92,.12)]">
-                    <Search className="h-4 w-4 text-[#8A9691]" />
+                    <Search className="h-4 w-4 text-muted" />
                     <input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}

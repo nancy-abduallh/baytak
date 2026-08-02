@@ -100,14 +100,14 @@ export default function AdminLoginPage() {
 
                         <label className="mb-1.5 block text-[13px] font-semibold text-[#57655F]">البريد الإلكتروني</label>
                         <div className="mb-1 flex items-center gap-2 rounded-xl border border-line px-3.5 py-3 transition-shadow focus-within:border-teal-700 focus-within:shadow-[0_0_0_4px_rgba(30,107,92,.12)]">
-                            <Mail className="h-4 w-4 text-[#8A9691]" />
+                            <Mail className="h-4 w-4 text-muted" />
                             <input {...register("email")} placeholder="admin@baytak.sa" className="w-full text-sm outline-none" dir="ltr" />
                         </div>
                         {errors.email && <p className="mb-3 text-[12px] text-danger">{errors.email.message}</p>}
 
                         <label className="mb-1.5 mt-4 block text-[13px] font-semibold text-[#57655F]">كلمة المرور</label>
                         <div className="mb-1 flex items-center gap-2 rounded-xl border border-line px-3.5 py-3 transition-shadow focus-within:border-teal-700 focus-within:shadow-[0_0_0_4px_rgba(30,107,92,.12)]">
-                            <Lock className="h-4 w-4 text-[#8A9691]" />
+                            <Lock className="h-4 w-4 text-muted" />
                             <input {...register("password")} type="password" placeholder="••••••••" className="w-full text-sm outline-none" />
                         </div>
                         {errors.password && <p className="mb-3 text-[12px] text-danger">{errors.password.message}</p>}
@@ -122,7 +122,7 @@ export default function AdminLoginPage() {
                         </button>
                     </form>
 
-                    <p className="mt-6 text-center text-[12px] text-[#8A9691]">
+                    <p className="mt-6 text-center text-[12px] text-muted">
                         هذا الدخول محصور بفريق بيتك الإداري فقط · جميع محاولات الدخول مسجّلة
                     </p>
                 </div>

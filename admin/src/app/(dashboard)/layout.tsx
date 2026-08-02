@@ -13,7 +13,7 @@ export default function DashboardShellLayout({ children }: { children: React.Rea
     }, [hasHydrated, accessToken, router]);
 
     if (!hasHydrated || !accessToken) {
-        return <main className="grid min-h-screen place-items-center text-[13.5px] text-[#8A9691]">جارِ التحقق من صلاحية الدخول...</main>;
+        return <main className="grid min-h-screen place-items-center text-[13.5px] text-muted">جارِ التحقق من صلاحية الدخول...</main>;
     }
 
     return (

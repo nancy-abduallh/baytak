@@ -25,7 +25,7 @@ export function GaugeCard({
         <div className="card-elevated p-5">
             <h3 className="mb-1 text-center font-heading text-[15px] font-extrabold text-ink">{title}</h3>
 
-            <div className="relative mx-auto h-[150px] w-full max-w-[220px]">
+            <div className="relative mx-auto h-[150px] w-full max-w-[220px]" style={{ direction: "ltr" }}>
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                         <Pie
@@ -48,9 +48,12 @@ export function GaugeCard({
 
                 <div className="pointer-events-none absolute inset-x-0 bottom-1 flex flex-col items-center">
                     <span className="font-heading text-[24px] font-extrabold leading-none text-ink">{valueLabel}</span>
+                    <span className="mt-1 text-[11px] font-bold text-muted">
+                        {Math.round((clamped / safeMax) * 100)}٪
+                    </span>
                 </div>
-                <div className="pointer-events-none absolute bottom-1 left-2 text-[10.5px] font-bold text-[#8A9691]">0</div>
-                <div className="pointer-events-none absolute bottom-1 right-2 text-[10.5px] font-bold text-[#8A9691]">
+                <div className="pointer-events-none absolute bottom-1 left-2 text-[10.5px] font-bold text-muted">0</div>
+                <div className="pointer-events-none absolute bottom-1 right-2 text-[10.5px] font-bold text-muted">
                     {safeMax.toLocaleString()}
                 </div>
             </div>

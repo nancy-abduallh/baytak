@@ -15,7 +15,7 @@ export function DataTable<T extends { id: number }>({
 }) {
     if (rows.length === 0) {
         return (
-            <div className="card-elevated grid place-items-center p-14 text-center text-[13.5px] text-[#8A9691]">
+            <div className="card-elevated grid place-items-center p-14 text-center text-[13.5px] text-muted">
                 {emptyLabel}
             </div>
         );

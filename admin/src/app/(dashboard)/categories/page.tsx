@@ -132,7 +132,7 @@ export default function AdminCategoriesPage() {
 
     const columns: Column<AdminCategoryRow>[] = [
         { header: "الفئة", render: (c) => <b>{c.nameAr}</b> },
-        { header: "المعرّف (slug)", render: (c) => <span dir="ltr" className="text-[#8A9691]">{c.slug}</span> },
+        { header: "المعرّف (slug)", render: (c) => <span dir="ltr" className="text-muted">{c.slug}</span> },
         { header: "السعر المعلن", render: (c) => `${c.priceFrom} ${c.priceUnit}` },
         { header: "الترتيب", render: (c) => c.sortOrder },
         { header: "عدد الفنيين", render: (c) => c.technicianCount },

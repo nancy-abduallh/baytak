@@ -38,8 +38,7 @@ export default function AdminOrdersPage() {
     const columns: Column<AdminOrderRow>[] = [
         { header: "رقم الطلب", render: (o) => <b>{o.orderNumber}</b> },
         { header: "العميل", render: (o) => o.customerName },
-        { header: "الفني", render: (o) => o.technicianName ?? <span className="text-[#8A9691]">لم يُعيّن</span> },
-        { header: "الخدمة", render: (o) => o.categoryLabel },
+        { header: "الفني", render: (o) => o.technicianName ?? <span className="text-muted">لم يُعيّن</span> }, { header: "الخدمة", render: (o) => o.categoryLabel },
         { header: "الحالة", render: (o) => <OrderStatusBadge status={o.status} /> },
         { header: "المبلغ", render: (o) => <b>{o.amount} ر.س</b> },
         { header: "الموعد", render: (o) => o.scheduledDate },

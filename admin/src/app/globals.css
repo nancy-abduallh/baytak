@@ -18,6 +18,11 @@
     --color-line: #E2DDD0;
     --color-danger: #B24B3C;
 
+    /* Secondary/meta text color — replaces the old #8A9691 which only hit ~3:1
+       contrast on white (fails WCAG AA for normal-size text). #5B6B64 hits
+       ~4.8:1 on white/sand backgrounds while staying visually "muted". */
+    --color-muted: #5B6B64;
+
     --font-heading: var(--font-tajawal), sans-serif;
     --font-body: var(--font-plex-arabic), sans-serif;
 

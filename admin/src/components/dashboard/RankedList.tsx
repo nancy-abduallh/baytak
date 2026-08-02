@@ -27,12 +27,12 @@ export function RankedList({
                             opacity: item.highlighted === false ? 0.4 : 1,
                         }}
                     >
-                        <span className="text-[12.5px] font-bold" style={{ color: item.color }}>
+                        <span className="text-[12.5px] font-bold text-[#2C3A34]">
                             {item.label}
                         </span>
                         <span className="font-heading text-[16px] font-extrabold text-ink">
                             {item.value.toLocaleString()}
-                            {unit ? <span className="ms-1 text-[11px] font-semibold text-[#8A9691]">{unit}</span> : null}
+                            {unit ? <span className="ms-1 text-[11px] font-semibold text-muted">{unit}</span> : null}
                         </span>
                     </li>
                 ))}

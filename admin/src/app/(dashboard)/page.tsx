@@ -242,6 +242,23 @@ export default function AdminOverviewPage() {
         [topCategories, categoryFilter],
     );
 
+    // ---------- Revenue / business KPIs ----------
+    const avgOrderValue = useMemo(() => {
+        if (!stats || !totalOrders) return 0;
+        return Math.round(stats.revenueThisMonth / totalOrders);
+    }, [stats, totalOrders]);
+
+    const completionRate = useMemo(() => {
+        if (!totalOrders) return 0;
+        return Math.round((completedOrders / totalOrders) * 100);
+    }, [completedOrders, totalOrders]);
+
+    const avgTechnicianRating = useMemo(() => {
+        if (!technicians || technicians.length === 0) return "—";
+        const sum = technicians.reduce((acc, t) => acc + (t.averageRating ?? 0), 0);
+        return (sum / technicians.length).toFixed(1);
+    }, [technicians]);
+
     const isLoading = !stats || !analytics || !technicians || !users || !categories;
 
     return (
@@ -255,7 +272,7 @@ export default function AdminOverviewPage() {
             )}
 
             {isLoading ? (
-                <div className="card-elevated p-10 text-center text-[13.5px] text-[#8A9691]">جارِ التحميل...</div>
+                <div className="card-elevated p-10 text-center text-[13.5px] text-muted">جارِ التحميل...</div>
             ) : (
                 <>
                     {/* Filters — mirrors the "Year(s) / Fire Type" controls in the reference dashboard */}
@@ -280,7 +297,19 @@ export default function AdminOverviewPage() {
                         <MetricPill label="الفنيون النشطون" value={stats.activeTechnicians} tone="teal700" />
                         <MetricPill label="فئات الخدمة" value={categories.length} tone="green500" />
                         <MetricPill label="بانتظار التوثيق" value={stats.pendingVerifications} tone="gold500" />
-                        <MetricPill label="مستخدمون جدد (٧ أيام)" value={stats.newUsersThisWeek} tone="sand100" />
+                        <MetricPill label="مستخدمون جدد" value={stats.newUsersThisWeek} tone="sand100" />
+                        <MetricPill
+                            label="إجمالي الإيرادات (هذا الشهر)"
+                            value={`${stats.revenueThisMonth.toLocaleString()} ر.س`}
+                            tone="blue500"
+                        />
+                        <MetricPill
+                            label="متوسط قيمة الطلب"
+                            value={`${avgOrderValue.toLocaleString()} ر.س`}
+                            tone="purple500"
+                        />
+                        <MetricPill label="نسبة إنجاز الطلبات" value={`${completionRate}٪`} tone="green500" />
+                        <MetricPill label="متوسط تقييم الفنيين" value={avgTechnicianRating} tone="gold500" />
                     </div>
 
                     {/* Main grid — 3 stacked donuts | trend + category chart | gauge + ranked list */}
@@ -322,45 +351,47 @@ export default function AdminOverviewPage() {
                                     )
                                 }
                             >
-                                <ResponsiveContainer width="100%" height={260}>
-                                    <LineChart data={ordersChartData} margin={{ top: 30, left: -18, right: 8, bottom: 24 }}>
-                                        <CartesianGrid strokeDasharray="3 3" stroke="#E2DDD0" vertical={false} />
-                                        <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#8A9691" }} axisLine={false} tickLine={false} />
-                                        <YAxis tick={{ fontSize: 11, fill: "#8A9691" }} axisLine={false} tickLine={false} allowDecimals={false} />
-                                        <Tooltip
-                                            contentStyle={{ borderRadius: 12, border: "1px solid #E2DDD0", fontSize: 12.5, direction: "rtl", boxShadow: "0 12px 30px rgba(18,48,46,.18)" }}
-                                            labelFormatter={(l) => `يوم ${l}`}
-                                            formatter={(value: number) => [`${value} طلب`, "الطلبات"]}
-                                        />
-                                        <Line
-                                            type="monotone"
-                                            dataKey="orders"
-                                            stroke="#1E6B5C"
-                                            strokeWidth={3}
-                                            dot={(dotProps: any) => {
-                                                const { cx, cy, index, value } = dotProps;
-                                                const pos = calloutMap.get(index);
-                                                if (!pos) {
-                                                    return <circle key={`d-${index}`} cx={cx} cy={cy} r={2.5} fill="#1E6B5C" />;
-                                                }
-                                                const label = `${value}`;
-                                                const boxWidth = Math.max(30, label.length * 9 + 16);
-                                                const y = pos === "top" ? cy - 34 : cy + 12;
-                                                const fill = pos === "top" ? "#1E6B5C" : "#BF8A34";
-                                                return (
-                                                    <g key={`d-${index}`}>
-                                                        <circle cx={cx} cy={cy} r={4} fill={fill} stroke="#fff" strokeWidth={2} />
-                                                        <rect x={cx - boxWidth / 2} y={y} width={boxWidth} height={22} rx={11} fill={fill} />
-                                                        <text x={cx} y={y + 15} textAnchor="middle" fontSize={11} fontWeight={700} fill="#fff">
-                                                            {label}
-                                                        </text>
-                                                    </g>
-                                                );
-                                            }}
-                                            activeDot={{ r: 5, fill: "#1E6B5C", stroke: "#fff", strokeWidth: 2 }}
-                                        />
-                                    </LineChart>
-                                </ResponsiveContainer>
+                                <div style={{ direction: "ltr" }}>
+                                    <ResponsiveContainer width="100%" height={260}>
+                                        <LineChart data={ordersChartData} margin={{ top: 30, left: -18, right: 8, bottom: 24 }}>
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#E2DDD0" vertical={false} />
+                                            <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#5B6B64" }} axisLine={false} tickLine={false} />
+                                            <YAxis tick={{ fontSize: 11, fill: "#5B6B64" }} axisLine={false} tickLine={false} allowDecimals={false} />
+                                            <Tooltip
+                                                contentStyle={{ borderRadius: 12, border: "1px solid #E2DDD0", fontSize: 12.5, direction: "rtl", boxShadow: "0 12px 30px rgba(18,48,46,.18)" }}
+                                                labelFormatter={(l) => `يوم ${l}`}
+                                                formatter={(value: number) => [`${value} طلب`, "الطلبات"]}
+                                            />
+                                            <Line
+                                                type="monotone"
+                                                dataKey="orders"
+                                                stroke="#1E6B5C"
+                                                strokeWidth={3}
+                                                dot={(dotProps: any) => {
+                                                    const { cx, cy, index, value } = dotProps;
+                                                    const pos = calloutMap.get(index);
+                                                    if (!pos) {
+                                                        return <circle key={`d-${index}`} cx={cx} cy={cy} r={2.5} fill="#1E6B5C" />;
+                                                    }
+                                                    const label = `${value}`;
+                                                    const boxWidth = Math.max(30, label.length * 9 + 16);
+                                                    const y = pos === "top" ? cy - 34 : cy + 12;
+                                                    const fill = pos === "top" ? "#1E6B5C" : "#BF8A34";
+                                                    return (
+                                                        <g key={`d-${index}`}>
+                                                            <circle cx={cx} cy={cy} r={4} fill={fill} stroke="#fff" strokeWidth={2} />
+                                                            <rect x={cx - boxWidth / 2} y={y} width={boxWidth} height={22} rx={11} fill={fill} />
+                                                            <text x={cx} y={y + 15} textAnchor="middle" fontSize={11} fontWeight={700} fill="#fff">
+                                                                {label}
+                                                            </text>
+                                                        </g>
+                                                    );
+                                                }}
+                                                activeDot={{ r: 5, fill: "#1E6B5C", stroke: "#fff", strokeWidth: 2 }}
+                                            />
+                                        </LineChart>
+                                    </ResponsiveContainer>
+                                </div>
                             </ChartCard>
 
                             <ChartCard
@@ -369,26 +400,28 @@ export default function AdminOverviewPage() {
                                 icon={ListTree}
                                 tone="blue"
                             >
-                                <ResponsiveContainer width="100%" height={260}>
-                                    <BarChart data={topCategories} layout="vertical" margin={{ left: 8, right: 30 }}>
-                                        <CartesianGrid strokeDasharray="3 3" stroke="#E2DDD0" horizontal={false} />
-                                        <XAxis type="number" tick={{ fontSize: 11, fill: "#8A9691" }} axisLine={false} tickLine={false} allowDecimals={false} />
-                                        <YAxis dataKey="label" type="category" width={70} tick={{ fontSize: 12, fill: "#57655F" }} axisLine={false} tickLine={false} />
-                                        <Tooltip
-                                            contentStyle={{ borderRadius: 12, border: "1px solid #E2DDD0", fontSize: 12.5, direction: "rtl", boxShadow: "0 12px 30px rgba(18,48,46,.18)" }}
-                                            formatter={(value: number) => [`${value} طلب`, "الطلبات"]}
-                                        />
-                                        <Bar dataKey="count" radius={[0, 8, 8, 0]} maxBarSize={20} label={{ position: "right", fontSize: 11, fill: "#57655F", fontWeight: 700 }}>
-                                            {topCategories.map((entry, i) => (
-                                                <Cell
-                                                    key={entry.label}
-                                                    fill={CATEGORY_COLORS[i % CATEGORY_COLORS.length]}
-                                                    fillOpacity={categoryFilter === "all" || entry.label === categoryFilter ? 1 : 0.35}
-                                                />
-                                            ))}
-                                        </Bar>
-                                    </BarChart>
-                                </ResponsiveContainer>
+                                <div style={{ direction: "ltr" }}>
+                                    <ResponsiveContainer width="100%" height={260}>
+                                        <BarChart data={topCategories} layout="vertical" margin={{ left: 8, right: 30 }}>
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#E2DDD0" horizontal={false} />
+                                            <XAxis type="number" tick={{ fontSize: 11, fill: "#5B6B64" }} axisLine={false} tickLine={false} allowDecimals={false} />
+                                            <YAxis dataKey="label" type="category" width={70} tick={{ fontSize: 12, fill: "#57655F" }} axisLine={false} tickLine={false} />
+                                            <Tooltip
+                                                contentStyle={{ borderRadius: 12, border: "1px solid #E2DDD0", fontSize: 12.5, direction: "rtl", boxShadow: "0 12px 30px rgba(18,48,46,.18)" }}
+                                                formatter={(value: number) => [`${value} طلب`, "الطلبات"]}
+                                            />
+                                            <Bar dataKey="count" radius={[0, 8, 8, 0]} maxBarSize={20} label={{ position: "right", fontSize: 11, fill: "#57655F", fontWeight: 700 }}>
+                                                {topCategories.map((entry, i) => (
+                                                    <Cell
+                                                        key={entry.label}
+                                                        fill={CATEGORY_COLORS[i % CATEGORY_COLORS.length]}
+                                                        fillOpacity={categoryFilter === "all" || entry.label === categoryFilter ? 1 : 0.35}
+                                                    />
+                                                ))}
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
                             </ChartCard>
                         </div>
 

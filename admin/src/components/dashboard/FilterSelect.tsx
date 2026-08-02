@@ -27,7 +27,7 @@ export function FilterSelect({
                         </option>
                     ))}
                 </select>
-                <ChevronDown className="pointer-events-none absolute top-1/2 start-3 h-3.5 w-3.5 -translate-y-1/2 text-[#8A9691]" />
+                <ChevronDown className="pointer-events-none absolute top-1/2 start-3 h-3.5 w-3.5 -translate-y-1/2 text-muted" />
             </div>
         </div>
     );
