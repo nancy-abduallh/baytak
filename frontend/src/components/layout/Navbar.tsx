@@ -58,7 +58,7 @@ export function Navbar() {
 
                 {accessToken && user ? (
                     <div className="flex items-center gap-2">
-                        <Link href="/dashboard/orders" className="flex items-center gap-2.5 rounded-full bg-white/[.07] py-1.5 ps-3.5 pe-1.5">
+                        <Link href="/dashboard/account" className="flex items-center gap-2.5 rounded-full bg-white/[.07] py-1.5 ps-3.5 pe-1.5">
                             <span className="text-[13.5px] font-semibold text-white">{user.fullName}</span>
                             <span className="grid h-7 w-7 place-items-center rounded-full bg-gold-500 text-xs font-bold text-white">{getInitials(user.fullName)}</span>
                         </Link>

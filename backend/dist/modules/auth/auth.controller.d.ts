@@ -2,6 +2,7 @@ import type { Request } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 export declare class AuthController {
     private readonly auth;
     constructor(auth: AuthService);
@@ -57,4 +58,14 @@ export declare class AuthController {
         id: number;
         phone: string;
     };
+    updateMe(user: {
+        id: number;
+    }, dto: UpdateProfileDto): Promise<{
+        id: number;
+        fullName: string;
+        phone: string;
+        email: string | null;
+        city: string | null;
+        district: string | null;
+    }>;
 }

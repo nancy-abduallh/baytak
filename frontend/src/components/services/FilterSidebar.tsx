@@ -1,9 +1,39 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import clsx from "clsx";
 import { ServiceCategory } from "@/lib/types";
 
+const RATING_OPTIONS = [
+    { label: "4.5 فأعلى", value: "4.5" },
+    { label: "4.0 فأعلى", value: "4" },
+    { label: "الكل", value: "" },
+];
+
 export function FilterSidebar({ categories, activeSlug }: { categories: ServiceCategory[]; activeSlug: string }) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const [maxPrice, setMaxPrice] = useState(() => Number(searchParams.get("maxPrice") ?? 300));
+    const [minRating, setMinRating] = useState(() => searchParams.get("minRating") ?? "");
+
+    const applyFilters = () => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (maxPrice < 300) params.set("maxPrice", String(maxPrice)); else params.delete("maxPrice");
+        if (minRating) params.set("minRating", minRating); else params.delete("minRating");
+        const qs = params.toString();
+        router.push(`/services/${activeSlug}${qs ? `?${qs}` : ""}`);
+    };
+
+    const clearFilters = () => {
+        setMaxPrice(300);
+        setMinRating("");
+        router.push(`/services/${activeSlug}`);
+    };
+
+    const hasActiveFilters = searchParams.has("maxPrice") || searchParams.has("minRating");
+
     return (
         <aside className="sticky top-[100px] h-fit rounded-md border border-line bg-white p-6">
             <h4 className="mb-4 text-[14.5px] font-bold">فئة الخدمة</h4>
@@ -23,8 +53,18 @@ export function FilterSidebar({ categories, activeSlug }: { categories: ServiceC
             </div>
 
             <div className="mb-6">
-                <label className="mb-2.5 block text-[13px] font-semibold text-[#57655F]">نطاق السعر (ر.س)</label>
-                <input type="range" min={50} max={300} defaultValue={200} className="w-full accent-teal-700" />
+                <label className="mb-2.5 block text-[13px] font-semibold text-[#57655F]">
+                    السعر الأقصى: <b className="text-ink">{maxPrice} ر.س</b>
+                </label>
+                <input
+                    type="range"
+                    min={50}
+                    max={300}
+                    step={10}
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(Number(e.target.value))}
+                    className="w-full accent-teal-700"
+                />
                 <div className="mt-2 flex justify-between text-[12.5px] text-[#8A9691]">
                     <span>٥٠</span><span>٣٠٠</span>
                 </div>
@@ -32,25 +72,28 @@ export function FilterSidebar({ categories, activeSlug }: { categories: ServiceC
 
             <div className="mb-6">
                 <label className="mb-2.5 block text-[13px] font-semibold text-[#57655F]">تقييم الفني</label>
-                {["4.5 فأعلى", "4.0 فأعلى", "الكل"].map((r) => (
-                    <label key={r} className="mb-2 flex items-center gap-2 text-[13px] text-[#57655F]">
-                        <input type="radio" name="rating" className="accent-teal-700" /> ★ {r}
+                {RATING_OPTIONS.map((opt) => (
+                    <label key={opt.label} className="mb-2 flex items-center gap-2 text-[13px] text-[#57655F]">
+                        <input
+                            type="radio"
+                            name="rating"
+                            checked={minRating === opt.value}
+                            onChange={() => setMinRating(opt.value)}
+                            className="accent-teal-700"
+                        />
+                        ★ {opt.label}
                     </label>
                 ))}
             </div>
 
-            <div className="mb-6">
-                <label className="mb-2.5 block text-[13px] font-semibold text-[#57655F]">وقت التوفر</label>
-                <div className="flex flex-wrap gap-2">
-                    {["اليوم", "غدًا", "أختار موعد"].map((slot, i) => (
-                        <button key={slot} className={clsx("rounded-full px-3.5 py-2 text-[12.8px] font-semibold", i === 0 ? "bg-teal-700 text-white" : "bg-sand-100 text-[#57655F]")}>
-                            {slot}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            <button className="w-full rounded-full bg-ink py-3.5 text-[13.8px] font-bold text-white">تطبيق الفلاتر</button>
+            <button onClick={applyFilters} className="w-full rounded-full bg-ink py-3.5 text-[13.8px] font-bold text-white">
+                تطبيق الفلاتر
+            </button>
+            {hasActiveFilters && (
+                <button onClick={clearFilters} className="mt-2.5 w-full rounded-full border border-line py-3 text-[13px] font-semibold text-[#57655F]">
+                    إعادة تعيين
+                </button>
+            )}
         </aside>
     );
 }

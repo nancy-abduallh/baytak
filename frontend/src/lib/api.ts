@@ -1,5 +1,5 @@
 import { useAuthStore } from "./stores/auth-store";
-import { ServiceCategory, Technician, Order, User, Address } from "./types";
+import { ServiceCategory, Technician, Order, User, Address, Review } from "./types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
 
@@ -61,11 +61,28 @@ async function refreshSession(): Promise<boolean> {
     }
 }
 
+export interface TechnicianFilters {
+    minRating?: number;
+    maxPrice?: number;
+    sortBy?: "rating" | "price" | "experience";
+}
+
+function buildQuery(params: Record<string, string | number | undefined>): string {
+    const search = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") search.set(key, String(value));
+    });
+    const qs = search.toString();
+    return qs ? `?${qs}` : "";
+}
+
 export const api = {
     // Public
     getCategories: () => request<ServiceCategory[]>("/service-categories"),
-    getTechniciansByCategory: (slug: string) => request<Technician[]>(`/technicians?category=${slug}`),
+    getTechniciansByCategory: (slug: string, filters: TechnicianFilters = {}) =>
+        request<Technician[]>(`/technicians${buildQuery({ category: slug, minRating: filters.minRating, maxPrice: filters.maxPrice, sortBy: filters.sortBy })}`),
     getTechnician: (id: number) => request<Technician>(`/technicians/${id}`),
+    getTechnicianReviews: (id: number) => request<Review[]>(`/technicians/${id}/reviews`),
 
     // Auth
     register: (payload: { fullName: string; phone: string; password: string; email?: string; city?: string; district?: string }) =>
@@ -77,13 +94,26 @@ export const api = {
         if (!refreshToken) return Promise.resolve();
         return request("/auth/logout", { method: "POST", body: JSON.stringify({ refreshToken }) }).catch(() => undefined);
     },
+    updateProfile: (payload: { fullName?: string; phone?: string; email?: string; city?: string; district?: string }) =>
+        request<User>("/auth/me", { method: "PATCH", body: JSON.stringify(payload) }),
 
     // Protected
     getOrders: (userId: number) => request<Order[]>(`/users/${userId}/orders`),
     getOrder: (id: number) => request<Order>(`/orders/${id}`),
     createOrder: (payload: { categoryId: number; addressId: number; technicianId?: number; description?: string; scheduledDate: string; amount: number }) =>
         request<Order>("/orders", { method: "POST", body: JSON.stringify(payload) }),
+    createReview: (orderId: number, payload: { rating: number; comment?: string }) =>
+        request<{ id: number }>(`/orders/${orderId}/reviews`, { method: "POST", body: JSON.stringify(payload) }),
+
     getMyAddresses: () => request<Address[]>("/addresses/mine"),
     createAddress: (payload: { label?: string; city: string; district: string; street?: string; isDefault?: boolean }) =>
         request<Address>("/addresses", { method: "POST", body: JSON.stringify(payload) }),
+    updateAddress: (id: number, payload: { label?: string; city?: string; district?: string; street?: string; isDefault?: boolean }) =>
+        request<Address>(`/addresses/${id}`, { method: "PATCH", body: JSON.stringify(payload) }),
+    deleteAddress: (id: number) => request<{ id: number; deleted: boolean }>(`/addresses/${id}`, { method: "DELETE" }),
+
+    getFavorites: () => request<Technician[]>("/favorites/mine"),
+    getFavoriteIds: () => request<number[]>("/favorites/mine/ids"),
+    addFavorite: (technicianId: number) => request<{ favorited: boolean }>(`/favorites/${technicianId}`, { method: "POST" }),
+    removeFavorite: (technicianId: number) => request<{ favorited: boolean }>(`/favorites/${technicianId}`, { method: "DELETE" }),
 };

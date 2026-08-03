@@ -10,6 +10,7 @@ import { TechniciansModule } from './modules/technicians/technicians.module';
 import { AddressesModule } from './modules/addresses/addresses.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
+import { FavoritesModule } from './modules/favorites/favorites.module';
 import { AdminModule } from './modules/admin/admin.module';
 
 @Module({
@@ -27,6 +28,7 @@ import { AdminModule } from './modules/admin/admin.module';
     AddressesModule,
     OrdersModule,
     ReviewsModule,
+    FavoritesModule,
     AdminModule,
   ],
 })

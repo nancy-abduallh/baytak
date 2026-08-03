@@ -113,6 +113,28 @@ let AuthService = class AuthService {
         await this.authTokens.update({ actorType: 'user', actorId: userId, refreshTokenHash: tokenHash }, { revokedAt: new Date() });
         return { success: true };
     }
+    async updateProfile(userId, dto) {
+        const user = await this.users.findOneByOrFail({ id: userId });
+        if (dto.phone && dto.phone !== user.phone) {
+            const existing = await this.users.findOne({ where: { phone: dto.phone } });
+            if (existing)
+                throw new common_1.ConflictException('رقم الجوال مستخدم بالفعل');
+        }
+        if (dto.email && dto.email !== user.email) {
+            const existing = await this.users.findOne({ where: { email: dto.email } });
+            if (existing)
+                throw new common_1.ConflictException('البريد الإلكتروني مستخدم بالفعل');
+        }
+        Object.assign(user, {
+            fullName: dto.fullName ?? user.fullName,
+            phone: dto.phone ?? user.phone,
+            email: dto.email ?? user.email,
+            city: dto.city ?? user.city,
+            district: dto.district ?? user.district,
+        });
+        await this.users.save(user);
+        return { id: user.id, fullName: user.fullName, phone: user.phone, email: user.email, city: user.city, district: user.district };
+    }
     async issueTokenPair(user, meta) {
         const accessToken = this.jwt.sign({ sub: user.id, phone: user.phone, actorType: 'user' }, { secret: this.config.get('jwt.accessSecret'), expiresIn: this.config.get('jwt.accessExpiresIn') });
         const refreshToken = this.jwt.sign({ sub: user.id, actorType: 'user' }, { secret: this.config.get('jwt.refreshSecret'), expiresIn: this.config.get('jwt.refreshExpiresIn') });

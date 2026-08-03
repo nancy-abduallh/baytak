@@ -40,8 +40,13 @@ let TechniciansService = class TechniciansService {
             qb.andWhere('t.averageRating >= :minRating', { minRating: parseFloat(query.minRating) });
         if (query.maxPrice)
             qb.andWhere('t.priceFrom <= :maxPrice', { maxPrice: parseFloat(query.maxPrice) });
-        const sortColumn = { rating: 't.averageRating', price: 't.priceFrom', experience: 't.yearsExperience' }[query.sortBy ?? 'rating'];
-        qb.orderBy(sortColumn, 'DESC');
+        const sortConfig = {
+            rating: { column: 't.averageRating', direction: 'DESC' },
+            price: { column: 't.priceFrom', direction: 'ASC' },
+            experience: { column: 't.yearsExperience', direction: 'DESC' },
+        };
+        const { column, direction } = sortConfig[query.sortBy ?? 'rating'];
+        qb.orderBy(column, direction).addOrderBy('t.reviewCount', 'DESC');
         const rows = await qb.getMany();
         return rows.map((t) => this.toResponse(t));
     }

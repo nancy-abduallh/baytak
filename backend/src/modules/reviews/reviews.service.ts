@@ -14,6 +14,22 @@ export class ReviewsService {
         @InjectRepository(Technician) private readonly technicians: Repository<Technician>,
     ) { }
 
+    async findByTechnician(technicianId: number) {
+        const rows = await this.reviews.find({
+            where: { technicianId },
+            relations: ['user'],
+            order: { createdAt: 'DESC' },
+        });
+
+        return rows.map((r) => ({
+            id: r.id,
+            rating: r.rating,
+            comment: r.comment,
+            createdAt: r.createdAt,
+            reviewerName: r.user?.fullName ?? 'مستخدم بيتك',
+        }));
+    }
+
     async create(orderId: number, userId: number, dto: CreateReviewDto) {
         const order = await this.orders.findOneBy({ id: orderId });
         if (!order) throw new NotFoundException('الطلب غير موجود');

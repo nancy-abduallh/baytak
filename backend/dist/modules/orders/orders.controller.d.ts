@@ -22,6 +22,8 @@ export declare class OrdersController {
         address: string;
         amount: number;
         scheduledDate: string;
+        hasReview: boolean;
+        canReview: boolean;
     }>;
     findMine(user: {
         id: number;
@@ -41,6 +43,8 @@ export declare class OrdersController {
         address: string;
         amount: number;
         scheduledDate: string;
+        hasReview: boolean;
+        canReview: boolean;
     }[]>;
     findOne(user: {
         id: number;
@@ -60,6 +64,8 @@ export declare class OrdersController {
         address: string;
         amount: number;
         scheduledDate: string;
+        hasReview: boolean;
+        canReview: boolean;
     }>;
     updateStatus(id: number, dto: UpdateOrderStatusDto): Promise<{
         id: number;
@@ -77,5 +83,7 @@ export declare class OrdersController {
         address: string;
         amount: number;
         scheduledDate: string;
+        hasReview: boolean;
+        canReview: boolean;
     }>;
 }

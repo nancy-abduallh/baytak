@@ -44,6 +44,16 @@ export interface Order {
     address: string;
     amount: number;
     scheduledDate: string;
+    hasReview: boolean;
+    canReview: boolean;
+}
+
+export interface Review {
+    id: number;
+    rating: number;
+    comment: string | null;
+    createdAt: string;
+    reviewerName: string;
 }
 
 export interface User {

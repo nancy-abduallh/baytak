@@ -9,6 +9,7 @@ import { User } from '../../entities/user.entity';
 import { AuthToken } from '../../entities/auth-token.entity';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 const SALT_ROUNDS = 12;
 
@@ -83,6 +84,30 @@ export class AuthService {
             { revokedAt: new Date() },
         );
         return { success: true };
+    }
+
+    async updateProfile(userId: number, dto: UpdateProfileDto) {
+        const user = await this.users.findOneByOrFail({ id: userId });
+
+        if (dto.phone && dto.phone !== user.phone) {
+            const existing = await this.users.findOne({ where: { phone: dto.phone } });
+            if (existing) throw new ConflictException('رقم الجوال مستخدم بالفعل');
+        }
+        if (dto.email && dto.email !== user.email) {
+            const existing = await this.users.findOne({ where: { email: dto.email } });
+            if (existing) throw new ConflictException('البريد الإلكتروني مستخدم بالفعل');
+        }
+
+        Object.assign(user, {
+            fullName: dto.fullName ?? user.fullName,
+            phone: dto.phone ?? user.phone,
+            email: dto.email ?? user.email,
+            city: dto.city ?? user.city,
+            district: dto.district ?? user.district,
+        });
+
+        await this.users.save(user);
+        return { id: user.id, fullName: user.fullName, phone: user.phone, email: user.email, city: user.city, district: user.district };
     }
 
     private async issueTokenPair(user: User, meta: { userAgent?: string; ip?: string }) {

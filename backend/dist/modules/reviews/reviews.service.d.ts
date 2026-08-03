@@ -8,6 +8,13 @@ export declare class ReviewsService {
     private readonly orders;
     private readonly technicians;
     constructor(reviews: Repository<Review>, orders: Repository<Order>, technicians: Repository<Technician>);
+    findByTechnician(technicianId: number): Promise<{
+        id: number;
+        rating: number;
+        comment: string | null;
+        createdAt: Date;
+        reviewerName: string;
+    }[]>;
     create(orderId: number, userId: number, dto: CreateReviewDto): Promise<Review>;
     private recalculateTechnicianRating;
 }

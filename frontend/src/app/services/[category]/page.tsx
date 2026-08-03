@@ -4,14 +4,30 @@ import { api, ApiError } from "@/lib/api";
 import { FilterSidebar } from "@/components/services/FilterSidebar";
 import { TechnicianListClient } from "@/components/services/TechnicianListClient";
 
-export default async function ServicesPage({ params }: { params: Promise<{ category: string }> }) {
+type SortBy = "rating" | "price" | "experience";
+
+export default async function ServicesPage({
+    params,
+    searchParams,
+}: {
+    params: Promise<{ category: string }>;
+    searchParams: Promise<{ minRating?: string; maxPrice?: string; sortBy?: string }>;
+}) {
     const { category } = await params;
+    const query = await searchParams;
+
+    const minRating = query.minRating ? Number(query.minRating) : undefined;
+    const maxPrice = query.maxPrice ? Number(query.maxPrice) : undefined;
+    const sortBy: SortBy = query.sortBy === "price" || query.sortBy === "experience" ? query.sortBy : "rating";
 
     let categories: Awaited<ReturnType<typeof api.getCategories>>;
     let technicians: Awaited<ReturnType<typeof api.getTechniciansByCategory>>;
 
     try {
-        [categories, technicians] = await Promise.all([api.getCategories(), api.getTechniciansByCategory(category)]);
+        [categories, technicians] = await Promise.all([
+            api.getCategories(),
+            api.getTechniciansByCategory(category, { minRating, maxPrice, sortBy }),
+        ]);
     } catch (err) {
         if (err instanceof ApiError && err.status === 404) notFound();
         throw err; // caught by app/error.tsx
@@ -35,9 +51,11 @@ export default async function ServicesPage({ params }: { params: Promise<{ categ
             <div className="mx-auto grid max-w-[1360px] grid-cols-[280px_1fr] gap-7 px-10 py-9">
                 <FilterSidebar categories={categories} activeSlug={category} />
                 {technicians.length > 0 ? (
-                    <TechnicianListClient technicians={technicians} categoryLabel={activeCategory.nameAr} />
+                    <TechnicianListClient technicians={technicians} categoryLabel={activeCategory.nameAr} sortBy={sortBy} />
                 ) : (
-                    <div className="rounded-md border border-line bg-white p-10 text-center text-[14px] text-[#8A9691]">لا يوجد فنيون متاحون في هذه الفئة حاليًا.</div>
+                    <div className="rounded-md border border-line bg-white p-10 text-center text-[14px] text-[#8A9691]">
+                        لا يوجد فنيون مطابقون لهذه الفلاتر حاليًا.
+                    </div>
                 )}
             </div>
         </main>

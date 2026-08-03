@@ -1,10 +1,29 @@
-import { BadgeCheck, Star } from "lucide-react";
+import { BadgeCheck, Star, Heart } from "lucide-react";
+import clsx from "clsx";
 import { Technician } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
 
-export function TechnicianCard({ tech }: { tech: Technician }) {
+export function TechnicianCard({
+    tech, isFavorite = false, onToggleFavorite,
+}: {
+    tech: Technician;
+    isFavorite?: boolean;
+    onToggleFavorite?: () => void;
+}) {
     return (
-        <div className="mb-3.5 grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-5 rounded-md border border-line bg-white p-5 transition hover:shadow-card">
+        <div className="mb-3.5 grid grid-cols-[auto_auto_1fr_auto_auto_auto] items-center gap-5 rounded-md border border-line bg-white p-5 transition hover:shadow-card">
+            {onToggleFavorite && (
+                <button
+                    onClick={onToggleFavorite}
+                    aria-label={isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
+                    className={clsx(
+                        "grid h-9 w-9 place-items-center rounded-full border transition",
+                        isFavorite ? "border-danger/30 bg-danger/10 text-danger" : "border-line text-[#B7C1BC] hover:text-danger"
+                    )}
+                >
+                    <Heart className={clsx("h-[18px] w-[18px]", isFavorite && "fill-current")} />
+                </button>
+            )}
             <div className="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-[#DCEAE3] to-[#C6DED3] font-heading text-xl font-extrabold text-teal-700">
                 {tech.initials}
             </div>

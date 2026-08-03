@@ -14,13 +14,14 @@ const order_entity_1 = require("../../entities/order.entity");
 const technician_entity_1 = require("../../entities/technician.entity");
 const reviews_service_1 = require("./reviews.service");
 const reviews_controller_1 = require("./reviews.controller");
+const technician_reviews_controller_1 = require("./technician-reviews.controller");
 let ReviewsModule = class ReviewsModule {
 };
 exports.ReviewsModule = ReviewsModule;
 exports.ReviewsModule = ReviewsModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([review_entity_1.Review, order_entity_1.Order, technician_entity_1.Technician])],
-        controllers: [reviews_controller_1.ReviewsController],
+        controllers: [reviews_controller_1.ReviewsController, technician_reviews_controller_1.TechnicianReviewsController],
         providers: [reviews_service_1.ReviewsService],
     })
 ], ReviewsModule);

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { BadgeCheck, Star } from "lucide-react";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { api, ApiError } from "@/lib/api";
-import { Technician, Address } from "@/lib/types";
+import { Technician, Address, Review } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
 
 export default function BookingPage() {
@@ -15,6 +15,7 @@ export default function BookingPage() {
     const { accessToken, hasHydrated } = useAuthStore();
 
     const [technician, setTechnician] = useState<Technician | null>(null);
+    const [reviews, setReviews] = useState<Review[]>([]);
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [addressId, setAddressId] = useState<number | null>(null);
     const [scheduledDate, setScheduledDate] = useState("");
@@ -29,6 +30,7 @@ export default function BookingPage() {
 
     useEffect(() => {
         api.getTechnician(technicianId).then(setTechnician).catch(() => setError("تعذر تحميل بيانات الفني"));
+        api.getTechnicianReviews(technicianId).then(setReviews).catch(() => undefined);
     }, [technicianId]);
 
     useEffect(() => {
@@ -120,6 +122,31 @@ export default function BookingPage() {
                     {submitting ? "جارِ التأكيد..." : `تأكيد الحجز — ${technician?.priceFrom ?? "—"} ر.س`}
                 </Button>
             </form>
+
+            <div className="mt-8 rounded-md border border-line bg-white p-6">
+                <h4 className="mb-4 text-[15px] font-bold">
+                    آراء العملاء {technician ? `(${technician.reviewCount})` : ""}
+                </h4>
+                {reviews.length === 0 ? (
+                    <p className="text-[13px] text-[#8A9691]">لا توجد تقييمات بعد لهذا الفني.</p>
+                ) : (
+                    <div className="space-y-4">
+                        {reviews.map((review) => (
+                            <div key={review.id} className="border-b border-dashed border-line pb-4 last:border-0 last:pb-0">
+                                <div className="mb-1.5 flex items-center justify-between">
+                                    <b className="text-[13.5px] text-ink">{review.reviewerName}</b>
+                                    <div className="flex items-center gap-1 text-gold-500">
+                                        {Array.from({ length: 5 }).map((_, i) => (
+                                            <Star key={i} className={`h-3.5 w-3.5 ${i < review.rating ? "fill-current" : "text-[#D8DFDB]"}`} />
+                                        ))}
+                                    </div>
+                                </div>
+                                {review.comment && <p className="text-[13px] text-[#63756F]">{review.comment}</p>}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </main>
     );
 }

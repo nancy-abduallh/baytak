@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Order, OrderStatus } from '../../entities/order.entity';
 import { OrderStatusHistory } from '../../entities/order-status-history.entity';
+import { Review } from '../../entities/review.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 
@@ -20,6 +21,7 @@ export class OrdersService {
     constructor(
         @InjectRepository(Order) private readonly orders: Repository<Order>,
         @InjectRepository(OrderStatusHistory) private readonly history: Repository<OrderStatusHistory>,
+        @InjectRepository(Review) private readonly reviews: Repository<Review>,
         private readonly events: EventEmitter2,
     ) { }
 
@@ -47,7 +49,8 @@ export class OrdersService {
             relations: ['technician', 'category', 'address'],
             order: { createdAt: 'DESC' },
         });
-        return rows.map((o) => this.toResponse(o));
+        const reviewedOrderIds = await this.reviewedOrderIds(rows.map((o) => o.id));
+        return rows.map((o) => this.toResponse(o, reviewedOrderIds.has(o.id)));
     }
 
     async findOne(id: number, requesterId?: number) {
@@ -57,7 +60,14 @@ export class OrdersService {
         });
         if (!order) throw new NotFoundException('الطلب غير موجود');
         if (requesterId && order.userId !== requesterId) throw new ForbiddenException('لا تملك صلاحية الوصول لهذا الطلب');
-        return this.toResponse(order);
+        const reviewedOrderIds = await this.reviewedOrderIds([order.id]);
+        return this.toResponse(order, reviewedOrderIds.has(order.id));
+    }
+
+    private async reviewedOrderIds(orderIds: number[]): Promise<Set<number>> {
+        if (orderIds.length === 0) return new Set();
+        const rows = await this.reviews.find({ where: orderIds.map((orderId) => ({ orderId })) });
+        return new Set(rows.map((r) => r.orderId));
     }
 
     async updateStatus(id: number, dto: UpdateOrderStatusDto) {
@@ -97,7 +107,7 @@ export class OrdersService {
         return { id, deleted: true };
     }
 
-    private toResponse(order: Order) {
+    private toResponse(order: Order, hasReview = false) {
         return {
             id: order.id,
             orderNumber: `#${order.id}`,
@@ -111,6 +121,8 @@ export class OrdersService {
             address: order.address ? `${order.address.city} - ${order.address.district}` : '',
             amount: order.amount,
             scheduledDate: order.scheduledDate,
+            hasReview,
+            canReview: order.status === 'completed' && !!order.technicianId && !hasReview,
         };
     }
 }

@@ -2,13 +2,15 @@ import { Repository } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Order, OrderStatus } from '../../entities/order.entity';
 import { OrderStatusHistory } from '../../entities/order-status-history.entity';
+import { Review } from '../../entities/review.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 export declare class OrdersService {
     private readonly orders;
     private readonly history;
+    private readonly reviews;
     private readonly events;
-    constructor(orders: Repository<Order>, history: Repository<OrderStatusHistory>, events: EventEmitter2);
+    constructor(orders: Repository<Order>, history: Repository<OrderStatusHistory>, reviews: Repository<Review>, events: EventEmitter2);
     create(userId: number, dto: CreateOrderDto): Promise<{
         id: number;
         orderNumber: string;
@@ -25,6 +27,8 @@ export declare class OrdersService {
         address: string;
         amount: number;
         scheduledDate: string;
+        hasReview: boolean;
+        canReview: boolean;
     }>;
     findMine(userId: number): Promise<{
         id: number;
@@ -42,6 +46,8 @@ export declare class OrdersService {
         address: string;
         amount: number;
         scheduledDate: string;
+        hasReview: boolean;
+        canReview: boolean;
     }[]>;
     findOne(id: number, requesterId?: number): Promise<{
         id: number;
@@ -59,7 +65,10 @@ export declare class OrdersService {
         address: string;
         amount: number;
         scheduledDate: string;
+        hasReview: boolean;
+        canReview: boolean;
     }>;
+    private reviewedOrderIds;
     updateStatus(id: number, dto: UpdateOrderStatusDto): Promise<{
         id: number;
         orderNumber: string;
@@ -76,6 +85,8 @@ export declare class OrdersService {
         address: string;
         amount: number;
         scheduledDate: string;
+        hasReview: boolean;
+        canReview: boolean;
     }>;
     remove(id: number): Promise<{
         id: number;

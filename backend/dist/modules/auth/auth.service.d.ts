@@ -5,6 +5,7 @@ import { User } from '../../entities/user.entity';
 import { AuthToken } from '../../entities/auth-token.entity';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 export declare class AuthService {
     private readonly users;
     private readonly authTokens;
@@ -58,6 +59,14 @@ export declare class AuthService {
     }>;
     logout(userId: number, presentedToken: string): Promise<{
         success: boolean;
+    }>;
+    updateProfile(userId: number, dto: UpdateProfileDto): Promise<{
+        id: number;
+        fullName: string;
+        phone: string;
+        email: string | null;
+        city: string | null;
+        district: string | null;
     }>;
     private issueTokenPair;
     private hashToken;

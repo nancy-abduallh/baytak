@@ -18,6 +18,7 @@ const jwt_access_guard_1 = require("../auth/guards/jwt-access.guard");
 const current_user_decorator_1 = require("../../common/decorators/current-user.decorator");
 const addresses_service_1 = require("./addresses.service");
 const create_address_dto_1 = require("./dto/create-address.dto");
+const update_address_dto_1 = require("./dto/update-address.dto");
 let AddressesController = class AddressesController {
     service;
     constructor(service) {
@@ -28,6 +29,12 @@ let AddressesController = class AddressesController {
     }
     create(user, dto) {
         return this.service.create(user.id, dto);
+    }
+    update(user, id, dto) {
+        return this.service.update(user.id, id, dto);
+    }
+    remove(user, id) {
+        return this.service.remove(user.id, id);
     }
 };
 exports.AddressesController = AddressesController;
@@ -46,6 +53,23 @@ __decorate([
     __metadata("design:paramtypes", [Object, create_address_dto_1.CreateAddressDto]),
     __metadata("design:returntype", void 0)
 ], AddressesController.prototype, "create", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    __param(1, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Number, update_address_dto_1.UpdateAddressDto]),
+    __metadata("design:returntype", void 0)
+], AddressesController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    __param(1, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Number]),
+    __metadata("design:returntype", void 0)
+], AddressesController.prototype, "remove", null);
 exports.AddressesController = AddressesController = __decorate([
     (0, common_1.UseGuards)(jwt_access_guard_1.JwtAccessGuard),
     (0, common_1.Controller)('addresses'),

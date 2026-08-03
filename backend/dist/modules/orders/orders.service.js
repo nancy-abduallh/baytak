@@ -19,6 +19,7 @@ const typeorm_2 = require("typeorm");
 const event_emitter_1 = require("@nestjs/event-emitter");
 const order_entity_1 = require("../../entities/order.entity");
 const order_status_history_entity_1 = require("../../entities/order-status-history.entity");
+const review_entity_1 = require("../../entities/review.entity");
 const ALLOWED_TRANSITIONS = {
     pending: ['confirmed', 'cancelled'],
     confirmed: ['in_progress', 'cancelled'],
@@ -29,10 +30,12 @@ const ALLOWED_TRANSITIONS = {
 let OrdersService = class OrdersService {
     orders;
     history;
+    reviews;
     events;
-    constructor(orders, history, events) {
+    constructor(orders, history, reviews, events) {
         this.orders = orders;
         this.history = history;
+        this.reviews = reviews;
         this.events = events;
     }
     async create(userId, dto) {
@@ -56,7 +59,8 @@ let OrdersService = class OrdersService {
             relations: ['technician', 'category', 'address'],
             order: { createdAt: 'DESC' },
         });
-        return rows.map((o) => this.toResponse(o));
+        const reviewedOrderIds = await this.reviewedOrderIds(rows.map((o) => o.id));
+        return rows.map((o) => this.toResponse(o, reviewedOrderIds.has(o.id)));
     }
     async findOne(id, requesterId) {
         const order = await this.orders.findOne({
@@ -67,7 +71,14 @@ let OrdersService = class OrdersService {
             throw new common_1.NotFoundException('الطلب غير موجود');
         if (requesterId && order.userId !== requesterId)
             throw new common_1.ForbiddenException('لا تملك صلاحية الوصول لهذا الطلب');
-        return this.toResponse(order);
+        const reviewedOrderIds = await this.reviewedOrderIds([order.id]);
+        return this.toResponse(order, reviewedOrderIds.has(order.id));
+    }
+    async reviewedOrderIds(orderIds) {
+        if (orderIds.length === 0)
+            return new Set();
+        const rows = await this.reviews.find({ where: orderIds.map((orderId) => ({ orderId })) });
+        return new Set(rows.map((r) => r.orderId));
     }
     async updateStatus(id, dto) {
         const order = await this.orders.findOneBy({ id });
@@ -95,7 +106,7 @@ let OrdersService = class OrdersService {
         this.events.emit('order.deleted', { orderId: id, deletedAt: new Date().toISOString() });
         return { id, deleted: true };
     }
-    toResponse(order) {
+    toResponse(order, hasReview = false) {
         return {
             id: order.id,
             orderNumber: `#${order.id}`,
@@ -109,6 +120,8 @@ let OrdersService = class OrdersService {
             address: order.address ? `${order.address.city} - ${order.address.district}` : '',
             amount: order.amount,
             scheduledDate: order.scheduledDate,
+            hasReview,
+            canReview: order.status === 'completed' && !!order.technicianId && !hasReview,
         };
     }
 };
@@ -117,7 +130,9 @@ exports.OrdersService = OrdersService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(order_entity_1.Order)),
     __param(1, (0, typeorm_1.InjectRepository)(order_status_history_entity_1.OrderStatusHistory)),
+    __param(2, (0, typeorm_1.InjectRepository)(review_entity_1.Review)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository,
         event_emitter_1.EventEmitter2])
 ], OrdersService);

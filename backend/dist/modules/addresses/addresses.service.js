@@ -25,8 +25,38 @@ let AddressesService = class AddressesService {
     findMine(userId) {
         return this.repo.find({ where: { userId }, order: { isDefault: 'DESC', createdAt: 'DESC' } });
     }
-    create(userId, dto) {
+    async create(userId, dto) {
+        if (dto.isDefault)
+            await this.clearDefault(userId);
         return this.repo.save(this.repo.create({ ...dto, userId }));
+    }
+    async update(userId, addressId, dto) {
+        const address = await this.findOwned(userId, addressId);
+        if (dto.isDefault)
+            await this.clearDefault(userId);
+        Object.assign(address, dto);
+        return this.repo.save(address);
+    }
+    async remove(userId, addressId) {
+        const address = await this.findOwned(userId, addressId);
+        await this.repo.remove(address);
+        if (address.isDefault) {
+            const [next] = await this.repo.find({ where: { userId }, order: { createdAt: 'DESC' }, take: 1 });
+            if (next)
+                await this.repo.update(next.id, { isDefault: true });
+        }
+        return { id: addressId, deleted: true };
+    }
+    async findOwned(userId, addressId) {
+        const address = await this.repo.findOneBy({ id: addressId });
+        if (!address)
+            throw new common_1.NotFoundException('العنوان غير موجود');
+        if (address.userId !== userId)
+            throw new common_1.ForbiddenException('لا تملك صلاحية الوصول لهذا العنوان');
+        return address;
+    }
+    async clearDefault(userId) {
+        await this.repo.update({ userId, isDefault: true }, { isDefault: false });
     }
 };
 exports.AddressesService = AddressesService;

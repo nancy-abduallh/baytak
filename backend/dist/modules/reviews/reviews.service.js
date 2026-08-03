@@ -28,6 +28,20 @@ let ReviewsService = class ReviewsService {
         this.orders = orders;
         this.technicians = technicians;
     }
+    async findByTechnician(technicianId) {
+        const rows = await this.reviews.find({
+            where: { technicianId },
+            relations: ['user'],
+            order: { createdAt: 'DESC' },
+        });
+        return rows.map((r) => ({
+            id: r.id,
+            rating: r.rating,
+            comment: r.comment,
+            createdAt: r.createdAt,
+            reviewerName: r.user?.fullName ?? 'مستخدم بيتك',
+        }));
+    }
     async create(orderId, userId, dto) {
         const order = await this.orders.findOneBy({ id: orderId });
         if (!order)
