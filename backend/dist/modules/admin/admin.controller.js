@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminController = void 0;
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
 const jwt_admin_guard_1 = require("./guards/jwt-admin.guard");
 const permissions_guard_1 = require("./guards/permissions.guard");
 const require_permission_decorator_1 = require("./decorators/require-permission.decorator");
@@ -25,6 +26,7 @@ const create_category_dto_1 = require("./dto/create-category.dto");
 const update_category_dto_1 = require("./dto/update-category.dto");
 const create_technician_dto_1 = require("./dto/create-technician.dto");
 const update_technician_dto_1 = require("./dto/update-technician.dto");
+const avatar_upload_util_1 = require("../../common/utils/avatar-upload.util");
 let AdminController = class AdminController {
     admin;
     constructor(admin) {
@@ -56,6 +58,14 @@ let AdminController = class AdminController {
     }
     deleteTechnician(id) {
         return this.admin.deleteTechnician(id);
+    }
+    uploadTechnicianAvatar(id, file) {
+        if (!file)
+            throw new common_1.BadRequestException('يرجى اختيار صورة');
+        return this.admin.updateTechnicianAvatar(id, file);
+    }
+    removeTechnicianAvatar(id) {
+        return this.admin.removeTechnicianAvatar(id);
     }
     setTechnicianVerified(id, dto) {
         return this.admin.setTechnicianVerified(id, dto.isVerified);
@@ -154,6 +164,28 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "deleteTechnician", null);
+__decorate([
+    (0, common_1.Post)('technicians/:id/avatar'),
+    (0, require_permission_decorator_1.RequirePermission)('technicians.manage'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar', {
+        storage: avatar_upload_util_1.technicianAvatarStorage,
+        fileFilter: avatar_upload_util_1.avatarImageFileFilter,
+        limits: { fileSize: avatar_upload_util_1.AVATAR_MAX_SIZE_BYTES },
+    })),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "uploadTechnicianAvatar", null);
+__decorate([
+    (0, common_1.Delete)('technicians/:id/avatar'),
+    (0, require_permission_decorator_1.RequirePermission)('technicians.manage'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "removeTechnicianAvatar", null);
 __decorate([
     (0, common_1.Patch)('technicians/:id/verify'),
     (0, require_permission_decorator_1.RequirePermission)('technicians.manage'),

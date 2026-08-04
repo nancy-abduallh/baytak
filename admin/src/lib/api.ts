@@ -8,6 +8,15 @@ import {
 } from "./types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
+// Static files (technician avatars) are served from the API origin but outside
+// the /api/v1 prefix, e.g. http://localhost:4000/uploads/avatars/xyz.jpg
+const ASSET_ORIGIN = BASE_URL.replace(/\/api\/v1\/?$/, "");
+
+export function getAssetUrl(path?: string | null): string | null {
+    if (!path) return null;
+    if (/^https?:\/\//i.test(path)) return path;
+    return `${ASSET_ORIGIN}${path.startsWith("/") ? path : `/${path}`}`;
+}
 
 export class ApiError extends Error {
     constructor(message: string, public status: number) {
@@ -38,6 +47,31 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
         throw new ApiError(body.message ?? `تعذر إتمام الطلب (${res.status})`, res.status);
     }
     if (res.status === 204) return undefined as T;
+    return res.json() as Promise<T>;
+}
+
+async function requestFormData<T>(path: string, formData: FormData, method: "POST" | "PATCH" = "POST"): Promise<T> {
+    const token = useAdminAuthStore.getState().accessToken;
+
+    // NOTE: no Content-Type header here on purpose — the browser sets the
+    // correct multipart/form-data boundary automatically for FormData bodies.
+    const res = await fetch(`${BASE_URL}${path}`, {
+        method,
+        headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: formData,
+        cache: "no-store",
+    });
+
+    if (res.status === 401) {
+        useAdminAuthStore.getState().clearSession();
+    }
+
+    if (!res.ok) {
+        const body = await res.json().catch(() => ({}) as { message?: string });
+        throw new ApiError(body.message ?? `تعذر إتمام الطلب (${res.status})`, res.status);
+    }
     return res.json() as Promise<T>;
 }
 
@@ -78,6 +112,13 @@ export const adminApi = {
         request<AdminTechnicianRow>(`/admin/technicians/${id}/verify`, { method: "PATCH", body: JSON.stringify({ isVerified }) }),
     setTechnicianActive: (id: number, isActive: boolean) =>
         request<AdminTechnicianRow>(`/admin/technicians/${id}/active`, { method: "PATCH", body: JSON.stringify({ isActive }) }),
+    uploadTechnicianAvatar: (id: number, file: File) => {
+        const formData = new FormData();
+        formData.append("avatar", file);
+        return requestFormData<AdminTechnicianRow>(`/admin/technicians/${id}/avatar`, formData, "POST");
+    },
+    removeTechnicianAvatar: (id: number) =>
+        request<AdminTechnicianRow>(`/admin/technicians/${id}/avatar`, { method: "DELETE" }),
 
     // ---------- Users ----------
     getUsers: (params?: { search?: string }) => {

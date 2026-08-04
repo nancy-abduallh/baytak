@@ -50,6 +50,8 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const bcrypt = __importStar(require("bcrypt"));
+const promises_1 = require("fs/promises");
+const path_1 = require("path");
 const order_entity_1 = require("../../entities/order.entity");
 const user_entity_1 = require("../../entities/user.entity");
 const technician_entity_1 = require("../../entities/technician.entity");
@@ -328,6 +330,42 @@ let AdminService = class AdminService {
         await this.technicians.save(technician);
         return this.toTechnicianRow(technician, await this.completedCountFor(id));
     }
+    async updateTechnicianAvatar(id, file) {
+        const technician = await this.technicians.findOne({ where: { id }, relations: ['primaryCategory'] });
+        if (!technician) {
+            await this.deleteUploadedFile(file.filename);
+            throw new common_1.NotFoundException('الفني غير موجود');
+        }
+        const previousAvatarUrl = technician.avatarUrl;
+        technician.avatarUrl = `/uploads/avatars/${file.filename}`;
+        await this.technicians.save(technician);
+        if (previousAvatarUrl)
+            await this.deleteAvatarFile(previousAvatarUrl);
+        return this.toTechnicianRow(technician, await this.completedCountFor(id));
+    }
+    async removeTechnicianAvatar(id) {
+        const technician = await this.technicians.findOne({ where: { id }, relations: ['primaryCategory'] });
+        if (!technician)
+            throw new common_1.NotFoundException('الفني غير موجود');
+        if (technician.avatarUrl) {
+            await this.deleteAvatarFile(technician.avatarUrl);
+            technician.avatarUrl = null;
+            await this.technicians.save(technician);
+        }
+        return this.toTechnicianRow(technician, await this.completedCountFor(id));
+    }
+    async deleteAvatarFile(avatarUrl) {
+        const filename = avatarUrl.split('/').pop();
+        if (filename)
+            await this.deleteUploadedFile(filename);
+    }
+    async deleteUploadedFile(filename) {
+        try {
+            await (0, promises_1.unlink)((0, path_1.join)(process.cwd(), 'uploads', 'avatars', filename));
+        }
+        catch {
+        }
+    }
     completedCountFor(technicianId) {
         return this.orders.count({ where: { technicianId, status: 'completed' } });
     }
@@ -335,8 +373,10 @@ let AdminService = class AdminService {
         return {
             id: t.id,
             fullName: t.fullName,
+            initials: t.initials,
             phone: t.phone,
             email: t.email,
+            avatarUrl: t.avatarUrl,
             categoryLabel: t.primaryCategory?.nameAr ?? '',
             primaryCategoryId: t.primaryCategoryId,
             city: t.city,

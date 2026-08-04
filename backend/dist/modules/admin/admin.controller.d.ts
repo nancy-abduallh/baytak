@@ -66,8 +66,10 @@ export declare class AdminController {
     getTechnicians(): Promise<{
         id: number;
         fullName: string;
+        initials: string;
         phone: string;
         email: string | null;
+        avatarUrl: string | null;
         categoryLabel: string;
         primaryCategoryId: number;
         city: string;
@@ -83,8 +85,10 @@ export declare class AdminController {
     createTechnician(dto: CreateTechnicianDto): Promise<{
         id: number;
         fullName: string;
+        initials: string;
         phone: string;
         email: string | null;
+        avatarUrl: string | null;
         categoryLabel: string;
         primaryCategoryId: number;
         city: string;
@@ -100,8 +104,10 @@ export declare class AdminController {
     updateTechnician(id: number, dto: UpdateTechnicianDto): Promise<{
         id: number;
         fullName: string;
+        initials: string;
         phone: string;
         email: string | null;
+        avatarUrl: string | null;
         categoryLabel: string;
         primaryCategoryId: number;
         city: string;
@@ -118,11 +124,51 @@ export declare class AdminController {
         id: number;
         deleted: boolean;
     }>;
+    uploadTechnicianAvatar(id: number, file: Express.Multer.File): Promise<{
+        id: number;
+        fullName: string;
+        initials: string;
+        phone: string;
+        email: string | null;
+        avatarUrl: string | null;
+        categoryLabel: string;
+        primaryCategoryId: number;
+        city: string;
+        district: string;
+        yearsExperience: number;
+        priceFrom: number;
+        isVerified: boolean;
+        isActive: boolean;
+        averageRating: number;
+        reviewCount: number;
+        completedOrders: number;
+    }>;
+    removeTechnicianAvatar(id: number): Promise<{
+        id: number;
+        fullName: string;
+        initials: string;
+        phone: string;
+        email: string | null;
+        avatarUrl: string | null;
+        categoryLabel: string;
+        primaryCategoryId: number;
+        city: string;
+        district: string;
+        yearsExperience: number;
+        priceFrom: number;
+        isVerified: boolean;
+        isActive: boolean;
+        averageRating: number;
+        reviewCount: number;
+        completedOrders: number;
+    }>;
     setTechnicianVerified(id: number, dto: UpdateTechnicianVerifiedDto): Promise<{
         id: number;
         fullName: string;
+        initials: string;
         phone: string;
         email: string | null;
+        avatarUrl: string | null;
         categoryLabel: string;
         primaryCategoryId: number;
         city: string;
@@ -138,8 +184,10 @@ export declare class AdminController {
     setTechnicianActive(id: number, dto: UpdateTechnicianActiveDto): Promise<{
         id: number;
         fullName: string;
+        initials: string;
         phone: string;
         email: string | null;
+        avatarUrl: string | null;
         categoryLabel: string;
         primaryCategoryId: number;
         city: string;

@@ -3,6 +3,14 @@ import { ServiceCategory, Technician, Order, User, Address, Review } from "./typ
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
 
+const ASSET_ORIGIN = BASE_URL.replace(/\/api\/v1\/?$/, "");
+
+export function getAssetUrl(path?: string | null): string | null {
+    if (!path) return null;
+    if (/^https?:\/\//i.test(path)) return path;
+    return `${ASSET_ORIGIN}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
 export class ApiError extends Error {
     constructor(message: string, public status: number) {
         super(message);

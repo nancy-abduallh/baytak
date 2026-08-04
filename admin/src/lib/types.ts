@@ -61,8 +61,10 @@ export interface AdminOrderRow {
 export interface AdminTechnicianRow {
     id: number;
     fullName: string;
+    initials: string;
     phone: string;
     email: string | null;
+    avatarUrl: string | null;
     categoryLabel: string;
     primaryCategoryId: number;
     city: string;

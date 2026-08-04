@@ -2,6 +2,8 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException }
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, In, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { unlink } from 'fs/promises';
+import { join } from 'path';
 import { Order, OrderStatus } from '../../entities/order.entity';
 import { User } from '../../entities/user.entity';
 import { Technician } from '../../entities/technician.entity';
@@ -316,6 +318,48 @@ export class AdminService {
         return this.toTechnicianRow(technician, await this.completedCountFor(id));
     }
 
+    async updateTechnicianAvatar(id: number, file: Express.Multer.File) {
+        const technician = await this.technicians.findOne({ where: { id }, relations: ['primaryCategory'] });
+        if (!technician) {
+            await this.deleteUploadedFile(file.filename);
+            throw new NotFoundException('الفني غير موجود');
+        }
+
+        const previousAvatarUrl = technician.avatarUrl;
+        technician.avatarUrl = `/uploads/avatars/${file.filename}`;
+        await this.technicians.save(technician);
+
+        if (previousAvatarUrl) await this.deleteAvatarFile(previousAvatarUrl);
+
+        return this.toTechnicianRow(technician, await this.completedCountFor(id));
+    }
+
+    async removeTechnicianAvatar(id: number) {
+        const technician = await this.technicians.findOne({ where: { id }, relations: ['primaryCategory'] });
+        if (!technician) throw new NotFoundException('الفني غير موجود');
+
+        if (technician.avatarUrl) {
+            await this.deleteAvatarFile(technician.avatarUrl);
+            technician.avatarUrl = null;
+            await this.technicians.save(technician);
+        }
+
+        return this.toTechnicianRow(technician, await this.completedCountFor(id));
+    }
+
+    private async deleteAvatarFile(avatarUrl: string) {
+        const filename = avatarUrl.split('/').pop();
+        if (filename) await this.deleteUploadedFile(filename);
+    }
+
+    private async deleteUploadedFile(filename: string) {
+        try {
+            await unlink(join(process.cwd(), 'uploads', 'avatars', filename));
+        } catch {
+            // file may already be gone — safe to ignore
+        }
+    }
+
     private completedCountFor(technicianId: number) {
         return this.orders.count({ where: { technicianId, status: 'completed' } });
     }
@@ -324,8 +368,10 @@ export class AdminService {
         return {
             id: t.id,
             fullName: t.fullName,
+            initials: t.initials,
             phone: t.phone,
             email: t.email,
+            avatarUrl: t.avatarUrl,
             categoryLabel: t.primaryCategory?.nameAr ?? '',
             primaryCategoryId: t.primaryCategoryId,
             city: t.city,

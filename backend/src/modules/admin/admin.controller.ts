@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     Body,
     Controller,
     Delete,
@@ -8,8 +9,11 @@ import {
     Patch,
     Post,
     Query,
+    UploadedFile,
     UseGuards,
+    UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAdminGuard } from './guards/jwt-admin.guard';
 import { PermissionsGuard } from './guards/permissions.guard';
 import { RequirePermission } from './decorators/require-permission.decorator';
@@ -22,6 +26,11 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CreateTechnicianDto } from './dto/create-technician.dto';
 import { UpdateTechnicianDto } from './dto/update-technician.dto';
 import type { OrderStatus } from '../../entities/order.entity';
+import {
+    AVATAR_MAX_SIZE_BYTES,
+    avatarImageFileFilter,
+    technicianAvatarStorage,
+} from '../../common/utils/avatar-upload.util';
 
 @UseGuards(JwtAdminGuard, PermissionsGuard)
 @Controller('admin')
@@ -82,6 +91,26 @@ export class AdminController {
     @RequirePermission('technicians.manage')
     deleteTechnician(@Param('id', ParseIntPipe) id: number) {
         return this.admin.deleteTechnician(id);
+    }
+
+    @Post('technicians/:id/avatar')
+    @RequirePermission('technicians.manage')
+    @UseInterceptors(
+        FileInterceptor('avatar', {
+            storage: technicianAvatarStorage,
+            fileFilter: avatarImageFileFilter,
+            limits: { fileSize: AVATAR_MAX_SIZE_BYTES },
+        }),
+    )
+    uploadTechnicianAvatar(@Param('id', ParseIntPipe) id: number, @UploadedFile() file: Express.Multer.File) {
+        if (!file) throw new BadRequestException('يرجى اختيار صورة');
+        return this.admin.updateTechnicianAvatar(id, file);
+    }
+
+    @Delete('technicians/:id/avatar')
+    @RequirePermission('technicians.manage')
+    removeTechnicianAvatar(@Param('id', ParseIntPipe) id: number) {
+        return this.admin.removeTechnicianAvatar(id);
     }
 
     // kept as dedicated toggle endpoints for the quick-action buttons in the table view

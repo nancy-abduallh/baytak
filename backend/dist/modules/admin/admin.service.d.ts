@@ -74,8 +74,10 @@ export declare class AdminService {
     getTechnicians(): Promise<{
         id: number;
         fullName: string;
+        initials: string;
         phone: string;
         email: string | null;
+        avatarUrl: string | null;
         categoryLabel: string;
         primaryCategoryId: number;
         city: string;
@@ -91,8 +93,10 @@ export declare class AdminService {
     createTechnician(dto: CreateTechnicianDto): Promise<{
         id: number;
         fullName: string;
+        initials: string;
         phone: string;
         email: string | null;
+        avatarUrl: string | null;
         categoryLabel: string;
         primaryCategoryId: number;
         city: string;
@@ -108,8 +112,10 @@ export declare class AdminService {
     updateTechnician(id: number, dto: UpdateTechnicianDto): Promise<{
         id: number;
         fullName: string;
+        initials: string;
         phone: string;
         email: string | null;
+        avatarUrl: string | null;
         categoryLabel: string;
         primaryCategoryId: number;
         city: string;
@@ -129,8 +135,10 @@ export declare class AdminService {
     setTechnicianVerified(id: number, isVerified: boolean): Promise<{
         id: number;
         fullName: string;
+        initials: string;
         phone: string;
         email: string | null;
+        avatarUrl: string | null;
         categoryLabel: string;
         primaryCategoryId: number;
         city: string;
@@ -146,8 +154,10 @@ export declare class AdminService {
     setTechnicianActive(id: number, isActive: boolean): Promise<{
         id: number;
         fullName: string;
+        initials: string;
         phone: string;
         email: string | null;
+        avatarUrl: string | null;
         categoryLabel: string;
         primaryCategoryId: number;
         city: string;
@@ -160,6 +170,46 @@ export declare class AdminService {
         reviewCount: number;
         completedOrders: number;
     }>;
+    updateTechnicianAvatar(id: number, file: Express.Multer.File): Promise<{
+        id: number;
+        fullName: string;
+        initials: string;
+        phone: string;
+        email: string | null;
+        avatarUrl: string | null;
+        categoryLabel: string;
+        primaryCategoryId: number;
+        city: string;
+        district: string;
+        yearsExperience: number;
+        priceFrom: number;
+        isVerified: boolean;
+        isActive: boolean;
+        averageRating: number;
+        reviewCount: number;
+        completedOrders: number;
+    }>;
+    removeTechnicianAvatar(id: number): Promise<{
+        id: number;
+        fullName: string;
+        initials: string;
+        phone: string;
+        email: string | null;
+        avatarUrl: string | null;
+        categoryLabel: string;
+        primaryCategoryId: number;
+        city: string;
+        district: string;
+        yearsExperience: number;
+        priceFrom: number;
+        isVerified: boolean;
+        isActive: boolean;
+        averageRating: number;
+        reviewCount: number;
+        completedOrders: number;
+    }>;
+    private deleteAvatarFile;
+    private deleteUploadedFile;
     private completedCountFor;
     private toTechnicianRow;
     getUsers(): Promise<{

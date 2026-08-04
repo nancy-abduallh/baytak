@@ -2,6 +2,7 @@ import { BadgeCheck, Star, Heart } from "lucide-react";
 import clsx from "clsx";
 import { Technician } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
+import { TechnicianAvatar } from "./TechnicianAvatar";
 
 export function TechnicianCard({
     tech, isFavorite = false, onToggleFavorite,
@@ -24,9 +25,7 @@ export function TechnicianCard({
                     <Heart className={clsx("h-[18px] w-[18px]", isFavorite && "fill-current")} />
                 </button>
             )}
-            <div className="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-[#DCEAE3] to-[#C6DED3] font-heading text-xl font-extrabold text-teal-700">
-                {tech.initials}
-            </div>
+            <TechnicianAvatar fullName={tech.fullName} initials={tech.initials} avatarUrl={tech.avatarUrl} size="lg" />
             <div>
                 <h4 className="mb-1 flex items-center gap-2 text-base font-bold">
                     {tech.fullName}

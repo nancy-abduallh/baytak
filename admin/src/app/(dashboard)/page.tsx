@@ -59,8 +59,10 @@ const MOCK_ANALYTICS: DashboardAnalytics = {
 const MOCK_TECHNICIANS: AdminTechnicianRow[] = Array.from({ length: 40 }).map((_, i) => ({
     id: i + 1,
     fullName: `فني ${i + 1}`,
+    initials: `ف${i + 1}`,
     phone: "05xxxxxxxx",
     email: null,
+    avatarUrl: null,
     categoryLabel: ["كهرباء", "سباكة", "تكييف"][i % 3],
     primaryCategoryId: (i % 3) + 1,
     city: "الرياض",

@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
-import { Check, X, Pencil, Trash2, Plus, Search, Ban, PlayCircle, Info } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Check, X, Pencil, Trash2, Plus, Search, Ban, PlayCircle, Info, Camera, ImageOff } from "lucide-react";
 import { adminApi, ApiError } from "@/lib/api";
 import { AdminCategoryRow, AdminTechnicianRow, CreateTechnicianPayload, UpdateTechnicianPayload } from "@/lib/types";
 import { AdminTopbar } from "@/components/layout/AdminTopbar";
 import { DataTable, Column } from "@/components/ui/DataTable";
 import { BoolBadge } from "@/components/ui/Badge";
+import { Avatar } from "@/components/ui/Avatar";
 import { Modal } from "@/components/ui/Modal";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { TextField, SelectField } from "@/components/ui/FormField";
@@ -17,8 +18,8 @@ const MOCK_CATEGORIES: AdminCategoryRow[] = [
 ];
 
 const MOCK_TECHS: AdminTechnicianRow[] = [
-    { id: 1, fullName: "محمد أحمد", phone: "0501234567", email: "mohammed@example.com", categoryLabel: "كهرباء", primaryCategoryId: 2, city: "الرياض", district: "النرجس", yearsExperience: 6, priceFrom: 100, isVerified: true, isActive: true, averageRating: 4.8, reviewCount: 210, completedOrders: 340 },
-    { id: 2, fullName: "خالد النعيمي", phone: "0559876543", email: null, categoryLabel: "كهرباء", primaryCategoryId: 2, city: "الرياض", district: "الربيع", yearsExperience: 3, priceFrom: 90, isVerified: false, isActive: true, averageRating: 4.6, reviewCount: 98, completedOrders: 120 },
+    { id: 1, fullName: "محمد أحمد", initials: "م.أ", phone: "0501234567", email: "mohammed@example.com", avatarUrl: null, categoryLabel: "كهرباء", primaryCategoryId: 2, city: "الرياض", district: "النرجس", yearsExperience: 6, priceFrom: 100, isVerified: true, isActive: true, averageRating: 4.8, reviewCount: 210, completedOrders: 340 },
+    { id: 2, fullName: "خالد النعيمي", initials: "خ.ن", phone: "0559876543", email: null, avatarUrl: null, categoryLabel: "كهرباء", primaryCategoryId: 2, city: "الرياض", district: "الربيع", yearsExperience: 3, priceFrom: 90, isVerified: false, isActive: true, averageRating: 4.6, reviewCount: 98, completedOrders: 120 },
 ];
 
 const emptyForm: CreateTechnicianPayload = {
@@ -42,6 +43,10 @@ export default function AdminTechniciansPage() {
     const [deleteTarget, setDeleteTarget] = useState<AdminTechnicianRow | null>(null);
     const [deleteError, setDeleteError] = useState<string | null>(null);
     const [deleting, setDeleting] = useState(false);
+
+    const [avatarUploading, setAvatarUploading] = useState(false);
+    const [avatarError, setAvatarError] = useState<string | null>(null);
+    const avatarInputRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
         Promise.all([adminApi.getTechnicians(), adminApi.getCategories()])
@@ -83,6 +88,7 @@ export default function AdminTechniciansPage() {
         setEditing(null);
         setForm({ ...emptyForm, primaryCategoryId: categories[0]?.id ?? 0 });
         setFormError(null);
+        setAvatarError(null);
         setModalOpen(true);
     };
 
@@ -95,6 +101,7 @@ export default function AdminTechniciansPage() {
             isVerified: row.isVerified, isActive: row.isActive,
         });
         setFormError(null);
+        setAvatarError(null);
         setModalOpen(true);
     };
 
@@ -121,7 +128,8 @@ export default function AdminTechniciansPage() {
                 } else {
                     const newRow: AdminTechnicianRow = {
                         id: Math.max(0, ...techs.map((t) => t.id)) + 1,
-                        fullName: form.fullName, phone: form.phone, email: form.email || null,
+                        fullName: form.fullName, initials: form.fullName.trim().slice(0, 2), phone: form.phone, email: form.email || null,
+                        avatarUrl: null,
                         categoryLabel: categories.find((c) => c.id === form.primaryCategoryId)?.nameAr ?? "",
                         primaryCategoryId: form.primaryCategoryId, city: form.city, district: form.district,
                         yearsExperience: form.yearsExperience ?? 0, priceFrom: form.priceFrom,
@@ -162,8 +170,58 @@ export default function AdminTechniciansPage() {
         }
     };
 
+    const handleAvatarSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        e.target.value = ""; // allow re-selecting the same file later
+        if (!file || !editing) return;
+
+        if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+            setAvatarError("صيغة الصورة غير مدعومة (JPG, PNG أو WEBP فقط)");
+            return;
+        }
+        if (file.size > 2 * 1024 * 1024) {
+            setAvatarError("حجم الصورة يجب ألا يتجاوز 2 ميجابايت");
+            return;
+        }
+
+        setAvatarError(null);
+        setAvatarUploading(true);
+        try {
+            const updated = await adminApi.uploadTechnicianAvatar(editing.id, file);
+            setTechs((prev) => prev.map((t) => (t.id === editing.id ? updated : t)));
+            setEditing(updated);
+        } catch (err) {
+            setAvatarError(err instanceof ApiError ? err.message : "تعذر رفع الصورة");
+        } finally {
+            setAvatarUploading(false);
+        }
+    };
+
+    const handleRemoveAvatar = async () => {
+        if (!editing) return;
+        setAvatarError(null);
+        setAvatarUploading(true);
+        try {
+            const updated = await adminApi.removeTechnicianAvatar(editing.id);
+            setTechs((prev) => prev.map((t) => (t.id === editing.id ? updated : t)));
+            setEditing(updated);
+        } catch (err) {
+            setAvatarError(err instanceof ApiError ? err.message : "تعذر إزالة الصورة");
+        } finally {
+            setAvatarUploading(false);
+        }
+    };
+
     const columns: Column<AdminTechnicianRow>[] = [
-        { header: "الفني", render: (t) => <b>{t.fullName}</b> },
+        {
+            header: "الفني",
+            render: (t) => (
+                <div className="flex items-center gap-2.5">
+                    <Avatar fullName={t.fullName} initials={t.initials} avatarUrl={t.avatarUrl} className="h-9 w-9 text-xs" />
+                    <b>{t.fullName}</b>
+                </div>
+            ),
+        },
         { header: "الجوال", render: (t) => <span dir="ltr">{t.phone}</span> },
         { header: "التخصص", render: (t) => t.categoryLabel },
         { header: "المدينة/الحي", render: (t) => `${t.city} - ${t.district}` },
@@ -251,6 +309,49 @@ export default function AdminTechniciansPage() {
                 description={editing ? `تعديل حساب: ${editing.fullName}` : "سيتمكن الفني من الدخول بالجوال وكلمة المرور بعد الإنشاء"}
             >
                 {formError && <div className="mb-4 rounded-md bg-danger/10 px-4 py-3 text-[13px] font-semibold text-danger">{formError}</div>}
+
+                {editing && (
+                    <div className="mb-5 flex items-center gap-4 rounded-md border border-line bg-sand-50/60 px-4 py-3.5">
+                        <Avatar fullName={editing.fullName} initials={editing.initials} avatarUrl={editing.avatarUrl} className="h-16 w-16 text-base" />
+                        <div className="flex-1">
+                            <p className="mb-1.5 text-[13px] font-bold">صورة الفني</p>
+                            <div className="flex flex-wrap items-center gap-2.5">
+                                <button
+                                    type="button"
+                                    onClick={() => avatarInputRef.current?.click()}
+                                    disabled={avatarUploading || isMock}
+                                    className="flex items-center gap-1.5 rounded-full border border-line px-3.5 py-1.5 text-xs font-semibold text-[#57655F] transition hover:bg-white disabled:opacity-50"
+                                >
+                                    <Camera className="h-3.5 w-3.5" />
+                                    {avatarUploading ? "جارِ الرفع..." : editing.avatarUrl ? "تغيير الصورة" : "رفع صورة"}
+                                </button>
+                                {editing.avatarUrl && (
+                                    <button
+                                        type="button"
+                                        onClick={handleRemoveAvatar}
+                                        disabled={avatarUploading || isMock}
+                                        className="flex items-center gap-1.5 rounded-full border border-danger/30 px-3.5 py-1.5 text-xs font-semibold text-danger transition hover:bg-danger/10 disabled:opacity-50"
+                                    >
+                                        <ImageOff className="h-3.5 w-3.5" />
+                                        إزالة
+                                    </button>
+                                )}
+                                <input
+                                    ref={avatarInputRef}
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/webp"
+                                    onChange={handleAvatarSelect}
+                                    className="hidden"
+                                />
+                            </div>
+                            <p className="mt-1.5 text-[11.5px] text-muted">JPG, PNG أو WEBP — بحد أقصى 2 ميجابايت</p>
+                            {avatarError && <p className="mt-1.5 text-[11.5px] font-semibold text-danger">{avatarError}</p>}
+                        </div>
+                    </div>
+                )}
+                {!editing && (
+                    <p className="mb-5 text-[12.5px] text-muted">يمكنك إضافة صورة الفني بعد حفظ بياناته لأول مرة.</p>
+                )}
 
                 <div className="grid grid-cols-2 gap-x-4">
                     <TextField label="الاسم الكامل" value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} />

@@ -7,6 +7,7 @@ import { useAuthStore } from "@/lib/stores/auth-store";
 import { api, ApiError } from "@/lib/api";
 import { Technician, Address, Review } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
+import { TechnicianAvatar } from "@/components/services/TechnicianAvatar";
 
 export default function BookingPage() {
     const params = useParams<{ technicianId: string }>();
@@ -84,9 +85,7 @@ export default function BookingPage() {
 
             {technician && (
                 <div className="mb-6 flex items-center gap-4 rounded-md border border-line bg-white p-5">
-                    <div className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-[#DCEAE3] to-[#C6DED3] font-heading text-lg font-extrabold text-teal-700">
-                        {technician.initials}
-                    </div>
+                    <TechnicianAvatar fullName={technician.fullName} initials={technician.initials} avatarUrl={technician.avatarUrl} size="md" />
                     <div>
                         <h4 className="mb-1 flex items-center gap-2 text-base font-bold">
                             {technician.fullName} {technician.isVerified && <BadgeCheck className="h-4 w-4 text-green-500" />}
