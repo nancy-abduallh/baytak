@@ -105,12 +105,12 @@ let AdminService = class AdminService {
     }
     async getAnalytics() {
         const fourteenDaysAgo = new Date();
-        fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 13);
-        fourteenDaysAgo.setHours(0, 0, 0, 0);
+        fourteenDaysAgo.setUTCHours(0, 0, 0, 0);
+        fourteenDaysAgo.setUTCDate(fourteenDaysAgo.getUTCDate() - 13);
         const sixMonthsAgo = new Date();
-        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
-        sixMonthsAgo.setDate(1);
-        sixMonthsAgo.setHours(0, 0, 0, 0);
+        sixMonthsAgo.setUTCHours(0, 0, 0, 0);
+        sixMonthsAgo.setUTCDate(1);
+        sixMonthsAgo.setUTCMonth(sixMonthsAgo.getUTCMonth() - 5);
         const [dailyRaw, statusRaw, categoryRaw, monthlyRaw] = await Promise.all([
             this.orders
                 .createQueryBuilder('o')
@@ -149,15 +149,15 @@ let AdminService = class AdminService {
         const dayMap = new Map(dailyRaw.map((d) => [this.toDateKey(d.day), parseInt(d.count, 10)]));
         const ordersLast14Days = Array.from({ length: 14 }).map((_, idx) => {
             const date = new Date(fourteenDaysAgo);
-            date.setDate(date.getDate() + idx);
+            date.setUTCDate(date.getUTCDate() + idx);
             const key = this.toDateKey(date);
             return { date: key, orders: dayMap.get(key) ?? 0 };
         });
         const monthMap = new Map(monthlyRaw.map((m) => [m.month, { revenue: parseFloat(m.revenue) || 0, orders: parseInt(m.count, 10) }]));
         const revenueLast6Months = Array.from({ length: 6 }).map((_, idx) => {
             const date = new Date(sixMonthsAgo);
-            date.setMonth(date.getMonth() + idx);
-            const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+            date.setUTCMonth(date.getUTCMonth() + idx);
+            const key = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`;
             const entry = monthMap.get(key);
             return { month: key, revenue: entry?.revenue ?? 0, orders: entry?.orders ?? 0 };
         });
@@ -418,7 +418,7 @@ let AdminService = class AdminService {
             email: u.email,
             city: u.city,
             isBlocked: !u.isActive,
-            orderCount,
+            ordersCount: orderCount,
             createdAt: u.createdAt?.toISOString().slice(0, 10),
         };
     }

@@ -44,6 +44,7 @@ export interface Order {
     address: string;
     amount: number;
     scheduledDate: string;
+    images: string[];
     hasReview: boolean;
     canReview: boolean;
 }
@@ -67,8 +68,7 @@ export interface User {
 
 export interface Address {
     id: number;
-    userId: number;
-    label: string;
+    label?: string | null;
     city: string;
     district: string;
     street?: string | null;

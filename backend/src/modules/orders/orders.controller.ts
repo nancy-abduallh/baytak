@@ -1,9 +1,29 @@
-import { Body, Controller, ForbiddenException, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    ForbiddenException,
+    Get,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    UploadedFiles,
+    UseGuards,
+    UseInterceptors,
+} from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { JwtAccessGuard } from '../auth/guards/jwt-access.guard';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
+import {
+    ORDER_IMAGE_MAX_COUNT,
+    ORDER_IMAGE_MAX_SIZE_BYTES,
+    orderImageFileFilter,
+    orderImageStorage,
+} from '../../common/utils/order-image-upload.util';
 
 @UseGuards(JwtAccessGuard)
 @Controller()
@@ -13,6 +33,25 @@ export class OrdersController {
     @Post('orders')
     create(@CurrentUser() user: { id: number }, @Body() dto: CreateOrderDto) {
         return this.service.create(user.id, dto);
+    }
+
+    // Optional photos of the problem, uploaded right after booking
+    // ("إضافة صور بالاختيار"). Up to ORDER_IMAGE_MAX_COUNT images per call.
+    @Post('orders/:id/images')
+    @UseInterceptors(
+        FilesInterceptor('images', ORDER_IMAGE_MAX_COUNT, {
+            storage: orderImageStorage,
+            fileFilter: orderImageFileFilter,
+            limits: { fileSize: ORDER_IMAGE_MAX_SIZE_BYTES },
+        }),
+    )
+    uploadImages(
+        @CurrentUser() user: { id: number },
+        @Param('id', ParseIntPipe) id: number,
+        @UploadedFiles() files: Express.Multer.File[],
+    ) {
+        if (!files || files.length === 0) throw new BadRequestException('يرجى اختيار صورة واحدة على الأقل');
+        return this.service.addImages(id, user.id, files);
     }
 
     // Matches frontend/src/lib/api.ts's `getOrders(userId)` exactly.

@@ -22,6 +22,29 @@ export declare class OrdersController {
         address: string;
         amount: number;
         scheduledDate: string;
+        images: string[];
+        hasReview: boolean;
+        canReview: boolean;
+    }>;
+    uploadImages(user: {
+        id: number;
+    }, id: number, files: Express.Multer.File[]): Promise<{
+        id: number;
+        orderNumber: string;
+        categoryId: number;
+        categorySlug: string;
+        categoryLabel: string;
+        categoryIconKey: string;
+        technician: {
+            id: number;
+            fullName: string;
+        } | null;
+        description: string | null;
+        status: import("../../entities/order.entity").OrderStatus;
+        address: string;
+        amount: number;
+        scheduledDate: string;
+        images: string[];
         hasReview: boolean;
         canReview: boolean;
     }>;
@@ -43,6 +66,7 @@ export declare class OrdersController {
         address: string;
         amount: number;
         scheduledDate: string;
+        images: string[];
         hasReview: boolean;
         canReview: boolean;
     }[]>;
@@ -64,6 +88,7 @@ export declare class OrdersController {
         address: string;
         amount: number;
         scheduledDate: string;
+        images: string[];
         hasReview: boolean;
         canReview: boolean;
     }>;
@@ -83,6 +108,7 @@ export declare class OrdersController {
         address: string;
         amount: number;
         scheduledDate: string;
+        images: string[];
         hasReview: boolean;
         canReview: boolean;
     }>;

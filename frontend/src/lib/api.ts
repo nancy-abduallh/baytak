@@ -52,6 +52,35 @@ async function request<T>(path: string, init?: RequestInit, allowRetry = true): 
     return res.json() as Promise<T>;
 }
 
+async function requestFormData<T>(path: string, formData: FormData, allowRetry = true): Promise<T> {
+    const token = useAuthStore.getState().accessToken;
+
+    // NOTE: no Content-Type header here on purpose — the browser sets the
+    // correct multipart/form-data boundary automatically for FormData bodies.
+    const res = await fetch(`${BASE_URL}${path}`, {
+        method: "POST",
+        headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: formData,
+        cache: "no-store",
+    });
+
+    if (res.status === 401 && allowRetry && useAuthStore.getState().refreshToken) {
+        const refreshed = await refreshSession();
+        if (refreshed) return requestFormData<T>(path, formData, false);
+        useAuthStore.getState().clearSession();
+    }
+
+    if (!res.ok) {
+        const body = await res.json().catch(() => ({}) as { message?: string });
+        throw new ApiError(body.message ?? `تعذر إتمام الطلب (${res.status})`, res.status);
+    }
+
+    if (res.status === 204) return undefined as T;
+    return res.json() as Promise<T>;
+}
+
 async function refreshSession(): Promise<boolean> {
     const refreshToken = useAuthStore.getState().refreshToken;
     if (!refreshToken) return false;
@@ -110,6 +139,11 @@ export const api = {
     getOrder: (id: number) => request<Order>(`/orders/${id}`),
     createOrder: (payload: { categoryId: number; addressId: number; technicianId?: number; description?: string; scheduledDate: string; amount: number }) =>
         request<Order>("/orders", { method: "POST", body: JSON.stringify(payload) }),
+    uploadOrderImages: (orderId: number, files: File[]) => {
+        const formData = new FormData();
+        files.forEach((file) => formData.append("images", file));
+        return requestFormData<Order>(`/orders/${orderId}/images`, formData);
+    },
     createReview: (orderId: number, payload: { rating: number; comment?: string }) =>
         request<{ id: number }>(`/orders/${orderId}/reviews`, { method: "POST", body: JSON.stringify(payload) }),
 

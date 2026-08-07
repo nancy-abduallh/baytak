@@ -207,7 +207,7 @@ export declare class AdminController {
         email: string | null;
         city: string | null;
         isBlocked: boolean;
-        orderCount: number;
+        ordersCount: number;
         createdAt: string;
     }[]>;
     setUserBlocked(id: number, dto: UpdateUserBlockedDto): Promise<{
@@ -217,7 +217,7 @@ export declare class AdminController {
         email: string | null;
         city: string | null;
         isBlocked: boolean;
-        orderCount: number;
+        ordersCount: number;
         createdAt: string;
     }>;
     getCategories(): Promise<{

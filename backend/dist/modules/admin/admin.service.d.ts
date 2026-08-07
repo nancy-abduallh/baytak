@@ -219,7 +219,7 @@ export declare class AdminService {
         email: string | null;
         city: string | null;
         isBlocked: boolean;
-        orderCount: number;
+        ordersCount: number;
         createdAt: string;
     }[]>;
     setUserBlocked(id: number, isBlocked: boolean): Promise<{
@@ -229,7 +229,7 @@ export declare class AdminService {
         email: string | null;
         city: string | null;
         isBlocked: boolean;
-        orderCount: number;
+        ordersCount: number;
         createdAt: string;
     }>;
     private toUserRow;

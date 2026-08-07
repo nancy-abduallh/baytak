@@ -3,7 +3,7 @@ import { FormEvent, useState } from "react";
 import { Star } from "lucide-react";
 import clsx from "clsx";
 import { Order } from "@/lib/types";
-import { api, ApiError } from "@/lib/api";
+import { api, ApiError, getAssetUrl } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { ORDER_STATUS_LABEL } from "@/lib/constants";
 
@@ -18,6 +18,21 @@ export function OrderDetails({ order }: { order: Order }) {
                 <Field label="العنوان" value={order.address} />
             </div>
             <p className="mb-4 text-[13.5px] text-[#57655F]">{order.description}</p>
+
+            {order.images.length > 0 && (
+                <div className="mb-4">
+                    <p className="mb-2 text-[13px] font-semibold text-[#57655F]">صور المشكلة المرفقة</p>
+                    <div className="flex flex-wrap gap-3">
+                        {order.images.map((url) => (
+                            <a key={url} href={getAssetUrl(url) ?? "#"} target="_blank" rel="noreferrer" className="block h-20 w-20 overflow-hidden rounded-md border border-line">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={getAssetUrl(url) ?? ""} alt="صورة المشكلة" className="h-full w-full object-cover" />
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            )}
+
             <Button variant="dark">تواصل مع الفني</Button>
 
             {order.canReview && <ReviewForm orderId={order.id} technicianName={order.technician?.fullName ?? "الفني"} />}

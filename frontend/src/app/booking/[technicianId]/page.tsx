@@ -2,12 +2,14 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { BadgeCheck, Star } from "lucide-react";
+import { BadgeCheck, ImagePlus, Star, X } from "lucide-react";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { api, ApiError } from "@/lib/api";
 import { Technician, Address, Review } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
 import { TechnicianAvatar } from "@/components/services/TechnicianAvatar";
+
+const MAX_IMAGES = 5;
 
 export default function BookingPage() {
     const params = useParams<{ technicianId: string }>();
@@ -21,6 +23,9 @@ export default function BookingPage() {
     const [addressId, setAddressId] = useState<number | null>(null);
     const [scheduledDate, setScheduledDate] = useState("");
     const [description, setDescription] = useState("");
+    const [images, setImages] = useState<File[]>([]);
+    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+    const [imageError, setImageError] = useState<string | null>(null);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
@@ -42,6 +47,33 @@ export default function BookingPage() {
         }).catch(() => undefined);
     }, [accessToken]);
 
+    useEffect(() => {
+        return () => imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+    }, [imagePreviews]);
+
+    const handleImagesSelected = (fileList: FileList | null) => {
+        if (!fileList || fileList.length === 0) return;
+        setImageError(null);
+
+        const picked = Array.from(fileList);
+        const combined = [...images, ...picked].slice(0, MAX_IMAGES);
+        if (images.length + picked.length > MAX_IMAGES) {
+            setImageError(`يمكن إضافة ${MAX_IMAGES} صور كحد أقصى`);
+        }
+
+        setImages(combined);
+        imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+        setImagePreviews(combined.map((file) => URL.createObjectURL(file)));
+    };
+
+    const removeImage = (index: number) => {
+        const nextImages = images.filter((_, i) => i !== index);
+        setImages(nextImages);
+        URL.revokeObjectURL(imagePreviews[index]);
+        setImagePreviews(imagePreviews.filter((_, i) => i !== index));
+        setImageError(null);
+    };
+
     const submit = async (e: FormEvent) => {
         e.preventDefault();
         if (!technician || !addressId || !scheduledDate) {
@@ -51,7 +83,7 @@ export default function BookingPage() {
         setSubmitting(true);
         setError(null);
         try {
-            await api.createOrder({
+            const order = await api.createOrder({
                 categoryId: technician.primaryCategoryId,
                 technicianId: technician.id,
                 addressId,
@@ -59,6 +91,13 @@ export default function BookingPage() {
                 scheduledDate,
                 amount: technician.priceFrom,
             });
+            if (images.length > 0) {
+                try {
+                    await api.uploadOrderImages(order.id, images);
+                } catch {
+                    // Booking already succeeded — a failed photo upload shouldn't block confirmation.
+                }
+            }
             setSuccess(true);
         } catch (err) {
             setError(err instanceof ApiError ? err.message : "تعذر إنشاء الطلب");
@@ -116,6 +155,44 @@ export default function BookingPage() {
 
                 <label className="mb-1.5 block text-[13px] font-semibold text-[#57655F]">وصف المشكلة (اختياري)</label>
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="mb-5 w-full rounded-md border border-line px-3.5 py-3 text-sm" />
+
+                <label className="mb-1.5 block text-[13px] font-semibold text-[#57655F]">صور المشكلة (اختياري)</label>
+                <p className="mb-3 text-[12px] text-[#8A9691]">أرفق حتى {MAX_IMAGES} صور لمساعدة الفني على فهم المشكلة قبل الوصول (JPG, PNG أو WEBP، بحد أقصى 5MB لكل صورة).</p>
+
+                <div className="mb-5 flex flex-wrap gap-3">
+                    {imagePreviews.map((src, index) => (
+                        <div key={src} className="group relative h-20 w-20 overflow-hidden rounded-md border border-line">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={src} alt={`صورة المشكلة ${index + 1}`} className="h-full w-full object-cover" />
+                            <button
+                                type="button"
+                                onClick={() => removeImage(index)}
+                                aria-label="إزالة الصورة"
+                                className="absolute left-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white"
+                            >
+                                <X className="h-3 w-3" />
+                            </button>
+                        </div>
+                    ))}
+
+                    {images.length < MAX_IMAGES && (
+                        <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-md border border-dashed border-line text-[#8A9691] hover:border-teal-700 hover:text-teal-700">
+                            <ImagePlus className="h-5 w-5" />
+                            <span className="text-[11px] font-semibold">إضافة صورة</span>
+                            <input
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                multiple
+                                className="hidden"
+                                onChange={(e) => {
+                                    handleImagesSelected(e.target.files);
+                                    e.target.value = "";
+                                }}
+                            />
+                        </label>
+                    )}
+                </div>
+                {imageError && <p className="-mt-3 mb-5 text-[12px] font-semibold text-danger">{imageError}</p>}
 
                 <Button type="submit" variant="dark" className="w-full justify-center">
                     {submitting ? "جارِ التأكيد..." : `تأكيد الحجز — ${technician?.priceFrom ?? "—"} ر.س`}

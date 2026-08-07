@@ -7,10 +7,12 @@ const path_1 = require("path");
 const app_module_1 = require("./app.module");
 const http_exception_filter_1 = require("./common/filters/http-exception.filter");
 const avatar_upload_util_1 = require("./common/utils/avatar-upload.util");
+const order_image_upload_util_1 = require("./common/utils/order-image-upload.util");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const config = app.get(config_1.ConfigService);
     (0, avatar_upload_util_1.ensureAvatarsDirExists)();
+    (0, order_image_upload_util_1.ensureOrderImagesDirExists)();
     app.useStaticAssets((0, path_1.join)(process.cwd(), 'uploads'), { prefix: '/uploads/' });
     app.setGlobalPrefix('api/v1');
     app.enableCors({ origin: config.get('corsOrigin'), credentials: true });

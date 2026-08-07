@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Order, OrderStatus } from '../../entities/order.entity';
 import { OrderStatusHistory } from '../../entities/order-status-history.entity';
+import { OrderImage } from '../../entities/order-image.entity';
 import { Review } from '../../entities/review.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
@@ -21,6 +22,7 @@ export class OrdersService {
     constructor(
         @InjectRepository(Order) private readonly orders: Repository<Order>,
         @InjectRepository(OrderStatusHistory) private readonly history: Repository<OrderStatusHistory>,
+        @InjectRepository(OrderImage) private readonly images: Repository<OrderImage>,
         @InjectRepository(Review) private readonly reviews: Repository<Review>,
         private readonly events: EventEmitter2,
     ) { }
@@ -43,10 +45,25 @@ export class OrdersService {
         return this.findOne(order.id, userId);
     }
 
+    // Optional photos of the problem, attached after the order is created
+    // ("إضافة صور بالاختيار"). Only the order's owner may attach photos.
+    async addImages(orderId: number, userId: number, files: Express.Multer.File[]) {
+        const order = await this.orders.findOneBy({ id: orderId });
+        if (!order) throw new NotFoundException('الطلب غير موجود');
+        if (order.userId !== userId) throw new ForbiddenException('لا تملك صلاحية الوصول لهذا الطلب');
+
+        const rows = files.map((file) =>
+            this.images.create({ orderId, imageUrl: `/uploads/orders/${file.filename}` }),
+        );
+        await this.images.save(rows);
+
+        return this.findOne(orderId, userId);
+    }
+
     async findMine(userId: number) {
         const rows = await this.orders.find({
             where: { userId },
-            relations: ['technician', 'category', 'address'],
+            relations: ['technician', 'category', 'address', 'images'],
             order: { createdAt: 'DESC' },
         });
         const reviewedOrderIds = await this.reviewedOrderIds(rows.map((o) => o.id));
@@ -56,7 +73,7 @@ export class OrdersService {
     async findOne(id: number, requesterId?: number) {
         const order = await this.orders.findOne({
             where: { id },
-            relations: ['technician', 'category', 'address', 'statusHistory'],
+            relations: ['technician', 'category', 'address', 'statusHistory', 'images'],
         });
         if (!order) throw new NotFoundException('الطلب غير موجود');
         if (requesterId && order.userId !== requesterId) throw new ForbiddenException('لا تملك صلاحية الوصول لهذا الطلب');
@@ -121,6 +138,7 @@ export class OrdersService {
             address: order.address ? `${order.address.city} - ${order.address.district}` : '',
             amount: order.amount,
             scheduledDate: order.scheduledDate,
+            images: (order.images ?? []).map((img) => img.imageUrl),
             hasReview,
             canReview: order.status === 'completed' && !!order.technicianId && !hasReview,
         };
