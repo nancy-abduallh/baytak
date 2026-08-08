@@ -26,8 +26,8 @@ export function OrdersBoard({ initialOrders }: { initialOrders: Order[] }) {
 
     return (
         <div>
-            <div className="mb-5 flex items-center justify-between">
-                <h2 className="text-2xl font-extrabold">طلباتي</h2>
+            <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <h2 className="text-xl font-extrabold sm:text-2xl">طلباتي</h2>
                 <StatusTabs counts={counts} active={tab} onChange={setTab} />
             </div>
 

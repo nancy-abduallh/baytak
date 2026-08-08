@@ -35,7 +35,7 @@ export function FilterSidebar({ categories, activeSlug }: { categories: ServiceC
     const hasActiveFilters = searchParams.has("maxPrice") || searchParams.has("minRating");
 
     return (
-        <aside className="sticky top-[100px] h-fit rounded-md border border-line bg-white p-6">
+        <aside className="h-fit rounded-md border border-line bg-white p-5 lg:sticky lg:top-[100px] lg:p-6">
             <h4 className="mb-4 text-[14.5px] font-bold">فئة الخدمة</h4>
             <div className="mb-6 flex flex-wrap gap-2">
                 {categories.map((cat) => (

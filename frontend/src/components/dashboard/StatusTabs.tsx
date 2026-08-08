@@ -17,12 +17,12 @@ export function StatusTabs({
     ];
 
     return (
-        <div className="flex gap-1.5 rounded-full border border-line bg-white p-1.5">
+        <div className="flex gap-1.5 overflow-x-auto rounded-full border border-line bg-white p-1.5 lg:overflow-visible">
             {tabs.map((tab) => (
                 <button
                     key={tab.key}
                     onClick={() => onChange(tab.key)}
-                    className={clsx("rounded-full px-4 py-2.5 text-[13px] font-semibold", active === tab.key ? "bg-ink text-white" : "text-[#57655F]")}
+                    className={clsx("flex-none whitespace-nowrap rounded-full px-3.5 py-2 text-[12.5px] font-semibold sm:px-4 sm:py-2.5 sm:text-[13px]", active === tab.key ? "bg-ink text-white" : "text-[#57655F]")}
                 >
                     {tab.label}
                 </button>

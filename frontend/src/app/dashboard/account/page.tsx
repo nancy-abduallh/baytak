@@ -196,11 +196,45 @@ function ProfileCard() {
                 </form>
             ) : (
                 <div className="grid grid-cols-3 gap-5 text-[13.5px]">
-                    <Field icon={<UserIcon className="h-4 w-4" />} label="الاسم الكامل" value={user.fullName} />
-                    <Field icon={<Phone className="h-4 w-4" />} label="رقم الجوال" value={user.phone} />
-                    <Field icon={<Mail className="h-4 w-4" />} label="البريد الإلكتروني" value={user.email ?? "—"} />
-                    <Field icon={<MapPin className="h-4 w-4" />} label="المدينة" value={user.city ?? "—"} />
-                    <Field icon={<MapPin className="h-4 w-4" />} label="الحي" value={user.district ?? "—"} />
+                    <div className="order-1">
+                        <Field
+                            icon={<UserIcon className="h-4 w-4" />}
+                            label="الاسم الكامل"
+                            value={user.fullName}
+                        />
+                    </div>
+
+                    <div className="order-2">
+                        <Field
+                            icon={<Phone className="h-4 w-4" />}
+                            label="رقم الجوال"
+                            value={user.phone}
+                        />
+                    </div>
+
+                    <div className="order-5 md:order-3">
+                        <Field
+                            icon={<Mail className="h-4 w-4" />}
+                            label="البريد الإلكتروني"
+                            value={user.email ?? "—"}
+                        />
+                    </div>
+
+                    <div className="order-3 md:order-4">
+                        <Field
+                            icon={<MapPin className="h-4 w-4" />}
+                            label="المدينة"
+                            value={user.city ?? "—"}
+                        />
+                    </div>
+
+                    <div className="order-4 md:order-5">
+                        <Field
+                            icon={<MapPin className="h-4 w-4" />}
+                            label="الحي"
+                            value={user.district ?? "—"}
+                        />
+                    </div>
                 </div>
             )}
         </div>

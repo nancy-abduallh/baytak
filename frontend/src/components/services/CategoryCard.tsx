@@ -7,9 +7,9 @@ export function CategoryCard({ category }: { category: ServiceCategory }) {
     return (
         <Link
             href={`/services/${category.slug}`}
-            className="group rounded-lg border border-line bg-white p-7 transition hover:-translate-y-1 hover:border-transparent hover:shadow-lift"
+            className="group rounded-lg border border-line bg-white p-5 transition hover:-translate-y-1 hover:border-transparent hover:shadow-lift lg:p-7"
         >
-            <div className="mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-green-100 text-teal-700">
+            <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-green-100 text-teal-700 lg:mb-5">
                 {Icon && <Icon className="h-6 w-6" />}
             </div>
             <h3 className="mb-2 text-[18.5px] font-bold">{category.nameAr}</h3>

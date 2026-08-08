@@ -38,7 +38,7 @@ export default async function ServicesPage({
 
     return (
         <main>
-            <div className="border-b border-line bg-white px-10 py-8">
+            <div className="border-b border-line bg-white px-4 py-7 sm:px-6 md:px-10 md:py-8">
                 <div className="mx-auto max-w-[1360px]">
                     <div className="mb-2.5 text-[12.5px] text-[#8A9691]">
                         <Link href="/" className="hover:underline">الرئيسية</Link> / <Link href="/services" className="hover:underline">الخدمات</Link> / <b className="text-ink">{activeCategory.nameAr}</b>
@@ -48,7 +48,7 @@ export default async function ServicesPage({
                 </div>
             </div>
 
-            <div className="mx-auto grid max-w-[1360px] grid-cols-[280px_1fr] gap-7 px-10 py-9">
+            <div className="mx-auto grid max-w-[1360px] grid-cols-1 gap-5 px-4 py-6 sm:px-6 sm:py-8 md:grid-cols-[280px_1fr] md:gap-7 md:px-10 md:py-9">
                 <FilterSidebar categories={categories} activeSlug={category} />
                 {technicians.length > 0 ? (
                     <TechnicianListClient technicians={technicians} categoryLabel={activeCategory.nameAr} sortBy={sortBy} />

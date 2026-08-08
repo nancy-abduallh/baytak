@@ -47,7 +47,7 @@ function LoginForm() {
     };
 
     return (
-        <main className="mx-auto flex min-h-[calc(100vh-78px)] max-w-[440px] flex-col justify-center px-6 py-16">
+        <main className="mx-auto flex min-h-[calc(100vh-78px)] w-full max-w-[440px] flex-col justify-center px-4 py-10 sm:px-6 sm:py-16">
             <div className="mb-8 text-center">
                 <span className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-green-500">
                     <Home className="h-6 w-6 text-teal-900" />
@@ -56,7 +56,7 @@ function LoginForm() {
                 <p className="mt-1.5 text-[13.5px] text-[#63756F]">أدخل رقم جوالك وكلمة المرور للمتابعة</p>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="rounded-md border border-line bg-white p-7">
+            <form onSubmit={handleSubmit(onSubmit)} className="rounded-md border border-line bg-white p-5 sm:p-7">
                 {serverError && <div className="mb-5 rounded-md bg-danger/10 px-4 py-3 text-[13px] font-semibold text-danger">{serverError}</div>}
 
                 <label className="mb-1.5 block text-[13px] font-semibold text-[#57655F]">رقم الجوال</label>

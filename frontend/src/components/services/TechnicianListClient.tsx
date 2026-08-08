@@ -66,8 +66,8 @@ export function TechnicianListClient({
 
     return (
         <div>
-            <div className="mb-5 flex items-center justify-between">
-                <div className="text-[14px] text-[#57655F]">
+            <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="text-[13.5px] text-[#57655F] lg:text-[14px]">
                     عرض <b className="text-ink">{technicians.length}</b> فني {categoryLabel} متاح
                 </div>
                 <div className="relative">

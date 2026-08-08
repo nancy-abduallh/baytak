@@ -18,7 +18,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
 
     return (
-        <main className="mx-auto grid max-w-[1360px] grid-cols-[250px_1fr] gap-7 px-10 py-9">
+        <main className="mx-auto grid max-w-[1360px] grid-cols-1 gap-5 px-4 py-6 sm:px-6 md:grid-cols-[250px_1fr] md:gap-7 md:px-10 md:py-9">
             <SidebarNav user={user} />
             <div>{children}</div>
         </main>

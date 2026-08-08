@@ -12,7 +12,7 @@ const NAV = [
     { href: "/dashboard/orders", label: "طلباتي", icon: ListChecks },
     { href: "/dashboard/account", label: "حسابي", icon: User },
     { href: "/dashboard/favorites", label: "المفضلة", icon: Heart },
-    { href: "/dashboard/payment-methods", label: "طرق الدفع", icon: CreditCard },
+    // { href: "/dashboard/payment-methods", label: "طرق الدفع", icon: CreditCard },
 ];
 
 export function SidebarNav({ user }: { user: UserType }) {
@@ -27,7 +27,7 @@ export function SidebarNav({ user }: { user: UserType }) {
     };
 
     return (
-        <aside className="sticky top-[100px] h-fit rounded-md border border-line bg-white p-5">
+        <aside className="h-fit rounded-md border border-line bg-white p-5 lg:sticky lg:top-[100px]">
             <div className="mb-4 flex items-center gap-3 border-b border-line pb-5">
                 <div className="grid h-[46px] w-[46px] place-items-center rounded-full bg-gold-500 font-bold text-white">{getInitials(user.fullName)}</div>
                 <div>
