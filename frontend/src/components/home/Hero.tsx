@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import { ArrowLeft, Droplet, Zap, Snowflake, Hammer, PaintRoller, Sparkles, Home as HomeIcon } from "lucide-react";
+import Image from "next/image";
+import { ArrowLeft, Droplet, Zap, Snowflake, Hammer, PaintRoller, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 const HUB_RADIUS = 190;
@@ -126,8 +127,8 @@ function ServiceHub() {
 
             <div className="absolute h-[220px] w-[220px] scale-[.84] rounded-full border border-dashed border-white/15 sm:scale-100 lg:h-[320px] lg:w-[320px]" />
 
-            <div className="relative z-10 grid h-[92px] w-[92px] scale-[.84] place-items-center rounded-full bg-[radial-gradient(circle_at_35%_30%,#6BB889,#4C9A6A_60%,#1E6B5C_100%)] shadow-[0_20px_50px_rgba(0,0,0,.35)] sm:scale-100 lg:h-[132px] lg:w-[132px]">
-                <HomeIcon className="h-8 w-8 text-white lg:h-11 lg:w-11" />
+            <div className="relative z-10 h-[92px] w-[92px] scale-[.84] overflow-hidden rounded-full shadow-[0_20px_50px_rgba(0,0,0,.35)] sm:scale-100 lg:h-[132px] lg:w-[132px]">
+                <Image src="/logo.png" alt="بيتك" fill sizes="132px" className="object-cover" priority />
             </div>
 
             <div className="absolute inset-0 scale-[.7] sm:scale-[.82] lg:scale-100">

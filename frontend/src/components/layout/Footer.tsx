@@ -1,4 +1,5 @@
-import { Home, ChevronDown } from "lucide-react";
+import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 
 const FOOTER_LINKS = {
     services: ["سباكة", "كهرباء", "تكييف", "نجارة ودهانات"],
@@ -37,8 +38,8 @@ function FooterIntro() {
     return (
         <div>
             <div className="mb-4 flex items-center gap-3">
-                <span className="grid h-[34px] w-[34px] place-items-center rounded-full bg-green-500">
-                    <Home className="h-4 w-4 text-teal-900" />
+                <span className="relative h-[34px] w-[34px] flex-none overflow-hidden rounded-xl">
+                    <Image src="/logo.png" alt="بيتك" fill sizes="34px" className="object-cover" />
                 </span>
                 <span className="font-heading text-[17px] font-black text-white">بيتك</span>
             </div>

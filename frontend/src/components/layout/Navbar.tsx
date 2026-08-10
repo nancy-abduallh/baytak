@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
-import { Bell, Home, LogOut, Menu, X } from "lucide-react";
+import { Bell, LogOut, Menu, X } from "lucide-react";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { api } from "@/lib/api";
 import { getInitials } from "@/lib/utils";
@@ -39,8 +40,8 @@ export function Navbar() {
         <nav className="sticky top-0 z-20 bg-teal-900 px-5 lg:px-10">
             <div className="flex h-[64px] items-center justify-between lg:h-[78px]">
                 <Link href="/" className="flex items-center gap-2.5 lg:gap-3">
-                    <span className="grid h-9 w-9 place-items-center rounded-full bg-green-500 lg:h-10 lg:w-10">
-                        <Home className="h-4 w-4 text-teal-900 lg:h-5 lg:w-5" />
+                    <span className="relative h-9 w-9 flex-none overflow-hidden rounded-2xl lg:h-10 lg:w-10">
+                        <Image src="/logo.png" alt="بيتك" fill sizes="40px" className="object-cover" priority />
                     </span>
                     <span className="leading-tight">
                         <span className="block font-heading text-lg font-black text-white lg:text-xl">بيتك</span>
