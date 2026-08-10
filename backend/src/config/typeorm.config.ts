@@ -14,6 +14,7 @@ import { PaymentMethod } from '../entities/payment-method.entity';
 import { Notification } from '../entities/notification.entity';
 import { Admin } from '../entities/admin.entity';
 import { AuthToken } from '../entities/auth-token.entity';
+import { SiteSetting } from '../entities/site-setting.entity';
 
 export default registerAs('database', (): TypeOrmModuleOptions => ({
     type: 'mysql',
@@ -25,7 +26,7 @@ export default registerAs('database', (): TypeOrmModuleOptions => ({
     entities: [
         User, Address, ServiceCategory, Technician, TechnicianAvailability,
         Order, OrderImage, OrderStatusHistory, Review, Favorite,
-        PaymentMethod, Notification, Admin, AuthToken,
+        PaymentMethod, Notification, Admin, AuthToken, SiteSetting,
     ],
     synchronize: false,
     charset: 'utf8mb4_unicode_ci',

@@ -6,7 +6,8 @@ export type PermissionKey =
     | "technicians.manage"
     | "users.manage"
     | "categories.manage"
-    | "admins.manage";
+    | "admins.manage"
+    | "settings.manage";
 
 export interface AdminUser {
     id: number;
@@ -146,3 +147,23 @@ export interface DashboardAnalytics {
     topCategories: { label: string; count: number }[];
     revenueLast6Months: { month: string; revenue: number; orders: number }[];
 }
+
+export interface SiteSettings {
+    siteName: string;
+    footerDescription: string | null;
+    availabilityNote: string | null;
+    contactPhone: string | null;
+    contactWhatsapp: string | null;
+    contactEmail: string | null;
+    websiteUrl: string | null;
+    address: string | null;
+    workingHours: string | null;
+    facebookUrl: string | null;
+    twitterUrl: string | null;
+    instagramUrl: string | null;
+    tiktokUrl: string | null;
+    copyrightText: string | null;
+    updatedAt: string;
+}
+
+export type UpdateSiteSettingsPayload = Partial<Omit<SiteSettings, "updatedAt">>;

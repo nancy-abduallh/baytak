@@ -10,7 +10,7 @@ export declare class AdminAuthController {
             fullName: string;
             email: string;
             role: import("../../entities/admin.entity").AdminRole;
-            permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage")[];
+            permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage")[];
             isActive: true;
         };
     }>;

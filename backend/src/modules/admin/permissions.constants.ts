@@ -15,6 +15,7 @@ export const ADMIN_PERMISSIONS = [
     'users.manage',
     'categories.manage',
     'admins.manage',
+    'settings.manage',
 ] as const;
 
 export type AdminPermission = (typeof ADMIN_PERMISSIONS)[number];
@@ -28,6 +29,7 @@ export const ADMIN_PERMISSION_LABELS: Record<AdminPermission, string> = {
     'users.manage': 'إدارة المستخدمين',
     'categories.manage': 'إدارة فئات الخدمة',
     'admins.manage': 'إدارة المشرفين وصلاحياتهم',
+    'settings.manage': 'إدارة إعدادات الموقع وبيانات التواصل',
 };
 
 // Sensible defaults offered by the UI when a super admin picks a role —

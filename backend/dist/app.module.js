@@ -24,6 +24,7 @@ const orders_module_1 = require("./modules/orders/orders.module");
 const reviews_module_1 = require("./modules/reviews/reviews.module");
 const favorites_module_1 = require("./modules/favorites/favorites.module");
 const admin_module_1 = require("./modules/admin/admin.module");
+const site_settings_module_1 = require("./modules/site-settings/site-settings.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -44,6 +45,7 @@ exports.AppModule = AppModule = __decorate([
             reviews_module_1.ReviewsModule,
             favorites_module_1.FavoritesModule,
             admin_module_1.AdminModule,
+            site_settings_module_1.SiteSettingsModule,
         ],
     })
 ], AppModule);

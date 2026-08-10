@@ -21,7 +21,7 @@ export declare class JwtAdminStrategy extends JwtAdminStrategy_base {
         email: string;
         role: import("../../../entities/admin.entity").AdminRole;
         actorType: string;
-        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage")[];
+        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage")[];
     }>;
 }
 export {};

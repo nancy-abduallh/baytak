@@ -1,5 +1,5 @@
 import { useAuthStore } from "./stores/auth-store";
-import { ServiceCategory, Technician, Order, User, Address, Review } from "./types";
+import { ServiceCategory, Technician, Order, User, Address, Review, SiteSettings } from "./types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
 
@@ -116,6 +116,7 @@ function buildQuery(params: Record<string, string | number | undefined>): string
 export const api = {
     // Public
     getCategories: () => request<ServiceCategory[]>("/service-categories"),
+    getSiteSettings: () => request<SiteSettings>("/site-settings"),
     getTechniciansByCategory: (slug: string, filters: TechnicianFilters = {}) =>
         request<Technician[]>(`/technicians${buildQuery({ category: slug, minRating: filters.minRating, maxPrice: filters.maxPrice, sortBy: filters.sortBy })}`),
     getTechnician: (id: number) => request<Technician>(`/technicians/${id}`),

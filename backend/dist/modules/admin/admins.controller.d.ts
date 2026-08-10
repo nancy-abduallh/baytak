@@ -11,7 +11,7 @@ export declare class AdminsController {
         fullName: string;
         email: string;
         role: import("../../entities/admin.entity").AdminRole;
-        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage")[];
+        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage")[];
         isActive: boolean;
         createdAt: string;
     }>;
@@ -20,12 +20,12 @@ export declare class AdminsController {
         fullName: string;
         email: string;
         role: import("../../entities/admin.entity").AdminRole;
-        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage")[];
+        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage")[];
         isActive: boolean;
         createdAt: string;
     }>;
     getPermissionsCatalogue(): {
-        key: "dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage";
+        key: "dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage";
         label: string;
     }[];
     list(): Promise<{
@@ -33,7 +33,7 @@ export declare class AdminsController {
         fullName: string;
         email: string;
         role: import("../../entities/admin.entity").AdminRole;
-        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage")[];
+        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage")[];
         isActive: boolean;
         createdAt: string;
     }[]>;
@@ -42,7 +42,7 @@ export declare class AdminsController {
         fullName: string;
         email: string;
         role: import("../../entities/admin.entity").AdminRole;
-        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage")[];
+        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage")[];
         isActive: boolean;
         createdAt: string;
     }>;
@@ -51,7 +51,7 @@ export declare class AdminsController {
         fullName: string;
         email: string;
         role: import("../../entities/admin.entity").AdminRole;
-        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage")[];
+        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage")[];
         isActive: boolean;
         createdAt: string;
     }>;

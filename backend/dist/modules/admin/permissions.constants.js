@@ -11,6 +11,7 @@ exports.ADMIN_PERMISSIONS = [
     'users.manage',
     'categories.manage',
     'admins.manage',
+    'settings.manage',
 ];
 exports.ADMIN_PERMISSION_LABELS = {
     'dashboard.view': 'عرض لوحة القيادة والإحصائيات',
@@ -21,6 +22,7 @@ exports.ADMIN_PERMISSION_LABELS = {
     'users.manage': 'إدارة المستخدمين',
     'categories.manage': 'إدارة فئات الخدمة',
     'admins.manage': 'إدارة المشرفين وصلاحياتهم',
+    'settings.manage': 'إدارة إعدادات الموقع وبيانات التواصل',
 };
 exports.DEFAULT_PERMISSIONS_BY_ROLE = {
     operations: ['dashboard.view', 'orders.view', 'orders.update_status', 'technicians.manage', 'categories.manage'],

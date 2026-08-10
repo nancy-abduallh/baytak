@@ -15,6 +15,7 @@ const payment_method_entity_1 = require("../entities/payment-method.entity");
 const notification_entity_1 = require("../entities/notification.entity");
 const admin_entity_1 = require("../entities/admin.entity");
 const auth_token_entity_1 = require("../entities/auth-token.entity");
+const site_setting_entity_1 = require("../entities/site-setting.entity");
 exports.default = (0, config_1.registerAs)('database', () => ({
     type: 'mysql',
     host: process.env.DB_HOST ?? '127.0.0.1',
@@ -25,7 +26,7 @@ exports.default = (0, config_1.registerAs)('database', () => ({
     entities: [
         user_entity_1.User, address_entity_1.Address, service_category_entity_1.ServiceCategory, technician_entity_1.Technician, technician_availability_entity_1.TechnicianAvailability,
         order_entity_1.Order, order_image_entity_1.OrderImage, order_status_history_entity_1.OrderStatusHistory, review_entity_1.Review, favorite_entity_1.Favorite,
-        payment_method_entity_1.PaymentMethod, notification_entity_1.Notification, admin_entity_1.Admin, auth_token_entity_1.AuthToken,
+        payment_method_entity_1.PaymentMethod, notification_entity_1.Notification, admin_entity_1.Admin, auth_token_entity_1.AuthToken, site_setting_entity_1.SiteSetting,
     ],
     synchronize: false,
     charset: 'utf8mb4_unicode_ci',

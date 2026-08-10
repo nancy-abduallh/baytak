@@ -11,7 +11,7 @@ export declare class AdminsService {
     private readonly admins;
     constructor(admins: Repository<Admin>);
     getPermissionsCatalogue(): {
-        key: "dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage";
+        key: "dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage";
         label: string;
     }[];
     list(): Promise<{
@@ -19,7 +19,7 @@ export declare class AdminsService {
         fullName: string;
         email: string;
         role: import("../../entities/admin.entity").AdminRole;
-        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage")[];
+        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage")[];
         isActive: boolean;
         createdAt: string;
     }[]>;
@@ -28,7 +28,7 @@ export declare class AdminsService {
         fullName: string;
         email: string;
         role: import("../../entities/admin.entity").AdminRole;
-        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage")[];
+        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage")[];
         isActive: boolean;
         createdAt: string;
     }>;
@@ -37,7 +37,7 @@ export declare class AdminsService {
         fullName: string;
         email: string;
         role: import("../../entities/admin.entity").AdminRole;
-        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage")[];
+        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage")[];
         isActive: boolean;
         createdAt: string;
     }>;
@@ -46,7 +46,7 @@ export declare class AdminsService {
         fullName: string;
         email: string;
         role: import("../../entities/admin.entity").AdminRole;
-        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage")[];
+        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage")[];
         isActive: boolean;
         createdAt: string;
     }>;
@@ -59,7 +59,7 @@ export declare class AdminsService {
         fullName: string;
         email: string;
         role: import("../../entities/admin.entity").AdminRole;
-        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage")[];
+        permissions: ("dashboard.view" | "orders.view" | "orders.update_status" | "orders.delete" | "technicians.manage" | "users.manage" | "categories.manage" | "admins.manage" | "settings.manage")[];
         isActive: boolean;
         createdAt: string;
     }>;

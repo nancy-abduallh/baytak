@@ -9,6 +9,7 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
     "users.manage": "إدارة المستخدمين",
     "categories.manage": "إدارة فئات الخدمة",
     "admins.manage": "إدارة المشرفين وصلاحياتهم",
+    "settings.manage": "إدارة إعدادات الموقع وبيانات التواصل",
 };
 
 export const ALL_PERMISSIONS = Object.keys(PERMISSION_LABELS) as PermissionKey[];

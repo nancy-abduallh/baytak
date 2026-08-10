@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
-import { LayoutDashboard, ClipboardList, Wrench, Users, ListTree, LogOut, ShieldCheck, UserCog, Settings } from "lucide-react";
+import { LayoutDashboard, ClipboardList, Wrench, Users, ListTree, LogOut, ShieldCheck, UserCog, Settings, Globe } from "lucide-react";
 import { useAdminAuthStore } from "@/lib/stores/admin-auth-store";
 import { hasPermission, ROLE_LABELS } from "@/lib/permissions";
 
@@ -23,6 +23,9 @@ export function AdminSidebar() {
         ...NAV,
         ...(hasPermission(admin, "admins.manage")
             ? [{ href: "/admins", label: "إدارة المشرفين", icon: UserCog }]
+            : []),
+        ...(hasPermission(admin, "settings.manage")
+            ? [{ href: "/settings", label: "إعدادات الموقع", icon: Globe }]
             : []),
         { href: "/account", label: "حسابي", icon: Settings },
     ];

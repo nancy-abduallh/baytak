@@ -5,6 +5,7 @@ import {
     CreateCategoryPayload, UpdateCategoryPayload,
     DashboardStats, DashboardAnalytics, AdminUser, OrderStatus,
     AdminRow, CreateAdminPayload, UpdateAdminPayload, UpdateOwnProfilePayload, PermissionKey,
+    SiteSettings, UpdateSiteSettingsPayload,
 } from "./types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
@@ -151,4 +152,9 @@ export const adminApi = {
         request<AdminRow>(`/admin/admins/${id}`, { method: "PATCH", body: JSON.stringify(payload) }),
     deleteAdmin: (id: number) =>
         request<{ id: number; deleted: boolean }>(`/admin/admins/${id}`, { method: "DELETE" }),
+
+    // ---------- Site settings (contact us / footer / social links) ----------
+    getSiteSettings: () => request<SiteSettings>("/admin/site-settings"),
+    updateSiteSettings: (payload: UpdateSiteSettingsPayload) =>
+        request<SiteSettings>("/admin/site-settings", { method: "PATCH", body: JSON.stringify(payload) }),
 };

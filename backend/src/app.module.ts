@@ -12,6 +12,7 @@ import { OrdersModule } from './modules/orders/orders.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
 import { FavoritesModule } from './modules/favorites/favorites.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { SiteSettingsModule } from './modules/site-settings/site-settings.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { AdminModule } from './modules/admin/admin.module';
     ReviewsModule,
     FavoritesModule,
     AdminModule,
+    SiteSettingsModule,
   ],
 })
 export class AppModule { }

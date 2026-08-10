@@ -304,3 +304,49 @@ SET permissions = JSON_ARRAY(
   'technicians.manage','users.manage','categories.manage','admins.manage'
 )
 WHERE role = 'super_admin';
+
+-- ---------------------------------------------------------------------
+-- 12. SITE SETTINGS (singleton row — editable "contact us" / footer /
+--     social-links / about info shown on the public frontend, managed
+--     from the admin dashboard's Settings page)
+-- ---------------------------------------------------------------------
+DROP TABLE IF EXISTS site_settings;
+CREATE TABLE site_settings (
+  id                  TINYINT UNSIGNED PRIMARY KEY DEFAULT 1,
+  site_name           VARCHAR(80)   NOT NULL DEFAULT 'بيتك',
+  footer_description  TEXT          NULL,
+  availability_note   VARCHAR(160)  NULL,
+  contact_phone       VARCHAR(30)   NULL,
+  contact_whatsapp    VARCHAR(30)   NULL,
+  contact_email       VARCHAR(160)  NULL,
+  website_url         VARCHAR(200)  NULL,
+  address             VARCHAR(255)  NULL,
+  working_hours       VARCHAR(120)  NULL,
+  facebook_url        VARCHAR(255)  NULL,
+  twitter_url         VARCHAR(255)  NULL,
+  instagram_url       VARCHAR(255)  NULL,
+  tiktok_url          VARCHAR(255)  NULL,
+  copyright_text      VARCHAR(160)  NULL,
+  updated_at          TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT chk_site_settings_singleton CHECK (id = 1)
+) ENGINE=InnoDB;
+
+INSERT INTO site_settings (
+  id, site_name, footer_description, availability_note,
+  contact_phone, contact_whatsapp, contact_email, website_url, address, working_hours,
+  facebook_url, twitter_url, instagram_url, tiktok_url, copyright_text
+) VALUES (
+  1, 'بيتك',
+  'تطبيق متكامل لخدمات صيانة وتشغيل المنازل، يقدم لك حلولًا سريعة وموثوقة لجميع احتياجات منزلك، بإشراف بيتك.',
+  'متوفر في جميع مناطق المملكة',
+  '9200 12345', NULL, 'info@baytak.sa', 'www.baytak.sa', NULL, NULL,
+  NULL, NULL, NULL, NULL, NULL
+);
+
+-- super_admin also manages the new site-settings page.
+UPDATE admins
+SET permissions = JSON_ARRAY(
+  'dashboard.view','orders.view','orders.update_status','orders.delete',
+  'technicians.manage','users.manage','categories.manage','admins.manage','settings.manage'
+)
+WHERE role = 'super_admin';
