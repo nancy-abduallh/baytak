@@ -17,13 +17,25 @@ export function StepsSection() {
 
                 <div className="relative grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4 md:gap-0">
                     <div className="absolute end-[12%] start-[12%] top-[27px] hidden h-px bg-[repeating-linear-gradient(90deg,rgba(255,255,255,.3)_0_8px,transparent_8px_16px)] md:block" />
-                    {STEPS.map((step) => (
-                        <div key={step.num} className="px-0 sm:px-4">
-                            <div className="relative z-10 mb-6 grid h-[54px] w-[54px] place-items-center rounded-full bg-green-500 font-heading text-lg font-extrabold text-white shadow-[0_0_0_8px_#123B37]">
-                                {step.num}
+                    {STEPS.map((step, i) => (
+                        <div key={step.num} className="relative px-0 sm:px-4">
+                            {/* mobile-only dashed connector: runs from the bottom of this circle
+                                through the row gap to the top of the next circle */}
+                            {i < STEPS.length - 1 && (
+                                <div className="absolute start-[26px] top-[54px] bottom-[-2rem] w-px bg-[repeating-linear-gradient(180deg,rgba(255,255,255,.35)_0_8px,transparent_8px_16px)] sm:hidden" />
+                            )}
+
+                            <div className="flex items-start gap-4 sm:block">
+                                <div className="relative z-10 grid h-[54px] w-[54px] flex-none place-items-center rounded-full bg-green-500 font-heading text-lg font-extrabold text-white shadow-[0_0_0_8px_#123B37] sm:mb-6">
+                                    {step.num}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <h4 className="flex h-[54px] items-center text-[16.5px] font-bold text-white sm:mb-2 sm:h-auto sm:block">
+                                        {step.title}
+                                    </h4>
+                                    <p className="mt-1 text-[13.5px] leading-[1.75] text-[#AFC9C0] sm:mt-0">{step.desc}</p>
+                                </div>
                             </div>
-                            <h4 className="mb-2 text-[16.5px] font-bold text-white">{step.title}</h4>
-                            <p className="text-[13.5px] leading-[1.75] text-[#AFC9C0]">{step.desc}</p>
                         </div>
                     ))}
                 </div>
