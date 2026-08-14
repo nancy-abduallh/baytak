@@ -141,12 +141,36 @@ export async function Footer() {
 
 function FooterIntro({ settings }: { settings: SiteSettings }) {
     const socialLinks = [
-        { href: settings.facebookUrl, label: "فيسبوك", Icon: FacebookIcon },
-        { href: settings.twitterUrl, label: "تويتر (X)", Icon: XIcon },
-        { href: settings.instagramUrl, label: "انستغرام", Icon: InstagramIcon },
-        { href: settings.tiktokUrl, label: "تيك توك", Icon: TikTokIcon },
+        {
+            href: settings.facebookUrl,
+            label: "فيسبوك",
+            Icon: FacebookIcon,
+            hoverBg: "group-hover/social:bg-[#1877F2]",
+            glow: "hover:shadow-[0_10px_24px_-8px_rgba(24,119,242,0.65)]",
+        },
+        {
+            href: settings.twitterUrl,
+            label: "تويتر (X)",
+            Icon: XIcon,
+            hoverBg: "group-hover/social:bg-black",
+            glow: "hover:shadow-[0_10px_24px_-8px_rgba(0,0,0,0.55)]",
+        },
+        {
+            href: settings.instagramUrl,
+            label: "انستغرام",
+            Icon: InstagramIcon,
+            hoverBg: "group-hover/social:bg-gradient-to-tr group-hover/social:from-[#F58529] group-hover/social:via-[#DD2A7B] group-hover/social:to-[#8134AF]",
+            glow: "hover:shadow-[0_10px_24px_-8px_rgba(221,42,123,0.55)]",
+        },
+        {
+            href: settings.tiktokUrl,
+            label: "تيك توك",
+            Icon: TikTokIcon,
+            hoverBg: "group-hover/social:bg-black",
+            glow: "hover:shadow-[0_10px_24px_-8px_rgba(0,0,0,0.55)]",
+        },
     ].filter(
-        (link): link is { href: string; label: string; Icon: typeof FacebookIcon } =>
+        (link): link is { href: string; label: string; Icon: typeof FacebookIcon; hoverBg: string; glow: string } =>
             Boolean(link.href && link.href.trim()),
     );
 
@@ -172,17 +196,20 @@ function FooterIntro({ settings }: { settings: SiteSettings }) {
                 {settings.footerDescription || FALLBACK_SETTINGS.footerDescription}
             </p>
             {socialLinks.length > 0 && (
-                <div className="mt-4 flex items-center gap-2.5">
-                    {socialLinks.map(({ href, label, Icon }) => (
+                <div className="mt-5 flex items-center gap-3">
+                    {socialLinks.map(({ href, label, Icon, hoverBg, glow }) => (
                         <a
                             key={label}
                             href={withProtocol(href)}
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label={label}
-                            className="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-[#B9C7C2] transition hover:-translate-y-0.5 hover:bg-white/20 hover:text-white"
+                            className={`group/social relative grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-white/10 bg-white/[0.06] text-[#B9C7C2] transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.12] hover:border-white/0 hover:text-white ${glow}`}
                         >
-                            <Icon className="h-4 w-4" />
+                            <span
+                                className={`absolute inset-0 scale-0 rounded-full opacity-0 transition-all duration-300 ease-out group-hover/social:scale-100 group-hover/social:opacity-100 ${hoverBg}`}
+                            />
+                            <Icon className="relative h-4 w-4 transition-transform duration-300 ease-out group-hover/social:scale-110" />
                         </a>
                     ))}
                 </div>
