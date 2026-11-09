@@ -38,8 +38,8 @@ export default function FavoritesPage() {
             <div className="grid min-h-[300px] place-items-center rounded-md border border-dashed border-line bg-white text-center">
                 <div>
                     <Heart className="mx-auto mb-3 h-8 w-8 text-[#B7C1BC]" />
-                    <h3 className="mb-1.5 text-[15px] font-bold">لا يوجد فنيون في المفضلة بعد</h3>
-                    <p className="mb-4 text-[13px] text-[#8A9691]">أضف الفنيين المفضلين لديك من صفحات الخدمات لتجدهم هنا بسهولة.</p>
+                    <h3 className="mb-1.5 text-[15px] font-bold">ما عندك أي فني في المفضلة بعد</h3>
+                    <p className="mb-4 text-[13px] text-[#8A9691]">تقدر تضيف الفنيين المفضلين من صفحة الخدمات لتجدهم هنا وترجع لهم وتطلبهم بضغطة زر.</p>
                     <Link href="/services" className="text-[13px] font-bold text-teal-700">تصفّح الخدمات</Link>
                 </div>
             </div>
@@ -48,7 +48,7 @@ export default function FavoritesPage() {
 
     return (
         <div>
-            <h2 className="mb-5 text-2xl font-extrabold">المفضلة</h2>
+            <h2 className="mb-5 text-2xl font-extrabold">الفنيين المفضلين</h2>
             {favorites.map((tech) => (
                 <TechnicianCard key={tech.id} tech={tech} isFavorite onToggleFavorite={() => remove(tech.id)} />
             ))}

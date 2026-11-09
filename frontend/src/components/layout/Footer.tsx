@@ -4,15 +4,15 @@ import { ChevronDown, Phone, Mail, Globe, MapPin, Clock, MessageCircle } from "l
 import { api } from "@/lib/api";
 import { ServiceCategory, SiteSettings } from "@/lib/types";
 
-const FOOTER_COMPANY_LINKS = ["من نحن", "انضم كفني", "الأسئلة الشائعة"];
+const FOOTER_COMPANY_LINKS = ["من نحن", "انضم كشريك فني", "الأسئلة الشائعة"];
 
 // Used only if the settings API is unreachable, so the footer never
 // breaks the page even when the backend is down.
 const FALLBACK_SETTINGS: SiteSettings = {
     siteName: "بيتك",
     footerDescription:
-        "تطبيق متكامل لخدمات صيانة وتشغيل المنازل، يقدم لك حلولًا سريعة وموثوقة لجميع احتياجات منزلك، بإشراف بيتك.",
-    availabilityNote: "متوفر في جميع مناطق المملكة",
+        "منصة بيتك لخدمات صيانة وتشغيل المنازل بالمملكة العربية السعودية، نجمع لك نخبة من الفنيين المعتمدين لضمان صيانة موثوقة وبأعلى معايير الجودة.",
+    availabilityNote: "متوفر في كافة مدن ومناطق المملكة",
     contactPhone: "9200 12345",
     contactWhatsapp: null,
     contactEmail: "info@baytak.sa",
@@ -81,13 +81,13 @@ export async function Footer() {
 
     const serviceLinks = categories.length > 0
         ? categories.map((c) => ({ label: c.nameAr, href: `/services/${c.slug}` }))
-        : [{ label: "كل الخدمات", href: "/services" }];
+        : [{ label: "تصفّح الخدمات", href: "/services" }];
 
     return (
         <footer className="bg-ink px-4 pb-6 pt-10 text-[#B9C7C2] md:px-10 md:pb-7 md:pt-14">
             <div className="mx-auto hidden max-w-[1360px] grid-cols-[1.3fr_.8fr_.8fr_1fr] gap-10 border-b border-white/10 pb-9 md:grid">
                 <FooterIntro settings={settings} />
-                <FooterColumn title="الخدمات">
+                <FooterColumn title="خدمات الصيانة">
                     <ul className="space-y-2.5 text-[13.5px]">
                         {serviceLinks.map((item) => (
                             <li key={item.href}>
@@ -96,7 +96,7 @@ export async function Footer() {
                         ))}
                     </ul>
                 </FooterColumn>
-                <FooterColumn title="الشركة">
+                <FooterColumn title="عن بيتك">
                     <ul className="space-y-2.5 text-[13.5px]">
                         {FOOTER_COMPANY_LINKS.map((item) => <li key={item}>{item}</li>)}
                     </ul>
@@ -109,7 +109,7 @@ export async function Footer() {
             <div className="mx-auto max-w-[1360px] border-b border-white/10 pb-3 md:hidden">
                 <FooterIntro settings={settings} />
                 <div className="mt-7 divide-y divide-white/10">
-                    <FooterDisclosure title="الخدمات">
+                    <FooterDisclosure title="خدمات الصيانة">
                         <ul className="space-y-3 pb-4 text-[13px] leading-relaxed text-[#B9C7C2]">
                             {serviceLinks.map((item) => (
                                 <li key={item.href}>
@@ -118,7 +118,7 @@ export async function Footer() {
                             ))}
                         </ul>
                     </FooterDisclosure>
-                    <FooterDisclosure title="الشركة">
+                    <FooterDisclosure title="عن بيتك">
                         <ul className="space-y-3 pb-4 text-[13px] leading-relaxed text-[#B9C7C2]">
                             {FOOTER_COMPANY_LINKS.map((item) => <li key={item}>{item}</li>)}
                         </ul>
@@ -133,7 +133,7 @@ export async function Footer() {
 
             <div className="mx-auto mt-5 flex max-w-[1360px] flex-col gap-2 text-[12px] text-[#728882] md:flex-row md:justify-between md:text-[12.5px]">
                 <span>{settings.copyrightText || `© ${new Date().getFullYear()} ${settings.siteName}. جميع الحقوق محفوظة.`}</span>
-                <span>{settings.availabilityNote || "متوفر في جميع مناطق المملكة"}</span>
+                <span>{settings.availabilityNote || "متوفر في كافة مدن ومناطق المملكة"}</span>
             </div>
         </footer>
     );

@@ -14,19 +14,19 @@ export function OrderDetails({ order }: { order: Order }) {
             <div className="mb-4 grid grid-cols-2 gap-4 border-b border-dashed border-line pb-5 text-[13.5px] text-[#57655F] sm:grid-cols-4 sm:gap-5">
                 <Field label="رقم الطلب" value={order.orderNumber} />
                 <Field label="حالة الطلب" value={ORDER_STATUS_LABEL[order.status]} />
-                <Field label="الفني" value={order.technician?.fullName ?? "—"} />
-                <Field label="العنوان" value={order.address} />
+                <Field label="الفني المختص" value={order.technician?.fullName ?? "جاري التعيين"} />
+                <Field label="عنوان الزيارة" value={order.address} />
             </div>
             <p className="mb-4 text-[13.5px] text-[#57655F]">{order.description}</p>
 
             {order.images.length > 0 && (
                 <div className="mb-4">
-                    <p className="mb-2 text-[13px] font-semibold text-[#57655F]">صور المشكلة المرفقة</p>
+                    <p className="mb-2 text-[13px] font-semibold text-[#57655F]">صور العطل المرفقة</p>
                     <div className="flex flex-wrap gap-3">
                         {order.images.map((url) => (
                             <a key={url} href={getAssetUrl(url) ?? "#"} target="_blank" rel="noreferrer" className="block h-20 w-20 overflow-hidden rounded-md border border-line">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={getAssetUrl(url) ?? ""} alt="صورة المشكلة" className="h-full w-full object-cover" />
+                                <img src={getAssetUrl(url) ?? ""} alt="صورة العطل" className="h-full w-full object-cover" />
                             </a>
                         ))}
                     </div>
@@ -38,7 +38,7 @@ export function OrderDetails({ order }: { order: Order }) {
             {order.canReview && <ReviewForm orderId={order.id} technicianName={order.technician?.fullName ?? "الفني"} />}
             {order.hasReview && (
                 <p className="mt-5 rounded-md bg-green-100 px-4 py-3 text-[13px] font-semibold text-teal-800">
-                    شكرًا لك، تم إرسال تقييمك لهذا الطلب.
+                    شكرًا لك! تم استلام تقييمك لهذا الطلب ويعطيك ألف عافية.
                 </p>
             )}
         </div>
@@ -79,14 +79,14 @@ function ReviewForm({ orderId, technicianName }: { orderId: number; technicianNa
     if (sent) {
         return (
             <p className="mt-5 rounded-md bg-green-100 px-4 py-3 text-[13px] font-semibold text-teal-800">
-                شكرًا لك، تم إرسال تقييمك لـ {technicianName} بنجاح.
+                شكرًا لك! تم إرسال تقييمك لـ {technicianName} بنجاح، يعطيك العافية.
             </p>
         );
     }
 
     return (
         <form onSubmit={submit} className="mt-5 rounded-md border border-line bg-sand-50 p-5">
-            <h5 className="mb-3 text-[13.5px] font-bold">قيّم {technicianName}</h5>
+            <h5 className="mb-3 text-[13.5px] font-bold">قيّم {technicianName} وجودة الخدمة</h5>
             {error && <p className="mb-3 text-[12.5px] text-danger">{error}</p>}
 
             <div className="mb-4 flex items-center gap-1.5" dir="ltr">
@@ -113,7 +113,7 @@ function ReviewForm({ orderId, technicianName }: { orderId: number; technicianNa
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 rows={3}
-                placeholder="اكتب رأيك في تجربتك مع الفني (اختياري)"
+                placeholder="اكتب رأيك في شغل الفني وتعامله بكل أمانة (اختياري)..."
                 className="mb-4 w-full rounded-md border border-line px-3.5 py-3 text-[13px]"
             />
 

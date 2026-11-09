@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
-import { ListChecks, User, Heart, CreditCard, Settings, LogOut } from "lucide-react";
+import { ListChecks, User, Heart, Settings, LogOut } from "lucide-react";
 import { User as UserType } from "@/lib/types";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { api } from "@/lib/api";
@@ -10,9 +10,8 @@ import { getInitials } from "@/lib/utils";
 
 const NAV = [
     { href: "/dashboard/orders", label: "طلباتي", icon: ListChecks },
-    { href: "/dashboard/account", label: "حسابي", icon: User },
-    { href: "/dashboard/favorites", label: "المفضلة", icon: Heart },
-    // { href: "/dashboard/payment-methods", label: "طرق الدفع", icon: CreditCard },
+    { href: "/dashboard/account", label: "حسابي وبياناتي", icon: User },
+    { href: "/dashboard/favorites", label: "الفنيين المفضلين", icon: Heart },
 ];
 
 export function SidebarNav({ user }: { user: UserType }) {
@@ -32,7 +31,7 @@ export function SidebarNav({ user }: { user: UserType }) {
                 <div className="grid h-[46px] w-[46px] place-items-center rounded-full bg-gold-500 font-bold text-white">{getInitials(user.fullName)}</div>
                 <div>
                     <h5 className="text-[14.5px] font-bold">{user.fullName}</h5>
-                    <p className="text-xs text-[#8A9691]">{user.city ?? "—"}، {user.district ?? "—"}</p>
+                    <p className="text-xs text-[#8A9691]">{user.city ?? "الرياض"}، {user.district ?? "—"}</p>
                 </div>
             </div>
 

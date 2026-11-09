@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { api, ApiError } from "@/lib/api";
 import { Order } from "@/lib/types";
@@ -20,7 +21,7 @@ export default function OrdersPage() {
     if (orders.length === 0) {
         return (
             <div className="rounded-md border border-line bg-white p-10 text-center text-[13.5px] text-[#8A9691]">
-                لا توجد طلبات بعد. <a href="/services" className="font-bold text-teal-700">اطلب خدمة الآن</a>
+                ما عندك أي طلبات حاليًا. <Link href="/services" className="font-bold text-teal-700">احجز خدمة الحين</Link>
             </div>
         );
     }

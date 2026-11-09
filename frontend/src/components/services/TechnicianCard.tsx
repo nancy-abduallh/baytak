@@ -33,8 +33,8 @@ export function TechnicianCard({
                         {tech.isVerified && <BadgeCheck className="h-4 w-4 flex-none text-green-500" />}
                     </h4>
                     <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1 text-[12.5px] text-[#8A9691] sm:text-[13px]">
-                        <span>فني {tech.categoryLabel}</span><span className="hidden sm:inline">·</span>
-                        <span>+{tech.yearsExperience} سنوات خبرة</span><span className="hidden sm:inline">·</span>
+                        <span>فني {tech.categoryLabel} معتمد</span><span className="hidden sm:inline">·</span>
+                        <span>خبرة +{tech.yearsExperience} سنوات</span><span className="hidden sm:inline">·</span>
                         <span>{tech.district}{tech.distanceKm ? ` (${tech.distanceKm} كم)` : ""}</span>
                     </div>
                 </div>
@@ -47,10 +47,10 @@ export function TechnicianCard({
 
             <div className="text-end lg:text-center">
                 <div className="font-heading text-base font-extrabold sm:text-lg">{tech.priceFrom} ر.س</div>
-                <div className="text-[11.5px] text-[#8A9691]">بداية السعر</div>
+                <div className="text-[11.5px] text-[#8A9691]">يبدأ من</div>
             </div>
 
-            <Button href={`/booking/${tech.id}`} variant="dark" className="col-span-2 justify-center lg:col-span-1 lg:justify-start">احجز الآن</Button>
+            <Button href={`/booking/${tech.id}`} variant="dark" className="col-span-2 justify-center lg:col-span-1 lg:justify-start">احجز الحين</Button>
         </div>
     );
 }

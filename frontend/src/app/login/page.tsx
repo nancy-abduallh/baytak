@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/Button";
 
 const schema = z.object({
     phone: z.string().regex(/^05\d{8}$/, "أدخل رقم جوال سعودي صحيح (05xxxxxxxx)"),
-    password: z.string().min(8, "كلمة المرور يجب ألا تقل عن 8 أحرف"),
+    password: z.string().min(8, "كلمة المرور يجب ألا تقل عن 8 خانات"),
 });
 type FormValues = z.infer<typeof schema>;
 
@@ -40,7 +40,7 @@ function LoginForm() {
             setSession(session);
             router.replace(searchParams.get("redirect") ?? "/dashboard/orders");
         } catch (err) {
-            setServerError(err instanceof ApiError ? err.message : "تعذر تسجيل الدخول، حاول مرة أخرى");
+            setServerError(err instanceof ApiError ? err.message : "تعذر تسجيل الدخول، تأكد من صحة البيانات");
         } finally {
             setSubmitting(false);
         }
@@ -74,11 +74,11 @@ function LoginForm() {
                 {errors.password && <p className="mb-3 text-[12px] text-danger">{errors.password.message}</p>}
 
                 <Button type="submit" variant="dark" className="mt-5 w-full justify-center">
-                    {submitting ? "جارِ الدخول..." : "تسجيل الدخول"}
+                    {submitting ? "جارِ تسجيل الدخول..." : "تسجيل الدخول"}
                 </Button>
 
                 <p className="mt-5 text-center text-[13px] text-[#63756F]">
-                    ليس لديك حساب؟ <Link href="/register" className="font-bold text-teal-700">إنشاء حساب جديد</Link>
+                    ما عندك حساب؟ <Link href="/register" className="font-bold text-teal-700">سجّل حساب جديد</Link>
                 </p>
             </form>
         </main>

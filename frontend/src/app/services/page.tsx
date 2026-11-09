@@ -16,16 +16,16 @@ export default async function ServicesIndexPage() {
         <main>
             <div className="border-b border-line bg-white px-4 py-8 sm:px-6 md:px-10 md:py-10">
                 <div className="mx-auto max-w-[1360px]">
-                    <div className="mb-2.5 text-[12.5px] text-[#8A9691]">الرئيسية / <b className="text-ink">الخدمات</b></div>
-                    <h1 className="mb-1.5 font-heading text-[28px] font-extrabold">اختر نوع الخدمة</h1>
-                    <p className="text-[14px] text-[#63756F]">ست فئات رئيسية، بأسعار معلنة قبل الحجز — اختر ما يناسب طلبك لعرض الفنيين المتاحين.</p>
+                    <div className="mb-2.5 text-[12.5px] text-[#8A9691]">الرئيسية / <b className="text-ink">خدمات الصيانة</b></div>
+                    <h1 className="mb-1.5 font-heading text-[28px] font-extrabold">اختر الخدمة اللي يحتاجها بيتك</h1>
+                    <p className="text-[14px] text-[#63756F]">6 فئات أساسية تغطي كافة أعمال الصيانة المنزلية، بأسعار معلنة ومحددة قبل الحجز — اختر فئة الخدمة لعرض الفنيين المعتمدين.</p>
                 </div>
             </div>
 
             <div className="mx-auto max-w-[1360px] px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-12">
                 {loadError && (
                     <div className="mb-6 rounded-md border border-danger/30 bg-danger/5 px-5 py-4 text-[13.5px] font-semibold text-danger">
-                        تعذر تحميل قائمة الخدمات حاليًا. تأكد من تشغيل الخادم الخلفي (backend) على المنفذ 4000 ثم أعد المحاولة.
+                        تعذر تحميل قائمة الخدمات حاليًا. تأكد من اتصال الخادم ثم أعد المحاولة.
                     </div>
                 )}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-5">

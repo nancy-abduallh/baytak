@@ -21,7 +21,7 @@ export function OrderRow({ order, selected, onSelect }: { order: Order; selected
             <div className="min-w-0">
                 <h4 className="mb-1 truncate text-[14px] font-bold sm:text-[15px]">{order.categoryLabel} — طلب {order.orderNumber}</h4>
                 <p className="truncate text-[12px] text-[#8A9691] sm:text-[12.5px]">
-                    {order.description} · <b className="text-[#57655F]">الفني: {order.technician?.fullName ?? "لم يُعيّن بعد"}</b>
+                    {order.description} · <b className="text-[#57655F]">الفني المختص: {order.technician?.fullName ?? "جاري تعيين فني"}</b>
                 </p>
             </div>
             <div className="col-span-2 flex flex-wrap items-center justify-between gap-3 pt-1 lg:col-span-1 lg:contents">

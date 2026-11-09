@@ -6,9 +6,9 @@ import clsx from "clsx";
 import { ServiceCategory } from "@/lib/types";
 
 const RATING_OPTIONS = [
-    { label: "4.5 فأعلى", value: "4.5" },
-    { label: "4.0 فأعلى", value: "4" },
-    { label: "الكل", value: "" },
+    { label: "4.5 نجوم فأعلى", value: "4.5" },
+    { label: "4.0 نجوم فأعلى", value: "4" },
+    { label: "جميع التقييمات", value: "" },
 ];
 
 export function FilterSidebar({ categories, activeSlug }: { categories: ServiceCategory[]; activeSlug: string }) {
@@ -36,7 +36,7 @@ export function FilterSidebar({ categories, activeSlug }: { categories: ServiceC
 
     return (
         <aside className="h-fit rounded-md border border-line bg-white p-5 lg:sticky lg:top-[100px] lg:p-6">
-            <h4 className="mb-4 text-[14.5px] font-bold">فئة الخدمة</h4>
+            <h4 className="mb-4 text-[14.5px] font-bold">فئات الصيانة</h4>
             <div className="mb-6 flex flex-wrap gap-2">
                 {categories.map((cat) => (
                     <Link
@@ -54,7 +54,7 @@ export function FilterSidebar({ categories, activeSlug }: { categories: ServiceC
 
             <div className="mb-6">
                 <label className="mb-2.5 block text-[13px] font-semibold text-[#57655F]">
-                    السعر الأقصى: <b className="text-ink">{maxPrice} ر.س</b>
+                    الحد الأقصى للسعر: <b className="text-ink">{maxPrice} ر.س</b>
                 </label>
                 <input
                     type="range"
@@ -91,7 +91,7 @@ export function FilterSidebar({ categories, activeSlug }: { categories: ServiceC
             </button>
             {hasActiveFilters && (
                 <button onClick={clearFilters} className="mt-2.5 w-full rounded-full border border-line py-3 text-[13px] font-semibold text-[#57655F]">
-                    إعادة تعيين
+                    إعادة ضبط الفلاتر
                 </button>
             )}
         </aside>

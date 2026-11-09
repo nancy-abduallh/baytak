@@ -47,7 +47,7 @@ export default function AdminAccountPage() {
         setPasswordError(null);
         setPasswordSuccess(null);
         if (newPassword.length < 8) {
-            setPasswordError("كلمة المرور الجديدة يجب ألا تقل عن 8 أحرف");
+            setPasswordError("كلمة المرور الجديدة يجب ألا تقل عن 8 خانات");
             return;
         }
         if (newPassword !== confirmPassword) {

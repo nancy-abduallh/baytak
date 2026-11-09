@@ -9,8 +9,8 @@ const SETTINGS_ID = 1;
 const DEFAULTS: Omit<SiteSetting, 'id' | 'updatedAt'> = {
     siteName: 'بيتك',
     footerDescription:
-        'تطبيق متكامل لخدمات صيانة وتشغيل المنازل، يقدم لك حلولًا سريعة وموثوقة لجميع احتياجات منزلك، بإشراف بيتك.',
-    availabilityNote: 'متوفر في جميع مناطق المملكة',
+        'منصة بيتك لخدمات صيانة وتشغيل المنازل بالمملكة العربية السعودية، نجمع لك نخبة من الفنيين المعتمدين لضمان صيانة موثوقة وبأعلى معايير الجودة.',
+    availabilityNote: 'متوفر في كافة مدن ومناطق المملكة',
     contactPhone: '9200 12345',
     contactWhatsapp: null,
     contactEmail: 'info@baytak.sa',

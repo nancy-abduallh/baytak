@@ -58,7 +58,7 @@ export default function BookingPage() {
         const picked = Array.from(fileList);
         const combined = [...images, ...picked].slice(0, MAX_IMAGES);
         if (images.length + picked.length > MAX_IMAGES) {
-            setImageError(`يمكن إضافة ${MAX_IMAGES} صور كحد أقصى`);
+            setImageError(`يمكن إضافة حتى ${MAX_IMAGES} صور كحد أقصى`);
         }
 
         setImages(combined);
@@ -77,7 +77,7 @@ export default function BookingPage() {
     const submit = async (e: FormEvent) => {
         e.preventDefault();
         if (!technician || !addressId || !scheduledDate) {
-            setError("الرجاء اختيار العنوان والتاريخ");
+            setError("الرجاء تحديد العنوان وتاريخ الزيارة المناسب");
             return;
         }
         setSubmitting(true);
@@ -100,7 +100,7 @@ export default function BookingPage() {
             }
             setSuccess(true);
         } catch (err) {
-            setError(err instanceof ApiError ? err.message : "تعذر إنشاء الطلب");
+            setError(err instanceof ApiError ? err.message : "تعذر إتمام الحجز، الرجاء المحاولة مجددًا");
         } finally {
             setSubmitting(false);
         }
@@ -111,16 +111,16 @@ export default function BookingPage() {
     if (success) {
         return (
             <main className="mx-auto max-w-[520px] px-6 py-24 text-center">
-                <h1 className="mb-2 text-xl font-extrabold">تم تأكيد الحجز بنجاح</h1>
-                <p className="mb-6 text-[13.5px] text-[#63756F]">سيصلك الفني في الموعد المحدد. يمكنك متابعة حالة الطلب من طلباتي.</p>
-                <Link href="/dashboard/orders"><Button variant="dark">الذهاب إلى طلباتي</Button></Link>
+                <h1 className="mb-2 text-xl font-extrabold">تم تأكيد حجزك بنجاح! 🎉</h1>
+                <p className="mb-6 text-[13.5px] text-[#63756F]">بيجيك الفني في الموعد المحدد. وتقدر تتابع حالة وتفاصيل طلبك مباشرة من صفحة طلباتي.</p>
+                <Link href="/dashboard/orders"><Button variant="dark">متابعة الطلب في طلباتي</Button></Link>
             </main>
         );
     }
 
     return (
         <main className="mx-auto max-w-[640px] px-6 py-12">
-            <h1 className="mb-6 text-2xl font-extrabold">تأكيد الحجز</h1>
+            <h1 className="mb-6 text-2xl font-extrabold">تأكيد حجز الخدمة</h1>
 
             {technician && (
                 <div className="mb-6 flex items-center gap-4 rounded-md border border-line bg-white p-5">
@@ -130,7 +130,7 @@ export default function BookingPage() {
                             {technician.fullName} {technician.isVerified && <BadgeCheck className="h-4 w-4 text-green-500" />}
                         </h4>
                         <div className="flex items-center gap-2 text-[13px] text-[#8A9691]">
-                            <Star className="h-3.5 w-3.5 fill-current text-gold-500" /> {technician.averageRating} · فني {technician.categoryLabel} · {technician.priceFrom} ر.س
+                            <Star className="h-3.5 w-3.5 fill-current text-gold-500" /> {technician.averageRating} · فني {technician.categoryLabel} معتمد · يبدأ من {technician.priceFrom} ر.س
                         </div>
                     </div>
                 </div>
@@ -139,25 +139,31 @@ export default function BookingPage() {
             <form onSubmit={submit} className="rounded-md border border-line bg-white p-6">
                 {error && <p className="mb-4 rounded-md bg-danger/10 px-4 py-3 text-[13px] font-semibold text-danger">{error}</p>}
 
-                <label className="mb-1.5 block text-[13px] font-semibold text-[#57655F]">العنوان</label>
+                <label className="mb-1.5 block text-[13px] font-semibold text-[#57655F]">عنوان الزيارة</label>
                 {addresses.length > 0 ? (
                     <select value={addressId ?? ""} onChange={(e) => setAddressId(Number(e.target.value))} className="mb-4 w-full rounded-md border border-line px-3.5 py-3 text-sm">
                         {addresses.map((a) => <option key={a.id} value={a.id}>{a.label} — {a.city}، {a.district}</option>)}
                     </select>
                 ) : (
                     <p className="mb-4 text-[13px] text-[#8A9691]">
-                        لا توجد عناوين محفوظة. <Link href="/dashboard/account" className="font-bold text-teal-700">أضف عنوانًا</Link> أولًا.
+                        ما عندك عناوين محفوظة بعد. <Link href="/dashboard/account" className="font-bold text-teal-700">أضف عنوان جديد</Link> أولاً للمتابعة.
                     </p>
                 )}
 
-                <label className="mb-1.5 block text-[13px] font-semibold text-[#57655F]">التاريخ المناسب</label>
+                <label className="mb-1.5 block text-[13px] font-semibold text-[#57655F]">موعد الزيارة المناسب</label>
                 <input type="date" value={scheduledDate} onChange={(e) => setScheduledDate(e.target.value)} className="mb-4 w-full rounded-md border border-line px-3.5 py-3 text-sm" />
 
-                <label className="mb-1.5 block text-[13px] font-semibold text-[#57655F]">وصف المشكلة (اختياري)</label>
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="mb-5 w-full rounded-md border border-line px-3.5 py-3 text-sm" />
+                <label className="mb-1.5 block text-[13px] font-semibold text-[#57655F]">تفاصيل المشكلة (اختياري)</label>
+                <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="اكتب وصفًا مختصرًا للمشكلة أو العطل لمساعدة الفني..."
+                    rows={3}
+                    className="mb-5 w-full rounded-md border border-line px-3.5 py-3 text-sm"
+                />
 
                 <label className="mb-1.5 block text-[13px] font-semibold text-[#57655F]">صور المشكلة (اختياري)</label>
-                <p className="mb-3 text-[12px] text-[#8A9691]">أرفق حتى {MAX_IMAGES} صور لمساعدة الفني على فهم المشكلة قبل الوصول (JPG, PNG أو WEBP، بحد أقصى 5MB لكل صورة).</p>
+                <p className="mb-3 text-[12px] text-[#8A9691]">تقدر ترفق حتى {MAX_IMAGES} صور توضح مكان العطل لمساعدة الفني قبل وصوله (JPG, PNG أو WEBP بحد أقصى 5 ميجابايت لكل صورة).</p>
 
                 <div className="mb-5 flex flex-wrap gap-3">
                     {imagePreviews.map((src, index) => (
@@ -195,16 +201,16 @@ export default function BookingPage() {
                 {imageError && <p className="-mt-3 mb-5 text-[12px] font-semibold text-danger">{imageError}</p>}
 
                 <Button type="submit" variant="dark" className="w-full justify-center">
-                    {submitting ? "جارِ التأكيد..." : `تأكيد الحجز — ${technician?.priceFrom ?? "—"} ر.س`}
+                    {submitting ? "جارِ تأكيد حجزك..." : `تأكيد الحجز — ${technician?.priceFrom ?? "—"} ر.س`}
                 </Button>
             </form>
 
             <div className="mt-8 rounded-md border border-line bg-white p-6">
                 <h4 className="mb-4 text-[15px] font-bold">
-                    آراء العملاء {technician ? `(${technician.reviewCount})` : ""}
+                    آراء وتقييمات العملاء {technician ? `(${technician.reviewCount})` : ""}
                 </h4>
                 {reviews.length === 0 ? (
-                    <p className="text-[13px] text-[#8A9691]">لا توجد تقييمات بعد لهذا الفني.</p>
+                    <p className="text-[13px] text-[#8A9691]">لا توجد تقييمات مسجلة بعد لهذا الفني.</p>
                 ) : (
                     <div className="space-y-4">
                         {reviews.map((review) => (

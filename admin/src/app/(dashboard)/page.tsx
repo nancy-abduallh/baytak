@@ -43,7 +43,7 @@ const MOCK_ANALYTICS: DashboardAnalytics = {
     ],
     topCategories: [
         { label: "كهرباء", count: 132 },
-        { label: "سباكة", count: 108 },
+        { label: "الصيانة", count: 108 },
         { label: "تكييف", count: 94 },
         { label: "دهانات", count: 51 },
         { label: "نظافة", count: 40 },
@@ -63,7 +63,7 @@ const MOCK_TECHNICIANS: AdminTechnicianRow[] = Array.from({ length: 40 }).map((_
     phone: "05xxxxxxxx",
     email: null,
     avatarUrl: null,
-    categoryLabel: ["كهرباء", "سباكة", "تكييف"][i % 3],
+    categoryLabel: ["كهرباء", "الصيانة", "تكييف"][i % 3],
     primaryCategoryId: (i % 3) + 1,
     city: "الرياض",
     district: "—",
@@ -87,7 +87,7 @@ const MOCK_USERS: AdminUserRow[] = Array.from({ length: 60 }).map((_, i) => ({
     isBlocked: i % 9 === 0,
 }));
 
-const MOCK_CATEGORIES: AdminCategoryRow[] = ["كهرباء", "سباكة", "تكييف", "دهانات", "نظافة", "نجارة"].map((nameAr, i) => ({
+const MOCK_CATEGORIES: AdminCategoryRow[] = ["كهرباء", "الصيانة", "تكييف", "دهانات", "نظافة", "نجارة"].map((nameAr, i) => ({
     id: i + 1,
     nameAr,
     slug: nameAr,

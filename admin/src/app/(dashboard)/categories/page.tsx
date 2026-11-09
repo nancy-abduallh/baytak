@@ -11,7 +11,7 @@ import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { TextField, TextareaField, CheckboxField } from "@/components/ui/FormField";
 
 const MOCK_CATEGORIES: AdminCategoryRow[] = [
-    { id: 1, nameAr: "سباكة", slug: "plumbing", description: "أعمال السباكة وتسليك المواسير", iconKey: "plumbing", priceFrom: 80, priceUnit: "ر.س", sortOrder: 1, technicianCount: 42, isActive: true },
+    { id: 1, nameAr: "الصيانة", slug: "plumbing", description: "كشف تسريبات المياه وتسليك المجاري والصرف", iconKey: "plumbing", priceFrom: 80, priceUnit: "ر.س", sortOrder: 1, technicianCount: 42, isActive: true },
     { id: 2, nameAr: "كهرباء", slug: "electrical", description: "أعمال الكهرباء والتمديدات", iconKey: "electrical", priceFrom: 100, priceUnit: "ر.س", sortOrder: 2, technicianCount: 51, isActive: true },
     { id: 3, nameAr: "تكييف", slug: "ac", description: "صيانة وتركيب المكيفات", iconKey: "ac", priceFrom: 120, priceUnit: "ر.س", sortOrder: 3, technicianCount: 38, isActive: true },
 ];

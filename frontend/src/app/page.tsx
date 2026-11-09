@@ -22,7 +22,7 @@ export default async function HomePage() {
         <ServicesGrid categories={categories} />
       ) : (
         <div className="mx-auto max-w-[1360px] px-5 py-16 text-center text-[14px] text-[#8A9691] lg:px-10 lg:py-24">
-          تعذر تحميل قائمة الخدمات حاليًا. تأكد من تشغيل الخادم الخلفي على المنفذ 4000، ثم أعد تحميل الصفحة.
+          تعذر تحميل باقة الخدمات حاليًا. الرجاء التأكد من اتصال الخادم ثم إعادة تحديث الصفحة.
         </div>
       )}
       <StepsSection />

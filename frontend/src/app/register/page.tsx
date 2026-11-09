@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/Button";
 const schema = z.object({
     fullName: z.string().min(3, "أدخل الاسم الكامل"),
     phone: z.string().regex(/^05\d{8}$/, "أدخل رقم جوال سعودي صحيح (05xxxxxxxx)"),
-    password: z.string().min(8, "كلمة المرور يجب ألا تقل عن 8 أحرف"),
+    password: z.string().min(8, "كلمة المرور يجب ألا تقل عن 8 خانات"),
 });
 type FormValues = z.infer<typeof schema>;
 
@@ -44,8 +44,8 @@ export default function RegisterPage() {
                 <span className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-green-500">
                     <Home className="h-6 w-6 text-teal-900" />
                 </span>
-                <h1 className="font-heading text-2xl font-extrabold">إنشاء حساب في بيتك</h1>
-                <p className="mt-1.5 text-[13.5px] text-[#63756F]">سجّل بياناتك لتبدأ بحجز خدمات الصيانة</p>
+                <h1 className="font-heading text-2xl font-extrabold">إنشاء حساب جديد في بيتك</h1>
+                <p className="mt-1.5 text-[13.5px] text-[#63756F]">سجّل بياناتك لتتمكن من حجز ومتابعة خدمات صيانة بيتك بكل سهولة</p>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="rounded-md border border-line bg-white p-5 sm:p-7">
@@ -54,7 +54,7 @@ export default function RegisterPage() {
                 <label className="mb-1.5 block text-[13px] font-semibold text-[#57655F]">الاسم الكامل</label>
                 <div className="mb-1 flex items-center gap-2 rounded-md border border-line px-3.5 py-3">
                     <UserIcon className="h-4 w-4 text-[#8A9691]" />
-                    <input {...register("fullName")} placeholder="مثال: أحمد محمد" className="w-full text-sm outline-none" />
+                    <input {...register("fullName")} placeholder="مثال: فهد بن عبد العزيز" className="w-full text-sm outline-none" />
                 </div>
                 {errors.fullName && <p className="mb-3 text-[12px] text-danger">{errors.fullName.message}</p>}
 
@@ -68,16 +68,16 @@ export default function RegisterPage() {
                 <label className="mb-1.5 mt-4 block text-[13px] font-semibold text-[#57655F]">كلمة المرور</label>
                 <div className="mb-1 flex items-center gap-2 rounded-md border border-line px-3.5 py-3">
                     <Lock className="h-4 w-4 text-[#8A9691]" />
-                    <input {...register("password")} type="password" placeholder="8 أحرف على الأقل" className="w-full text-sm outline-none" />
+                    <input {...register("password")} type="password" placeholder="8 خانات على الأقل" className="w-full text-sm outline-none" />
                 </div>
                 {errors.password && <p className="mb-3 text-[12px] text-danger">{errors.password.message}</p>}
 
                 <Button type="submit" variant="dark" className="mt-5 w-full justify-center">
-                    {submitting ? "جارِ الإنشاء..." : "إنشاء الحساب"}
+                    {submitting ? "جارِ إنشاء الحساب..." : "إنشاء الحساب"}
                 </Button>
 
                 <p className="mt-5 text-center text-[13px] text-[#63756F]">
-                    لديك حساب بالفعل؟ <Link href="/login" className="font-bold text-teal-700">تسجيل الدخول</Link>
+                    عندك حساب بالفعل؟ <Link href="/login" className="font-bold text-teal-700">تسجيل الدخول</Link>
                 </p>
             </form>
         </main>

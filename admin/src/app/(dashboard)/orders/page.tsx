@@ -14,7 +14,7 @@ import { SelectField, TextareaField } from "@/components/ui/FormField";
 
 const MOCK_ORDERS: AdminOrderRow[] = [
     { id: 1010, orderNumber: "#1010", customerName: "أحمد محمد", technicianName: "محمد أحمد", categoryLabel: "كهرباء", status: "in_progress", amount: 200, scheduledDate: "2026-07-30", createdAt: "2026-07-28" },
-    { id: 1000, orderNumber: "#1000", customerName: "سارة العتيبي", technicianName: "سعيد القرني", categoryLabel: "سباكة", status: "completed", amount: 150, scheduledDate: "2026-07-20", createdAt: "2026-07-18" },
+    { id: 1000, orderNumber: "#1000", customerName: "سارة العتيبي", technicianName: "سعيد القرني", categoryLabel: "الصيانة", status: "completed", amount: 150, scheduledDate: "2026-07-20", createdAt: "2026-07-18" },
     { id: 999, orderNumber: "#0999", customerName: "خالد الدوسري", technicianName: "عادل الشهري", categoryLabel: "تكييف", status: "pending", amount: 210, scheduledDate: "2026-08-01", createdAt: "2026-07-29" },
 ];
 

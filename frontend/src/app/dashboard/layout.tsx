@@ -14,7 +14,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }, [hasHydrated, accessToken, pathname, router]);
 
     if (!hasHydrated || !accessToken || !user) {
-        return <main className="grid min-h-[60vh] place-items-center text-[13.5px] text-[#8A9691]">جارِ التحقق من جلسة الدخول...</main>;
+        return <main className="grid min-h-[60vh] place-items-center text-[13.5px] text-[#8A9691]">جارِ التحقق من تسجيل الدخول...</main>;
     }
 
     return (

@@ -11,7 +11,7 @@ import { getInitials } from "@/lib/utils";
 
 const TABS = [
     { href: "/", label: "الرئيسية" },
-    { href: "/services", label: "الخدمات والحجز" },
+    { href: "/services", label: "الخدمات والصيانة" },
     { href: "/dashboard/orders", label: "طلباتي" },
 ];
 
@@ -37,7 +37,7 @@ export function Navbar() {
     };
 
     return (
-        <nav className="sticky top-0 z-20 bg-teal-900 px-5 lg:px-10">
+        <nav className="sticky top-0 z-20 border-b border-white/[0.08] bg-[#071E1B]/95 px-5 backdrop-blur-md lg:px-10">
             <div className="flex h-[64px] items-center justify-between lg:h-[78px]">
                 <Link href="/" className="flex items-center gap-2.5 lg:gap-3">
                     <span className="relative h-9 w-9 flex-none overflow-hidden rounded-2xl lg:h-10 lg:w-10">
@@ -45,7 +45,7 @@ export function Navbar() {
                     </span>
                     <span className="leading-tight">
                         <span className="block font-heading text-lg font-black text-white lg:text-xl">بيتك</span>
-                        <span className="hidden text-[11px] tracking-wide text-[#9FC2B7] sm:block">صيانة وتشغيل · من بلدي</span>
+                        <span className="hidden text-[11px] tracking-wide text-[#9FC2B7] sm:block">خدمات الصيانة والتشغيل · منصة بلدي</span>
                     </span>
                 </Link>
 

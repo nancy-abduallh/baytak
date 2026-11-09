@@ -128,8 +128,8 @@ export default function AdminSettingsPage() {
                         <h2 className="font-heading text-lg font-extrabold text-ink">تواصل معنا</h2>
                     </div>
 
-                    <TextField label="رقم الهاتف" dir="ltr" placeholder="9200 12345" {...field("contactPhone")} />
-                    <TextField label="رقم واتساب" dir="ltr" placeholder="+966 5xxxxxxxx" {...field("contactWhatsapp")} />
+                    <TextField label="رقم خدمة العملاء (الهاتف الموحد)" dir="ltr" placeholder="9200 12345" {...field("contactPhone")} />
+                    <TextField label="رقم الواتساب" dir="ltr" placeholder="+966 5xxxxxxxx" {...field("contactWhatsapp")} />
                     <TextField label="البريد الإلكتروني" dir="ltr" placeholder="info@baytak.sa" {...field("contactEmail")} />
                     <TextField label="الموقع الإلكتروني" dir="ltr" placeholder="www.baytak.sa" {...field("websiteUrl")} />
                     <TextField label="العنوان" placeholder="الرياض، المملكة العربية السعودية" {...field("address")} />
@@ -166,9 +166,9 @@ export default function AdminSettingsPage() {
 
                     <div className="grid gap-x-6 lg:grid-cols-2">
                         <TextField label="اسم الموقع" {...field("siteName")} />
-                        <TextField label="ملاحظة التوفر" placeholder="متوفر في جميع مناطق المملكة" {...field("availabilityNote")} />
+                        <TextField label="ملاحظة التوفر" placeholder="متوفر في كافة مدن ومناطق المملكة" {...field("availabilityNote")} />
                     </div>
-                    <TextareaField label="وصف الموقع (يظهر أسفل الشعار في التذييل)" rows={3} {...field("footerDescription")} />
+                    <TextareaField label="وصف المنصة (يظهر أسفل الشعار في التذييل)" rows={3} {...field("footerDescription")} />
                     <TextField label="نص حقوق النشر" placeholder="© 2026 بيتك. جميع الحقوق محفوظة." {...field("copyrightText")} />
 
                     <button

@@ -12,7 +12,7 @@ import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { TextField, SelectField } from "@/components/ui/FormField";
 
 const MOCK_CATEGORIES: AdminCategoryRow[] = [
-    { id: 1, nameAr: "سباكة", slug: "plumbing", description: null, iconKey: "plumbing", priceFrom: 80, priceUnit: "ر.س", sortOrder: 1, technicianCount: 42, isActive: true },
+    { id: 1, nameAr: "الصيانة", slug: "plumbing", description: null, iconKey: "plumbing", priceFrom: 80, priceUnit: "ر.س", sortOrder: 1, technicianCount: 42, isActive: true },
     { id: 2, nameAr: "كهرباء", slug: "electrical", description: null, iconKey: "electrical", priceFrom: 100, priceUnit: "ر.س", sortOrder: 2, technicianCount: 51, isActive: true },
     { id: 3, nameAr: "تكييف", slug: "ac", description: null, iconKey: "ac", priceFrom: 120, priceUnit: "ر.س", sortOrder: 3, technicianCount: 38, isActive: true },
 ];

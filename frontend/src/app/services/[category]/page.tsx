@@ -41,10 +41,10 @@ export default async function ServicesPage({
             <div className="border-b border-line bg-white px-4 py-7 sm:px-6 md:px-10 md:py-8">
                 <div className="mx-auto max-w-[1360px]">
                     <div className="mb-2.5 text-[12.5px] text-[#8A9691]">
-                        <Link href="/" className="hover:underline">الرئيسية</Link> / <Link href="/services" className="hover:underline">الخدمات</Link> / <b className="text-ink">{activeCategory.nameAr}</b>
+                        <Link href="/" className="hover:underline">الرئيسية</Link> / <Link href="/services" className="hover:underline">خدمات الصيانة</Link> / <b className="text-ink">{activeCategory.nameAr}</b>
                     </div>
-                    <h2 className="mb-1.5 text-[26px] font-extrabold">اختر فنّي {activeCategory.nameAr} المناسب لك</h2>
-                    <p className="text-[14px] text-[#63756F]">{technicians.length} فنّي {activeCategory.nameAr} معتمد متاح اليوم في الرياض</p>
+                    <h2 className="mb-1.5 text-[26px] font-extrabold">اختر فني {activeCategory.nameAr} الأنسب لطلبك</h2>
+                    <p className="text-[14px] text-[#63756F]">{technicians.length} فني {activeCategory.nameAr} معتمد ومتاح اليوم بالرياض</p>
                 </div>
             </div>
 
@@ -54,7 +54,7 @@ export default async function ServicesPage({
                     <TechnicianListClient technicians={technicians} categoryLabel={activeCategory.nameAr} sortBy={sortBy} />
                 ) : (
                     <div className="rounded-md border border-line bg-white p-10 text-center text-[14px] text-[#8A9691]">
-                        لا يوجد فنيون مطابقون لهذه الفلاتر حاليًا.
+                        لا يوجد فنيين مطابقين لهذه الفلاتر حاليًا. جرّب تعديل خيارات التصفية.
                     </div>
                 )}
             </div>

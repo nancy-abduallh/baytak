@@ -11,9 +11,9 @@ export function StatusTabs({
     onChange: (v: TabKey) => void;
 }) {
     const tabs: { key: TabKey; label: string }[] = [
-        { key: "all", label: `الكل (${counts.all})` },
+        { key: "all", label: `جميع الطلبات (${counts.all})` },
         { key: "in_progress", label: `قيد التنفيذ (${counts.inProgress})` },
-        { key: "completed", label: `مكتمل (${counts.completed})` },
+        { key: "completed", label: `المكتملة (${counts.completed})` },
     ];
 
     return (

@@ -12,7 +12,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
                 <AlertTriangle className="h-6 w-6" />
             </div>
             <h1 className="mb-2 text-xl font-extrabold">حدث خطأ غير متوقع</h1>
-            <p className="mb-6 text-[13.5px] text-[#63756F]">تعذر تحميل هذه الصفحة. تأكد من تشغيل الخادم الخلفي على المنفذ 4000 ثم حاول مرة أخرى.</p>
+            <p className="mb-6 text-[13.5px] text-[#63756F]">تعذر تحميل الصفحة المطلوبة حاليًا. الرجاء التحقق من الاتصال وإعادة المحاولة.</p>
             <Button variant="dark" onClick={reset}>إعادة المحاولة</Button>
         </main>
     );
