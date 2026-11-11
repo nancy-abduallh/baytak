@@ -17,6 +17,9 @@ const TABS = [
 
 export function Navbar() {
     const pathname = usePathname();
+
+    // Hide public navbar on admin routes
+    if (pathname?.startsWith("/admin")) return null;
     const router = useRouter();
     const { user, accessToken, clearSession } = useAuthStore();
     const [mobileOpen, setMobileOpen] = useState(false);
