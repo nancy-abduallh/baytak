@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ShieldCheck, Mail, Lock, Sparkles } from "lucide-react";
+import { ShieldCheck, Mail, Lock, Sparkles, Eye, EyeOff } from "lucide-react";
 import { adminApi, ApiError } from "@/lib/admin/api";
 import { useAdminAuthStore } from "@/lib/admin/stores/admin-auth-store";
 
@@ -19,6 +19,7 @@ export default function AdminLoginPage() {
     const setSession = useAdminAuthStore((s) => s.setSession);
     const [serverError, setServerError] = useState<string | null>(null);
     const [submitting, setSubmitting] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
     const onSubmit = async (values: FormValues) => {
@@ -108,7 +109,15 @@ export default function AdminLoginPage() {
                         <label className="mb-1.5 mt-4 block text-[13px] font-semibold text-[#57655F]">كلمة المرور</label>
                         <div className="mb-1 flex items-center gap-2 rounded-xl border border-line px-3.5 py-3 transition-shadow focus-within:border-teal-700 focus-within:shadow-[0_0_0_4px_rgba(30,107,92,.12)]">
                             <Lock className="h-4 w-4 text-muted" />
-                            <input {...register("password")} type="password" placeholder="••••••••" className="w-full text-sm outline-none" />
+                            <input {...register("password")} type={showPassword ? "text" : "password"} placeholder="••••••••" className="w-full text-sm outline-none" />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                className="text-muted hover:text-ink focus:outline-none transition-colors"
+                                aria-label={showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
+                            >
+                                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            </button>
                         </div>
                         {errors.password && <p className="mb-3 text-[12px] text-danger">{errors.password.message}</p>}
 

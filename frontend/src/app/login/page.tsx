@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Home, Lock, Phone } from "lucide-react";
+import { Eye, EyeOff, Home, Lock, Phone } from "lucide-react";
 import { api, ApiError } from "@/lib/api";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { Button } from "@/components/ui/Button";
@@ -30,6 +30,7 @@ function LoginForm() {
     const setSession = useAuthStore((s) => s.setSession);
     const [serverError, setServerError] = useState<string | null>(null);
     const [submitting, setSubmitting] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
     const onSubmit = async (values: FormValues) => {
@@ -69,7 +70,15 @@ function LoginForm() {
                 <label className="mb-1.5 mt-4 block text-[13px] font-semibold text-[#57655F]">كلمة المرور</label>
                 <div className="mb-1 flex items-center gap-2 rounded-md border border-line px-3.5 py-3">
                     <Lock className="h-4 w-4 text-[#8A9691]" />
-                    <input {...register("password")} type="password" placeholder="••••••••" className="w-full text-sm outline-none" />
+                    <input {...register("password")} type={showPassword ? "text" : "password"} placeholder="••••••••" className="w-full text-sm outline-none" />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="text-[#8A9691] hover:text-[#12302E] focus:outline-none transition-colors"
+                        aria-label={showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
+                    >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                 </div>
                 {errors.password && <p className="mb-3 text-[12px] text-danger">{errors.password.message}</p>}
 
