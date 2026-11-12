@@ -40,7 +40,7 @@ export function CategoryCard({ category }: { category: ServiceCategory }) {
                 <div className="absolute inset-0 z-0">
                     <Image
                         src={bgImage}
-                        alt={category.nameAr}
+                        alt={`خدمة ${category.nameAr} - منصة بيتك لخدمات الصيانة`}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover object-center brightness-[0.95] contrast-[1.05] transition-all duration-700 ease-out group-hover:scale-110 group-hover:brightness-105"

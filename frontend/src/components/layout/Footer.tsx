@@ -180,7 +180,7 @@ function FooterIntro({ settings }: { settings: SiteSettings }) {
                 <span className="relative grid h-[34px] w-[34px] place-items-center overflow-hidden rounded-full bg-green-500">
                     <Image
                         src="/logo.png"
-                        alt="logo"
+                        alt={`شعار ${settings.siteName || "بيتك"} لخدمات الصيانة والتشغيل المنزلي`}
                         fill
                         sizes="34px"
                         className="object-cover"

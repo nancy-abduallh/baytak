@@ -44,7 +44,7 @@ export function Navbar() {
             <div className="flex h-[64px] items-center justify-between lg:h-[78px]">
                 <Link href="/" className="flex items-center gap-2.5 lg:gap-3">
                     <span className="relative h-9 w-9 flex-none overflow-hidden rounded-2xl lg:h-10 lg:w-10">
-                        <Image src="/logo.png" alt="بيتك" fill sizes="40px" className="object-cover" priority />
+                        <Image src="/logo.png" alt="شعار منصة بيتك لخدمات صيانة وتشغيل المنازل بالمملكة" fill sizes="40px" className="object-cover" priority />
                     </span>
                     <span className="leading-tight">
                         <span className="block font-heading text-lg font-black text-white lg:text-xl">بيتك</span>

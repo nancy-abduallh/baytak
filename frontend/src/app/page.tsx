@@ -1,10 +1,41 @@
+import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
 import { ServicesGrid } from "@/components/home/ServicesGrid";
 import { StepsSection } from "@/components/home/StepsSection";
 import { TrustBar } from "@/components/home/TrustBar";
 import { Footer } from "@/components/layout/Footer";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { api } from "@/lib/api";
 import { ServiceCategory } from "@/lib/types";
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_DEFAULT_DESCRIPTION,
+  getBreadcrumbSchema,
+} from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: `${SITE_NAME} | ${SITE_TAGLINE}`,
+  description: SITE_DEFAULT_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: `${SITE_NAME} | ${SITE_TAGLINE}`,
+    description: SITE_DEFAULT_DESCRIPTION,
+    url: SITE_URL,
+    type: "website",
+    images: [
+      {
+        url: "/logo.png",
+        width: 800,
+        height: 800,
+        alt: `${SITE_NAME} - ${SITE_TAGLINE}`,
+      },
+    ],
+  },
+};
 
 export default async function HomePage() {
   let categories: ServiceCategory[] = [];
@@ -17,6 +48,7 @@ export default async function HomePage() {
 
   return (
     <main>
+      <JsonLd data={getBreadcrumbSchema([{ name: "الرئيسية", url: "/" }])} />
       <Hero />
       {categories.length > 0 ? (
         <ServicesGrid categories={categories} />
